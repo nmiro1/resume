@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Saab 340B CT7 — Start Gauges (NG & ITT) Simulator</title>
+  <style>
+    :root { --bg:#0b0f14; --card:#121821; --ink:#e6edf3; --muted:#8aa0b5; --accent:#61dafb; --good:#24d17e; --warn:#f2c94c; --bad:#ff5c5c; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:radial-gradient(1200px 800px at 70% 10%,#0e1621 0%,var(--bg) 40%);color:var(--ink);display:grid;place-items:center;padding:24px}
+    .app{display:grid;gap:18px;grid-template-columns:1.2fr 1fr;max-width:1100px;width:100%}
+    .panel{background:linear-gradient(180deg,#121a24,#0f1620);border:1px solid #203040;border-radius:16px;padding:16px 18px;box-shadow:0 20px 60px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.04)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    h1{font-size:20px;margin:0 0 6px;letter-spacing:.3px}
+    p{color:var(--muted);margin:6px 0 12px}
+
+    .gauges{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center;justify-items:center}
+    .gauge-card{width:100%;aspect-ratio:1.35/1;position:relative}
+    .gauge-card svg{width:100%;height:100%;display:block}
+    .readout{position:absolute;inset:auto 0 8% 0;text-align:center;display:grid;gap:2px;place-items:center}
+    .readout .val{font-size:36px;font-weight:700;letter-spacing:1px}
+    .readout .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1.8px}
+
+    .controls{display:grid;gap:12px}
+    .btns{display:flex;flex-wrap:wrap;gap:10px}
+    button{background:#182232;color:var(--ink);border:1px solid #2b3c53;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.04);transition:transform .08s ease,background .2s ease}
+    button:hover{transform:translateY(-1px);background:#1a2740}
+    button:active{transform:translateY(0)}
+    button.primary{background:#1d3557;border-color:#3e5c8a}
+    button.danger{background:#3b1f25;border-color:#6b2b35}
+
+    .toggles,.sliders{display:grid;gap:10px}
+    .toggle{display:flex;align-items:center;gap:10px}
+    .toggle input{transform:scale(1.2)}
+
+    .kv{display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center}
+    input[type="range"]{width:100%}
+
+    .status{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:8px}
+    .chip{text-align:center;padding:8px 6px;border-radius:999px;font-size:12px;font-weight:700;background:#162031;border:1px solid #24344a;color:var(--muted)}
+    .chip.on{color:#04130b;background:#24d17e;border-color:#2ee08a;text-shadow:0 0 12px rgba(36,209,126,.6)}
+    .chip.warn{color:#141000;background:#f2c94c;border-color:#f7d66b}
+    .chip.bad{color:#1c0000;background:#ff5c5c;border-color:#ff8383}
+
+    .legend{font-size:12px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap}
+    .legend span{display:inline-flex;align-items:center;gap:6px}
+    .swatch{width:12px;height:8px;border-radius:2px;display:inline-block}
+    .swatch.good{background:var(--good)} .swatch.warn{background:var(--warn)} .swatch.bad{background:var(--bad)}
+
+    .footer-note{font-size:12px;color:var(--muted);opacity:.9;margin-top:8px}
+    code.small{font-size:12px}
+
+    .tests{margin-top:8px;padding:8px;background:#0f1620;border:1px solid #223349;border-radius:10px}
+    .test-pass{color:#9af5b0} .test-fail{color:#ff9a9a}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- LEFT: GAUGES -->
+    <section class="panel">
+      <h1>Saab 340B — CT7 Start: Engine Gauges</h1>
+      <p>CT7 motoring start model. Motor to ~20% NG and ITT ≤175 °C before fuel/ign. Observe ITT & NG behaviour for normal, hot, and hung starts.</p>
+
+      <div class="gauges">
+        <!-- NG -->
+        <div class="gauge-card">
+          <svg viewBox="0 0 300 220" id="ngGauge" aria-label="NG gauge">
+            <defs>
+              <linearGradient id="ngFade" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#2b3c53" />
+                <stop offset="100%" stop-color="#102030" />
+              </linearGradient>
+              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <path d="M20,200 A130,130 0 1 1 280,200" fill="none" stroke="url(#ngFade)" stroke-width="28"/>
+            <g stroke-linecap="round" stroke-width="10" filter="url(#glow)">
+              <path id="ng-good"  d="" stroke="var(--good)"/>
+              <path id="ng-warn1" d="" stroke="var(--warn)"/>
+              <path id="ng-warn2" d="" stroke="var(--warn)"/>
+              <path id="ng-bad"   d="" stroke="var(--bad)"/>
+            </g>
+            <g id="ng-needle" transform="rotate(-120 150 200)">
+              <line x1="150" y1="200" x2="150" y2="40" stroke="#e8eef7" stroke-width="4" />
+              <circle cx="150" cy="200" r="7" fill="#e8eef7" />
+            </g>
+            <g id="ng-ticks"></g>
+          </svg>
+          <div class="readout">
+            <div class="val" id="ngVal">0.0%</div>
+            <div class="label">NG</div>
+          </div>
+        </div>
+
+        <!-- ITT -->
+        <div class="gauge-card">
+          <svg viewBox="0 0 300 220" id="ittGauge" aria-label="ITT gauge">
+            <path d="M20,200 A130,130 0 1 1 280,200" fill="none" stroke="url(#ngFade)" stroke-width="28"/>
+            <g stroke-linecap="round" stroke-width="10" filter="url(#glow)">
+              <path id="itt-good" d="" stroke="var(--good)"/>
+              <path id="itt-warn" d="" stroke="var(--warn)"/>
+              <path id="itt-bad"  d="" stroke="var(--bad)"/>
+            </g>
+            <g id="itt-needle" transform="rotate(-120 150 200)">
+              <line x1="150" y1="200" x2="150" y2="40" stroke="#e8eef7" stroke-width="4" />
+              <circle cx="150" cy="200" r="7" fill="#e8eef7" />
+            </g>
+            <g id="itt-ticks"></g>
+          </svg>
+          <div class="readout">
+            <div class="val" id="ittVal">0 °C</div>
+            <div class="label">ITT</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="legend" style="margin-top:8px">
+        <span><i class="swatch good"></i> Normal</span>
+        <span><i class="swatch warn"></i> Caution</span>
+        <span><i class="swatch bad"></i> Limit</span>
+      </div>
+
+      <div class="status">
+        <div id="chip-starter" class="chip">STARTER</div>
+        <div id="chip-ign" class="chip">IGN</div>
+        <div id="chip-fuel" class="chip">FUEL</div>
+        <div id="chip-fail" class="chip">FAULT</div>
+      </div>
+
+      <div class="footer-note">CT7 start ITT limit 965 °C. Hot & hung starts are advisory (no auto-shutdown). <code class="small">CT7-tuned</code></div>
+    </section>
+
+    <!-- RIGHT: CONTROLS -->
+    <section class="panel controls">
+      <h1>Controls</h1>
+      <div class="btns">
+        <button class="primary" id="btn-start">Start</button>
+        <button id="btn-abort" class="danger">Abort</button>
+        <button id="btn-reset">Reset</button>
+        <button id="btn-run-tests" title="Run built-in self checks">Run Self-Tests</button>
+      </div>
+
+      <div class="sliders">
+        <div class="kv">
+          <label for="ambient">Ambient temperature (°C)</label>
+          <input type="range" id="ambient" min="-20" max="45" value="15" />
+        </div>
+        <div class="kv">
+          <label for="battery">Battery / Starter strength</label>
+          <input type="range" id="battery" min="50" max="120" value="100" />
+        </div>
+      </div>
+
+      <div class="toggles">
+        <label class="toggle"><input type="checkbox" id="hotStart"> Force hot start</label>
+        <label class="toggle"><input type="checkbox" id="hungStart"> Simulate hung start</label>
+        <label class="toggle"><input type="checkbox" id="showTraces"> Show traces</label>
+      </div>
+
+      <h1 style="margin-top:6px">Live Data</h1>
+      <div class="row">
+        <div>
+          <p>State: <strong id="state">IDLE</strong></p>
+          <p>Time since start: <strong id="tClock">0.0 s</strong></p>
+          <p>Fuel introduced at: <strong id="fuelAt">—</strong></p>
+          <p>Peak ITT: <strong id="peakITT">—</strong></p>
+        </div>
+        <div>
+          <p>NG target (idle): <strong id="idleNG">64%</strong></p>
+          <p>Starter cutout: <strong id="cutout">55% NG</strong></p>
+          <p>ITT settle target: <strong id="settleITT">440 °C</strong></p>
+        </div>
+      </div>
+
+      <div id="test-report" class="tests" hidden></div>
+
+      <p class="footer-note">Motoring start: fuel/ign at ~20% NG & ITT ≤175 °C. Hot start = rapid smooth ITT rise + sluggish NG. Hung start = NG stagnates ~40% with high ITT. Use <em>Abort</em> and motor to cool.</p>
+    </section>
+  </div>
+
+  <script>
+    // --- Utility
+    function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+    function lerp(a,b,t){return a+(b-a)*t}
+    // Limit the change per second toward a target (percent points per second)
+    function slewTowards(curr, target, maxRatePerSec, dt){
+      const maxStep = maxRatePerSec * dt;
+      const delta = clamp(target - curr, -maxStep, maxStep);
+      return curr + delta;
+    }
+    function sweepFrom(value,min,max){const t=clamp((value-min)/(max-min),0,1);return -120+240*t}
+    function polar(cx,cy,r,deg){const rad=(deg*Math.PI)/180;return [cx+r*Math.cos(rad),cy+r*Math.sin(rad)]}
+    function arcPath(cx,cy,r,a0,a1){const [x0,y0]=polar(cx,cy,r,a0);const [x1,y1]=polar(cx,cy,r,a1);const large=((a1-a0)%360)>180?1:0;return `M${x0.toFixed(2)},${y0.toFixed(2)} A${r},${r} 0 ${large} 1 ${x1.toFixed(2)},${y1.toFixed(2)}`}
+
+    // --- Ticks & arcs
+    function makeTicks(svgId,min,max,step,labelFmt){
+      const g=document.querySelector(svgId); const ticks=g.querySelector('[id$="-ticks"]');
+      for(let v=min; v<=max+1e-6; v+=step){
+        const a=sweepFrom(v,min,max); const [x0,y0]=polar(150,200,120,a);
+        const major=(v%(step*5)===0); const [x1,y1]=polar(150,200,major?94:104,a);
+        const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+        line.setAttribute('x1',x0); line.setAttribute('y1',y0);
+        line.setAttribute('x2',x1); line.setAttribute('y2',y1);
+        line.setAttribute('stroke','#7b8da3'); line.setAttribute('stroke-width',major?2.4:1.2);
+        ticks.appendChild(line);
+        if(major){ const [lx,ly]=polar(150,200,82,a); const text=document.createElementNS('http://www.w3.org/2000/svg','text');
+          text.setAttribute('x',lx); text.setAttribute('y',ly+4); text.setAttribute('fill','#9fb2c7'); text.setAttribute('font-size','12'); text.setAttribute('text-anchor','middle');
+          text.textContent=labelFmt(v); ticks.appendChild(text); }
+      }
+    }
+    function setRange(svg,id,minVal,maxVal,min,max){
+      const a0=sweepFrom(minVal,min,max), a1=sweepFrom(maxVal,min,max);
+      svg.querySelector('#'+id).setAttribute('d',arcPath(150,200,114,a0,a1));
+    }
+
+    const NG_MIN=0, NG_MAX=110;
+    const ITT_MIN=0, ITT_MAX=1000;
+    const ITT_START_LIMIT=965;
+
+    makeTicks('#ngGauge', NG_MIN, NG_MAX, 2, v=> (v%10===0? v: ''));
+    makeTicks('#ittGauge', ITT_MIN, ITT_MAX, 20, v=> (v%100===0? v: ''));
+    const ngSVG=document.getElementById('ngGauge');
+    setRange(ngSVG,'ng-warn1',50,60,NG_MIN,NG_MAX);
+    setRange(ngSVG,'ng-good',60,100,NG_MIN,NG_MAX);
+    setRange(ngSVG,'ng-warn2',100,105,NG_MIN,NG_MAX);
+    setRange(ngSVG,'ng-bad',105,110,NG_MIN,NG_MAX);
+    const ittSVG=document.getElementById('ittGauge');
+    setRange(ittSVG,'itt-good',200,780,ITT_MIN,ITT_MAX);
+    setRange(ittSVG,'itt-warn',780,950,ITT_MIN,ITT_MAX);
+    setRange(ittSVG,'itt-bad',950,1000,ITT_MIN,ITT_MAX);
+
+    // --- DOM
+    const ngNeedle=document.getElementById('ng-needle');
+    const ittNeedle=document.getElementById('itt-needle');
+    const ngValEl=document.getElementById('ngVal');
+    const ittValEl=document.getElementById('ittVal');
+    const stateEl=document.getElementById('state');
+    const tClockEl=document.getElementById('tClock');
+    const fuelAtEl=document.getElementById('fuelAt');
+    const peakITTEl=document.getElementById('peakITT');
+
+    const chipStarter=document.getElementById('chip-starter');
+    const chipIgn=document.getElementById('chip-ign');
+    const chipFuel=document.getElementById('chip-fuel');
+    const chipFail=document.getElementById('chip-fail');
+
+    const btnStart=document.getElementById('btn-start');
+    const btnAbort=document.getElementById('btn-abort');
+    const btnReset=document.getElementById('btn-reset');
+    const btnRunTests=document.getElementById('btn-run-tests');
+
+    const ambient=document.getElementById('ambient');
+    const battery=document.getElementById('battery');
+    const hotStart=document.getElementById('hotStart');
+    const hungStart=document.getElementById('hungStart');
+    const showTraces=document.getElementById('showTraces');
+
+    const idleNGEl=document.getElementById('idleNG');
+    const cutoutEl=document.getElementById('cutout');
+    const settleITTEl=document.getElementById('settleITT');
+
+    // --- Model (CT7 tuned)
+    const Model={
+      state:'IDLE',
+      t:0, ng:0, itt:0, peakITT:0,
+      fuelIntroAt:null,
+      starterCutoutNG:55,   // CT7 ~55%
+      idleNG:64,            // ground idle target
+      settleITT:440         // stabilized ITT target
+    };
+
+    function setChip(el,on,kind){ el.className='chip'+(on?' on':''); if(kind==='warn')el.classList.add('warn'); if(kind==='bad')el.classList.add('bad'); }
+
+    function updateNeedles(){
+      const ngA=sweepFrom(Model.ng,NG_MIN,NG_MAX);
+      const ittA=sweepFrom(Model.itt,ITT_MIN,ITT_MAX);
+      ngNeedle.setAttribute('transform',`rotate(${ngA} 150 200)`);
+      ittNeedle.setAttribute('transform',`rotate(${ittA} 150 200)`);
+      ngValEl.textContent=`${Model.ng.toFixed(1)}%`;
+      ittValEl.textContent=`${Math.round(Model.itt)} °C`;
+      stateEl.textContent=Model.state;
+      tClockEl.textContent=`${Model.t.toFixed(1)} s`;
+      idleNGEl.textContent=`${Model.idleNG}%`;
+      cutoutEl.textContent=`${Model.starterCutoutNG}% NG`;
+      settleITTEl.textContent=`${Model.settleITT} °C`;
+    }
+
+    function resetModel(){
+      Model.state='IDLE'; Model.t=0; Model.ng=0; Model.itt=0; Model.peakITT=0; Model.fuelIntroAt=null;
+      setChip(chipStarter,false); setChip(chipIgn,false); setChip(chipFuel,false); setChip(chipFail,false);
+      fuelAtEl.textContent='—'; peakITTEl.textContent='—';
+      updateNeedles(); drawTraces(true);
+    }
+
+    // --- Traces
+    const traceCanvas=document.createElement('canvas'); traceCanvas.width=1000; traceCanvas.height=140;
+    traceCanvas.style.width='100%'; traceCanvas.style.height='140px';
+    let traceAttached=false, traceX=0;
+    function attachTrace(){ if(traceAttached) return; document.querySelector('.controls').appendChild(traceCanvas); traceAttached=true; }
+    function detachTrace(){ if(!traceAttached) return; traceCanvas.remove(); traceAttached=false; }
+    function drawTraces(reset){
+      if(!traceAttached) return;
+      const ctx=traceCanvas.getContext('2d');
+      if(reset){ ctx.clearRect(0,0,traceCanvas.width,traceCanvas.height); traceX=0; }
+      ctx.fillStyle='#0d131b'; ctx.fillRect(0,0,traceCanvas.width,traceCanvas.height);
+      ctx.strokeStyle='#24344a'; ctx.lineWidth=1;
+      for(let y=0;y<=140;y+=28){ ctx.beginPath(); ctx.moveTo(0,y+.5); ctx.lineTo(1000,y+.5); ctx.stroke(); }
+      ctx.fillStyle='#9fb2c7'; ctx.font='12px system-ui'; ctx.fillText('Traces: NG (%) and ITT (°C / 10)',10,14);
+    }
+    function plotTrace(){
+      if(!traceAttached) return;
+      const ctx=traceCanvas.getContext('2d'), h=traceCanvas.height;
+      const yNG=h - (Model.ng/110)*(h-20) - 10;
+      const yITT=h - ((Model.itt/1000)*(h-20)) - 10;
+      if(traceX>=traceCanvas.width){
+        const img=ctx.getImageData(200,0,traceCanvas.width-200,h);
+        ctx.putImageData(img,0,0);
+        ctx.fillStyle='#0d131b'; ctx.fillRect(traceCanvas.width-200,0,200,h);
+        traceX=traceCanvas.width-200;
+      }
+      ctx.fillStyle='#24d17e'; ctx.fillRect(traceX,yNG,2,2);
+      ctx.fillStyle='#61dafb'; ctx.fillRect(traceX,yITT,2,2);
+      traceX+=2;
+    }
+
+    // --- Dynamics
+    let rafId=null, lastTs=null;
+    function step(ts){
+      if(lastTs==null) lastTs=ts;
+      const dt=Math.min(0.1,(ts-lastTs)/1000); lastTs=ts;
+
+      const amb=parseFloat(ambient.value);
+      const batt=parseFloat(battery.value);
+      const hotPenalty=(amb>30)?1.05:1.0;
+      const battFactor=batt/100;
+
+      switch(Model.state){
+        case 'STARTER': {
+          setChip(chipStarter,true);
+          // CT7 motoring: spool toward ~22% (battery-scaled); ITT tends toward ambient+20 but not above 175
+          const target = 22 * battFactor;
+          Model.ng = lerp(Model.ng, target, 1 - Math.exp(-dt*2.0));
+          const coolTarget = Math.min(175, Math.max(amb+20, 120));
+          Model.itt = lerp(Model.itt, coolTarget, 1 - Math.exp(-dt*0.6));
+
+          // Introduce fuel/ign ONLY when Ng>=20 and ITT<=175
+          if(Model.ng>=20 && Model.itt<=175 && !Model.fuelIntroAt){
+            Model.fuelIntroAt = Model.t;
+            fuelAtEl.textContent = `${Model.t.toFixed(1)} s @ ${Model.ng.toFixed(1)}% NG`;
+            setChip(chipIgn,true); setChip(chipFuel,true);
+            Model.state='LIGHTOFF';
+          }
+          break;
+        }
+
+        case 'LIGHTOFF': {
+          const sinceFuel = Model.t - (Model.fuelIntroAt||Model.t);
+
+          // ITT: smooth, rapid exponential rise. Hot start rises much faster and to higher target (capped by 965).
+          const normalPeak = lerp(740, 810, (amb+20)/65);
+          const desiredPeak = hotStart.checked ? 990 : normalPeak;
+          const ittBound = Math.min(desiredPeak, ITT_START_LIMIT);
+          const riseAgg = hotStart.checked ? 5.2 : (hungStart.checked ? 2.2 : 3.2);
+          Model.itt = lerp(Model.itt, ittBound, 1 - Math.exp(-dt*riseAgg));
+
+          // NG: hot start sluggish; hung start stagnates ~38–40 %
+          let accelTarget = Model.idleNG;
+          let accelFactor = 0.55; // slower normal lightoff accel
+          if(hotStart.checked){ accelFactor = 0.24; }
+          if(hungStart.checked){ accelTarget = 38; accelFactor = 0.18; }
+          Model.ng = lerp(Model.ng, accelTarget, 1 - Math.exp(-dt*accelFactor));
+
+          if(Model.ng >= Model.starterCutoutNG) setChip(chipStarter,false);
+          if(sinceFuel > 3.3){ Model.state='ACCEL'; }
+          break;
+        }
+
+        case 'ACCEL': {
+          if(hungStart.checked){
+            // Hung: NG stays low; ITT elevated and creeping
+            const stagnation = 40;
+            Model.ng = lerp(Model.ng, stagnation, 1 - Math.exp(-dt*0.2));
+            const creepTarget = Math.min(900, ITT_START_LIMIT);
+            Model.itt = lerp(Model.itt, creepTarget, 1 - Math.exp(-dt*0.12));
+          } else {
+            // Post-lightoff acceleration uses slew limiting instead of pure exponential
+            const rate = hotStart.checked ? 4.5 : 6.0; // % NG per second (hot slower)
+            Model.ng = slewTowards(Model.ng, Model.idleNG, rate, dt);
+            const settle = Model.settleITT * hotPenalty;
+            Model.itt = lerp(Model.itt, settle, 1 - Math.exp(-dt*0.18));
+          }
+          if(Model.ng > Model.starterCutoutNG) setChip(chipStarter,false);
+          if(!hungStart.checked && Math.abs(Model.ng-Model.idleNG)<0.6 && Math.abs(Model.itt-Model.settleITT)<6){
+            Model.state='STABLE'; setChip(chipIgn,false); setChip(chipFuel,false);
+          }
+          break;
+        }
+
+        case 'STABLE': {
+          Model.ng = lerp(Model.ng, Model.idleNG, 1 - Math.exp(-dt*0.15));
+          Model.itt = lerp(Model.itt, Model.settleITT, 1 - Math.exp(-dt*0.15));
+          break;
+        }
+
+        case 'ABORT': {
+          // Fuel/ign off. Slow cooling; motor to cool faster; target ≤175 °C.
+          setChip(chipFuel,false); setChip(chipIgn,false);
+          const coast=0.965; Model.ng *= Math.pow(coast, dt*10);
+          const coolFloor = Math.max(amb+10, 120);
+          const coolTarget = Math.min(175, coolFloor);
+          const coolRate = 0.10; // slower than before
+          Model.itt = lerp(Model.itt, coolTarget, 1 - Math.exp(-dt*coolRate));
+          if(Model.ng < 1){ Model.state='IDLE'; setChip(chipStarter,false); setChip(chipFail,false); }
+          break;
+        }
+      }
+
+      // Peak & faults (advisory only)
+      Model.peakITT = Math.max(Model.peakITT, Model.itt);
+      peakITTEl.textContent = `${Math.round(Model.peakITT)} °C`;
+
+      const overLimit = (Model.itt >= ITT_START_LIMIT);
+      const hung = hungStart.checked && (Model.state!=='IDLE') && Model.ng < 45 && Model.t > 12;
+      setChip(chipFail, overLimit || hung, overLimit? 'bad' : (hung ? 'warn' : undefined));
+      // Never auto-abort hot/hung; leave ABORT to the user
+
+      Model.t += dt;
+      updateNeedles();
+      if(showTraces.checked) plotTrace();
+      rafId = requestAnimationFrame(step);
+    }
+
+    // --- Controls
+    btnStart.addEventListener('click', ()=>{
+      if(['STARTER','LIGHTOFF','ACCEL'].includes(Model.state)) return;
+      if(showTraces.checked) attachTrace(); else detachTrace(); drawTraces(true);
+      Model.state='STARTER';
+      Model.t=0; Model.ng=0; Model.itt= Math.max(parseFloat(ambient.value)+20, 120); // prestart ITT closer to ambient
+      Model.peakITT=0; Model.fuelIntroAt=null;
+      setChip(chipStarter,true); setChip(chipIgn,false); setChip(chipFuel,false); setChip(chipFail,false);
+      cancelAnimationFrame(rafId); lastTs=null; rafId=requestAnimationFrame(step);
+    });
+
+    btnAbort.addEventListener('click', ()=>{
+      if(['IDLE','ABORT'].includes(Model.state)) return;
+      Model.state='ABORT';
+      setChip(chipStarter,false); setChip(chipFuel,false); setChip(chipIgn,false);
+    });
+
+    btnReset.addEventListener('click', ()=>{ cancelAnimationFrame(rafId); lastTs=null; resetModel(); });
+
+    ambient.addEventListener('input', ()=>{});
+    battery.addEventListener('input', ()=>{});
+
+    // --- Self tests (expanded)
+    function runSelfTests(){
+      const report=document.getElementById('test-report'); const results=[];
+      const pass=(n)=>results.push({n,ok:true}); const fail=(n,m)=>results.push({n,ok:false,m});
+
+      try{ document.getElementById('btn-start')?pass('btn-start exists'):fail('btn-start exists','missing'); }catch(e){ fail('btn-start exists',e.message); }
+      try{ document.getElementById('battery')?pass('battery slider exists'):fail('battery slider exists','missing'); }catch(e){ fail('battery slider exists',e.message); }
+      try{ document.getElementById('hotStart')&&document.getElementById('hungStart')?pass('mode toggles exist'):fail('mode toggles exist','missing'); }catch(e){ fail('mode toggles exist',e.message); }
+
+      // Start button should enter STARTER and set starter chip ON without throwing
+      try {
+        Model.state='IDLE';
+        btnStart.click();
+        setTimeout(()=>{
+          (Model.state==='STARTER')?pass('Start → STARTER'):fail('Start → STARTER',`state=${Model.state}`);
+          (chipStarter.classList.contains('on'))?pass('Starter chip ON after Start'):fail('Starter chip ON after Start');
+
+          // Immediately after Start, fuel must NOT be introduced yet (motoring requirement)
+          (Model.fuelIntroAt===null)?pass('No fuel on immediate Start'):fail('No fuel on immediate Start','fuelIntroAt set too early');
+
+          // Abort should force ABORT state
+          btnAbort.click();
+          (Model.state==='ABORT')?pass('Abort → ABORT'):fail('Abort → ABORT',`state=${Model.state}`);
+
+          render();
+        }, 10);
+      } catch(e){ fail('Start/Abort flow', e.message); render(); }
+
+      function render(){
+        report.hidden=false; report.innerHTML='<strong>Self-Tests</strong><br/>'+
+          results.map(r=>`<div class="${r.ok?'test-pass':'test-fail'}">${r.ok?'✓':'✗'} ${r.n}${r.m?': '+r.m:''}</div>`).join('');
+      }
+
+      // Immediate partial render; async assertions render after the timeout above
+      render();
+    }
+    function runHotPacingTest(){
+      const report=document.getElementById('test-report');
+      // Ensure report is visible without overwriting previous content
+      report.hidden=false;
+      const header=document.createElement('div'); header.innerHTML='<em>Extra Tests</em>'; report.appendChild(header);
+      const add=(ok,msg)=>{ const d=document.createElement('div'); d.className=ok?'test-pass':'test-fail'; d.textContent=(ok?'✓ ':'✗ ')+msg; report.appendChild(d); };
+      try{
+        resetModel(); hotStart.checked=true; hungStart.checked=false;
+        btnStart.click();
+        const waitFuel=()=>{
+          if(Model.fuelIntroAt===null){ setTimeout(waitFuel,40); return; }
+          setTimeout(()=>{
+            add(Model.ng<35, `Hot-start NG pacing (<35% @ ~1.2s): NG=${Model.ng.toFixed(1)}%`);
+          },1200);
+        };
+        waitFuel();
+      }catch(e){ add(false, 'Hot-start pacing test threw: '+e.message); }
+    }
+
+    function runAccelPacingTest(){
+      const report=document.getElementById('test-report');
+      report.hidden=false;
+      const add=(ok,msg)=>{ const d=document.createElement('div'); d.className=ok?'test-pass':'test-fail'; d.textContent=(ok?'✓ ':'✗ ')+msg; report.appendChild(d); };
+      try{
+        // Normal start pacing: after entering ACCEL, NG should not jump >8% within 0.8s
+        resetModel(); hotStart.checked=false; hungStart.checked=false;
+        btnStart.click();
+        const waitFuel=()=>{
+          if(Model.fuelIntroAt===null){ setTimeout(waitFuel,30); return; }
+          const waitAccel=()=>{
+            if(Model.state!=='ACCEL'){ setTimeout(waitAccel,30); return; }
+            const ng0=Model.ng;
+            setTimeout(()=>{ add((Model.ng - ng0) < 8.0, `Accel pacing (normal): ΔNG ${(Model.ng-ng0).toFixed(1)}% in 0.8s (<8% expected)`); }, 800);
+          };
+          waitAccel();
+        };
+        waitFuel();
+      }catch(e){ add(false,'Accel pacing test threw: '+e.message); }
+    }
+
+    function runStrictAccelPacingTest(){
+      const report=document.getElementById('test-report');
+      report.hidden=false;
+      const add=(ok,msg)=>{ const d=document.createElement('div'); d.className=ok?'test-pass':'test-fail'; d.textContent=(ok?'✓ ':'✗ ')+msg; report.appendChild(d); };
+      try{
+        // Stricter pacing: in normal ACCEL, ΔNG should be <9.5% within 1.5s
+        resetModel(); hotStart.checked=false; hungStart.checked=false;
+        btnStart.click();
+        const waitFuel=()=>{
+          if(Model.fuelIntroAt===null){ setTimeout(waitFuel,30); return; }
+          const waitAccel=()=>{
+            if(Model.state!=='ACCEL'){ setTimeout(waitAccel,30); return; }
+            const ng0=Model.ng;
+            setTimeout(()=>{ add((Model.ng - ng0) < 9.5, `Strict accel pacing (normal): ΔNG ${(Model.ng-ng0).toFixed(1)}% in 1.5s (<9.5% expected)`); }, 1500);
+          };
+          waitAccel();
+        };
+        waitFuel();
+      }catch(e){ add(false,'Strict accel pacing test threw: '+e.message); }
+    }
+
+    function runHotStrictAccelPacingTest(){
+      const report=document.getElementById('test-report');
+      report.hidden=false;
+      const add=(ok,msg)=>{ const d=document.createElement('div'); d.className=ok?'test-pass':'test-fail'; d.textContent=(ok?'✓ ':'✗ ')+msg; report.appendChild(d); };
+      try{
+        // Hot-start ACCEL pacing: with slower rate, ΔNG should be <7.2% within 1.5s
+        resetModel(); hotStart.checked=true; hungStart.checked=false;
+        btnStart.click();
+        const waitFuel=()=>{
+          if(Model.fuelIntroAt===null){ setTimeout(waitFuel,30); return; }
+          const waitAccel=()=>{
+            if(Model.state!=='ACCEL'){ setTimeout(waitAccel,30); return; }
+            const ng0=Model.ng;
+            setTimeout(()=>{ add((Model.ng - ng0) < 7.2, `Strict accel pacing (hot): ΔNG ${(Model.ng-ng0).toFixed(1)}% in 1.5s (<7.2% expected)`); }, 1500);
+          };
+          waitAccel();
+        };
+        waitFuel();
+      }catch(e){ add(false,'Hot strict accel pacing test threw: '+e.message); }
+    }
+
+    btnRunTests.addEventListener('click', ()=>{ runSelfTests(); runHotPacingTest(); runAccelPacingTest(); runStrictAccelPacingTest(); runHotStrictAccelPacingTest(); });
+
+    // Boot
+    resetModel();
+  </script>
+</body>
+</html>
