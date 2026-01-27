@@ -425,22 +425,56 @@
                 aircraft: []
             };
 
-            // Extract Grand Totals line
-            const grandTotalsMatch = text.match(/Grand Totals[\s\S]*?(\d+)\s+Flights:[\s\S]*?Total\s+([\d.]+)/i);
-            if (grandTotalsMatch) {
-                data.totalTime = parseFloat(grandTotalsMatch[2]);
+            // Find the Grand Totals line - the format is:
+            // "Grand Totals\n578 Flights: [numbers...] Total [number]"
+            // The very last number in the Grand Totals section is the Total Time
+            const grandTotalsRegex = /Grand Totals[\s\S]*?(\d+)\s+Flights:[\s\S]*?(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\.\d+)/;
+            
+            const match = text.match(grandTotalsRegex);
+            
+            if (match) {
+                // Based on the PDF structure:
+                // 1: Number of flights (578)
+                // 2-15: Various hour categories
+                // 16: Total hours (last number, which is 1239.1)
+                const numFlights = match[1];
+                
+                // Extract the numbers in order they appear
+                const singleEngineDualDay = parseFloat(match[2]);      // 206.7
+                const singleEnginePICDay = parseFloat(match[3]);       // 575.5
+                const singleEngineSICDay = parseFloat(match[4]);       // 1.3
+                const singleEngineP1Day = parseFloat(match[5]);        // 20.8
+                const singleEngineUSDay = parseFloat(match[6]);        // 173.3
+                const singleEngineDualNight = parseFloat(match[7]);    // 35.7
+                const singleEnginePICNight = parseFloat(match[8]);     // 141.3
+                const singleEngineSICNight = parseFloat(match[9]);     // 3.5
+                const singleEngineP1Night = parseFloat(match[10]);     // 60.7
+                const multiEngineUSDay = parseFloat(match[11]);        // 1.0
+                const multiEngineDualNight = parseFloat(match[12]);    // 10.1
+                const multiEnginePICNight = parseFloat(match[13]);     // 8.0
+                const ifrActual = parseFloat(match[14]);               // 174.4
+                const simulator = parseFloat(match[15]);               // 42.5
+                const totalTime = parseFloat(match[16]);               // 1239.1
+                
+                data.totalTime = totalTime;
+                data.pic = singleEnginePICDay + singleEnginePICNight; // 575.5 + 141.3 = 716.8
+                
+                // Night hours (all night columns)
+                data.night = singleEngineDualNight + singleEnginePICNight + singleEngineSICNight + 
+                            singleEngineP1Night + multiEngineDualNight + multiEnginePICNight;
             }
 
-            // Parse individual aircraft data
-            const aircraftPattern = /([A-Z0-9]{4})\s+for Period[\s\S]*?Total\s+\((\d+)\s+Flights\):[\s\S]*?([\d.]+)(?=\s+\d+\s*$)/gm;
-            let match;
+            // Parse individual aircraft
+            const aircraftPattern = /([A-Z][A-Z0-9]{2,3})\s+Total\s+\(\d+\s+Flights\):[\s\S]*?([\d.]+)\s+(?=\d+\s*$)/gm;
+            let aircraftMatch;
             const aircraftData = {};
 
-            while ((match = aircraftPattern.exec(text)) !== null) {
-                const type = match[1];
-                const hours = parseFloat(match[3]);
+            while ((aircraftMatch = aircraftPattern.exec(text)) !== null) {
+                const type = aircraftMatch[1];
+                const hours = parseFloat(aircraftMatch[2]);
                 
-                if (!aircraftData[type]) {
+                // Skip SIM entries
+                if (type !== 'SIM' && hours > 0) {
                     aircraftData[type] = hours;
                 }
             }
@@ -450,30 +484,16 @@
                 .map(([type, hours]) => ({ type, hours }))
                 .sort((a, b) => b.hours - a.hours);
 
-            // Calculate PIC from single and multi-engine columns
-            const picMatch = text.match(/Grand Totals[\s\S]*?Flights:\s+([\d.]+)\s+([\d.]+)/i);
-            if (picMatch) {
-                const singleEnginePIC = parseFloat(picMatch[2]) || 0;
-                data.pic = singleEnginePIC;
-            }
+            // Extract turbine hours (P46T + SF34)
+            const p46tHours = aircraftData['P46T'] || 0;
+            const sf34Hours = aircraftData['SF34'] || 0;
+            data.turbine = p46tHours + sf34Hours;
 
-            // Extract turbine hours (P46T)
-            const turbineMatch = text.match(/P46T[\s\S]*?Total[\s\S]*?([\d.]+)(?=\s+\d+\s*$)/i);
-            if (turbineMatch) {
-                data.turbine = parseFloat(turbineMatch[1]);
-            }
-
-            // Extract multi-engine hours (sum of multi-engine aircraft)
-            const multiEngineTypes = ['PA31', 'PA34', 'PA44', 'BE55', 'BE58', 'SF34'];
+            // Calculate multi-engine hours
+            const multiEngineTypes = ['PA31', 'PA34', 'PA44', 'BE55', 'BE58', 'SF34', 'AC11'];
             data.multiEngine = data.aircraft
                 .filter(a => multiEngineTypes.includes(a.type))
                 .reduce((sum, a) => sum + a.hours, 0);
-
-            // Extract night hours from Grand Totals
-            const nightMatch = text.match(/Grand Totals[\s\S]*?P1 U\/S\s+([\d.]+)/i);
-            if (nightMatch) {
-                data.night = parseFloat(nightMatch[1]);
-            }
 
             return data;
         }
