@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Admin - Noah Mirosch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent-purple: #a855f7;
+            --accent-blue: #3b82f6;
+            --accent-pink: #ec4899;
+            --accent-green: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            font-size: 0.9375rem;
+        }
+
+        .login-form, .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        input[type="password"],
+        input[type="file"] {
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9375rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        input[type="password"]:focus,
+        input[type="file"]:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+            background: rgba(168, 85, 247, 0.08);
+        }
+
+        input[type="file"] {
+            cursor: pointer;
+        }
+
+        input[type="file"]::file-selector-button {
+            padding: 8px 16px;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 6px;
+            color: var(--text-primary);
+            cursor: pointer;
+            margin-right: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.5);
+        }
+
+        button {
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(168, 85, 247, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            margin-bottom: 20px;
+        }
+
+        .message.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--accent-green);
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .stats-preview {
+            margin-top: 24px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+        }
+
+        .stats-preview h3 {
+            font-size: 1rem;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+        }
+
+        .stat-value {
+            color: var(--accent-purple);
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            margin-top: 20px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <!-- Login Form -->
+            <div id="loginSection">
+                <h1>Admin Login</h1>
+                <p class="subtitle">Enter password to update resume data</p>
+                <div id="loginMessage"></div>
+                <form class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required autocomplete="current-password">
+                    </div>
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+
+            <!-- Upload Form -->
+            <div id="uploadSection" class="hidden">
+                <h1>Update Resume Data</h1>
+                <p class="subtitle">Upload your flight data PDF to update the resume</p>
+                <div id="uploadMessage"></div>
+                <form class="upload-form" id="uploadForm">
+                    <div class="form-group">
+                        <label for="pdfFile">Flight Data PDF</label>
+                        <input type="file" id="pdfFile" accept=".pdf" required>
+                    </div>
+                    <button type="submit" id="uploadBtn">Parse and Preview</button>
+                </form>
+
+                <div id="statsPreview" class="hidden">
+                    <div class="stats-preview">
+                        <h3>Parsed Flight Data</h3>
+                        <div id="statsContent"></div>
+                    </div>
+                    <button id="updateResumeBtn" style="margin-top: 20px; width: 100%;">Update Resume</button>
+                </div>
+
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Set PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        let parsedData = null;
+
+        // Check if already logged in
+        if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+            showUploadSection();
+        }
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            
+            try {
+                // Call Vercel serverless function for authentication only
+                const response = await fetch('https://password-nine-weld.vercel.app/api/auth', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ password })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    sessionStorage.setItem('adminLoggedIn', 'true');
+                    showUploadSection();
+                    showMessage('loginMessage', 'Login successful!', 'success');
+                    setTimeout(() => {
+                        document.getElementById('loginMessage').innerHTML = '';
+                    }, 2000);
+                } else {
+                    showMessage('loginMessage', 'Incorrect password', 'error');
+                }
+            } catch (error) {
+                showMessage('loginMessage', 'Error connecting to authentication server', 'error');
+            }
+        });
+
+        // Upload form handler
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fileInput = document.getElementById('pdfFile');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                showMessage('uploadMessage', 'Please select a PDF file', 'error');
+                return;
+            }
+
+            document.getElementById('uploadBtn').disabled = true;
+            document.getElementById('uploadBtn').textContent = 'Parsing PDF...';
+
+            try {
+                const text = await extractTextFromPDF(file);
+                parsedData = parseFlightData(text);
+                displayStats(parsedData);
+                document.getElementById('statsPreview').classList.remove('hidden');
+                showMessage('uploadMessage', 'PDF parsed successfully! Review and click "Update Resume" to save.', 'success');
+            } catch (error) {
+                showMessage('uploadMessage', 'Error parsing PDF: ' + error.message, 'error');
+            } finally {
+                document.getElementById('uploadBtn').disabled = false;
+                document.getElementById('uploadBtn').textContent = 'Parse and Preview';
+            }
+        });
+
+        // Update resume button
+        document.getElementById('updateResumeBtn').addEventListener('click', () => {
+            if (parsedData) {
+                updateResume(parsedData);
+                showMessage('uploadMessage', 'Resume data updated! You can now close this page.', 'success');
+            }
+        });
+
+        // Logout button
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            sessionStorage.removeItem('adminLoggedIn');
+            document.getElementById('uploadSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('password').value = '';
+            document.getElementById('statsPreview').classList.add('hidden');
+            document.getElementById('uploadMessage').innerHTML = '';
+        });
+
+        function showUploadSection() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('uploadSection').classList.remove('hidden');
+        }
+
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="message ${type}">${message}</div>`;
+        }
+
+        async function extractTextFromPDF(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            let fullText = '';
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                const pageText = textContent.items.map(item => item.str).join(' ');
+                fullText += pageText + '\n';
+            }
+
+            return fullText;
+        }
+
+        function parseFlightData(text) {
+            const data = {
+                totalTime: 0,
+                pic: 0,
+                turbine: 0,
+                night: 0,
+                multiEngine: 0,
+                aircraft: []
+            };
+
+            // Extract Grand Totals line
+            const grandTotalsMatch = text.match(/Grand Totals[\s\S]*?(\d+)\s+Flights:[\s\S]*?Total\s+([\d.]+)/i);
+            if (grandTotalsMatch) {
+                data.totalTime = parseFloat(grandTotalsMatch[2]);
+            }
+
+            // Parse individual aircraft data
+            const aircraftPattern = /([A-Z0-9]{4})\s+for Period[\s\S]*?Total\s+\((\d+)\s+Flights\):[\s\S]*?([\d.]+)(?=\s+\d+\s*$)/gm;
+            let match;
+            const aircraftData = {};
+
+            while ((match = aircraftPattern.exec(text)) !== null) {
+                const type = match[1];
+                const hours = parseFloat(match[3]);
+                
+                if (!aircraftData[type]) {
+                    aircraftData[type] = hours;
+                }
+            }
+
+            // Convert to array and sort by hours
+            data.aircraft = Object.entries(aircraftData)
+                .map(([type, hours]) => ({ type, hours }))
+                .sort((a, b) => b.hours - a.hours);
+
+            // Calculate PIC from single and multi-engine columns
+            const picMatch = text.match(/Grand Totals[\s\S]*?Flights:\s+([\d.]+)\s+([\d.]+)/i);
+            if (picMatch) {
+                const singleEnginePIC = parseFloat(picMatch[2]) || 0;
+                data.pic = singleEnginePIC;
+            }
+
+            // Extract turbine hours (P46T)
+            const turbineMatch = text.match(/P46T[\s\S]*?Total[\s\S]*?([\d.]+)(?=\s+\d+\s*$)/i);
+            if (turbineMatch) {
+                data.turbine = parseFloat(turbineMatch[1]);
+            }
+
+            // Extract multi-engine hours (sum of multi-engine aircraft)
+            const multiEngineTypes = ['PA31', 'PA34', 'PA44', 'BE55', 'BE58', 'SF34'];
+            data.multiEngine = data.aircraft
+                .filter(a => multiEngineTypes.includes(a.type))
+                .reduce((sum, a) => sum + a.hours, 0);
+
+            // Extract night hours from Grand Totals
+            const nightMatch = text.match(/Grand Totals[\s\S]*?P1 U\/S\s+([\d.]+)/i);
+            if (nightMatch) {
+                data.night = parseFloat(nightMatch[1]);
+            }
+
+            return data;
+        }
+
+        function displayStats(data) {
+            const content = document.getElementById('statsContent');
+            content.innerHTML = `
+                <div class="stat-row">
+                    <span class="stat-label">Total Time:</span>
+                    <span class="stat-value">${data.totalTime.toFixed(1)} hrs</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">PIC:</span>
+                    <span class="stat-value">${data.pic.toFixed(1)} hrs</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Turbine:</span>
+                    <span class="stat-value">${data.turbine.toFixed(1)} hrs</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Night:</span>
+                    <span class="stat-value">${data.night.toFixed(1)} hrs</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Multi Engine:</span>
+                    <span class="stat-value">${data.multiEngine.toFixed(1)} hrs</span>
+                </div>
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                    <strong style="color: var(--text-primary);">Top Aircraft (${data.aircraft.length} types):</strong>
+                    ${data.aircraft.slice(0, 9).map(a => `
+                        <div class="stat-row">
+                            <span class="stat-label">${a.type}:</span>
+                            <span class="stat-value">${a.hours.toFixed(1)} hrs</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function updateResume(data) {
+            // Store data in localStorage to be accessed by the resume page
+            const resumeData = {
+                totalTime: data.totalTime.toFixed(1),
+                pic: data.pic.toFixed(1),
+                turbine: data.turbine.toFixed(1),
+                night: data.night.toFixed(1),
+                multiEngine: data.multiEngine.toFixed(1),
+                aircraft: data.aircraft.slice(0, 9).map(a => ({
+                    type: a.type,
+                    hours: a.hours.toFixed(1)
+                })),
+                lastUpdated: new Date().toLocaleDateString('en-GB')
+            };
+
+            localStorage.setItem('noahResumeData', JSON.stringify(resumeData));
+        }
+    </script>
+</body>
+</html>
