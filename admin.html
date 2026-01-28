@@ -402,7 +402,7 @@
                                 turbine: parsedData.turbine.toFixed(1),
                                 night: parsedData.night.toFixed(1),
                                 multiEngine: parsedData.multiEngine.toFixed(1),
-                                aircraft: parsedData.aircraft.slice(0, 9).map(a => ({
+                                aircraft: parsedData.aircraft.map(a => ({
                                     type: a.type,
                                     hours: a.hours.toFixed(1)
                                 })),
