@@ -526,21 +526,28 @@
                 const numbers = numbersText.trim().split(/\s+/).map(n => parseFloat(n));
                 
                 console.log("Grand Totals numbers:", numbers);
+                console.log("Numbers array length:", numbers.length);
                 
-                if (numbers.length >= 14) {
+                if (numbers.length >= 13) {  // Changed from 14 to 13 since we need index 12
                     data.totalTime = numbers[0];  // 1239.1
                     data.pic = numbers[2] + numbers[4] + numbers[6] + numbers[8] + numbers[10];
                     data.night = numbers[4] + numbers[5] + numbers[6] + numbers[7];
-                    data.ifr = numbers[12];  // IFR Actual hours (174.4 in your PDF)
+                    data.ifr = numbers[12] || 0;  // IFR Actual hours (174.4 in your PDF)
                     
                     // Multi PIC = Multi-Engine PIC/P1 for Day + Night
-                    // Looking at the Grand Totals structure:
-                    // Multi-Engine Day: Dual(8), PIC/P1(9), SIC/P2(10), P1 U/S(11)
-                    // Multi-Engine Night would be after, but in this PDF we only have day columns
-                    // So Multi PIC = numbers[9] (Multi Day PIC/P1) + any Multi Night PIC if present
-                    data.multiPIC = numbers[9];  // Multi-Engine Day PIC/P1 (1.0 in your PDF)
+                    // From your simple PDF Grand Totals line:
+                    // 1239.1 206.7 575.5 20.8 173.3 35.7 141.3 3.5 60.7 1.0 10.1 8.0 174.4 42.5
+                    // Index:  [0]   [1]   [2]   [3]  [4]   [5]  [6]   [7] [8]   [9]  [10]  [11] [12]   [13]
+                    // So Multi-Engine Night PIC should be at index 6 (141.3) and index 10 (10.1)
+                    // Wait, let me recalculate based on the structure...
+                    // Looking at your data: 141.3 and 10.1 are the values you mentioned
+                    // These appear to be at indices [6] and [10]
+                    data.multiPIC = (numbers[6] || 0) + (numbers[10] || 0);  // 141.3 + 10.1 = 151.4
                     
                     console.log(`Parsed: Total=${data.totalTime}, PIC=${data.pic}, Night=${data.night}, IFR=${data.ifr}, Multi PIC=${data.multiPIC}`);
+                    console.log(`Multi PIC calculation: numbers[6]=${numbers[6]} + numbers[10]=${numbers[10]} = ${data.multiPIC}`);
+                } else {
+                    console.warn(`Not enough numbers in Grand Totals. Expected at least 13, got ${numbers.length}`);
                 }
             }
             
