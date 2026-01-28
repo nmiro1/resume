@@ -416,7 +416,7 @@
         }
 
         function parseFlightData(text) {
-            console.log("Raw PDF text:", text); // Debug logging
+            console.log("Raw PDF text:", text);
             
             const data = {
                 totalTime: 0,
@@ -427,99 +427,83 @@
                 aircraft: []
             };
 
-            // Step 1: Extract the Grand Totals line and parse all numbers
-            // The line looks like: "Grand Totals 578 Flights: 206.7 575.5 1.3 20.8 173.3 35.7 141.3 3.5 60.7 1.0 10.1 8.0 174.4 42.5 1239.1 466"
-            const grandTotalsLine = text.match(/Grand Totals[\s\S]*?(\d+)\s+Flights:([\s\d.]+)/);
+            // Step 1: Parse Grand Totals
+            // Format: "Grand Totals 578 1239.1 206.7 575.5 20.8 173.3 35.7 141.3 3.5 60.7 1.0 10.1 8.0 174.4 42.5"
+            const grandTotalsMatch = text.match(/Grand Totals\s+(\d+)\s+([\d.\s]+)/);
             
-            if (grandTotalsLine) {
-                // Extract all numbers after "Flights:"
-                const numbersText = grandTotalsLine[2];
+            if (grandTotalsMatch) {
+                const numbersText = grandTotalsMatch[2];
                 const numbers = numbersText.trim().split(/\s+/).map(n => parseFloat(n));
                 
-                console.log("Extracted numbers:", numbers);
+                console.log("Grand Totals numbers:", numbers);
                 
-                // Based on PDF structure (16 numbers total):
-                // [0] = 206.7 (Single Day Dual)
-                // [1] = 575.5 (Single Day PIC/P1) ✓ PIC
-                // [2] = 1.3 (Single Day SIC/P2) ✓ PIC
+                // Simple PDF format:
+                // Grand Totals 578 1239.1 206.7 575.5 20.8 173.3 35.7 141.3 3.5 60.7 1.0 10.1 8.0 174.4 42.5
+                // [0] = 1239.1 (Total Time) ✓
+                // [1] = 206.7 (Single Day Dual)
+                // [2] = 575.5 (Single Day PIC) ✓
                 // [3] = 20.8 (Single Day P1 U/S)
-                // [4] = 173.3 (Single Night Dual) ✓ PIC
-                // [5] = 35.7 (Single Night PIC/P1)
-                // [6] = 141.3 (Single Night SIC/P2) ✓ PIC
+                // [4] = 173.3 (Single Night Dual) ✓
+                // [5] = 35.7 (Single Night PIC)
+                // [6] = 141.3 (Single Night SIC) ✓
                 // [7] = 3.5 (Single Night P1 U/S)
-                // [8] = 60.7 (Multi Day Dual) ✓ PIC
+                // [8] = 60.7 (Multi Day Dual) ✓
                 // [9] = 1.0 (Multi Day PIC/P1)
-                // [10] = 10.1 (Multi Day SIC/P2) ✓ PIC
+                // [10] = 10.1 (Multi Day SIC/P2) ✓
                 // [11] = 8.0 (Multi Day P1 U/S)
-                // [12] = 174.4 (IFR Actual)
+                // [12] = 174.4 (IFR Act)
                 // [13] = 42.5 (Simulator)
-                // [14] = 1239.1 (Total Time) ✓
-                // [15] = 466 (Total Landings)
                 
-                if (numbers.length >= 15) {
-                    data.totalTime = numbers[14];  // 1239.1
+                if (numbers.length >= 14) {
+                    data.totalTime = numbers[0];  // 1239.1
                     
-                    // PIC: 575.5, 1.3, 173.3, 141.3, 60.7, 10.1
-                    data.pic = numbers[1] + numbers[2] + numbers[4] + numbers[6] + numbers[8] + numbers[10];
+                    // PIC: 575.5 + 173.3 + 141.3 + 60.7 + 10.1 = 960.9
+                    data.pic = numbers[2] + numbers[4] + numbers[6] + numbers[8] + numbers[10];
                     
-                    // Night: Single Night columns (indices 4,5,6,7) + Multi Night columns
-                    // But we don't have separate Multi Night in this structure
-                    data.night = numbers[4] + numbers[5] + numbers[6] + numbers[7];
+                    // Night: Single Night columns (indices 4,5,6,7)
+                    data.night = numbers[4] + numbers[5] + numbers[6] + numbers[7];  // 173.3 + 35.7 + 141.3 + 3.5 = 353.8
+                    
+                    console.log(`Parsed: Total=${data.totalTime}, PIC=${data.pic}, Night=${data.night}`);
                 }
             }
 
             // Step 2: Parse individual aircraft
-            // Looking at the raw text structure, each aircraft has two lines:
-            // "XXXX for Period (N Flights): [numbers] total landings"
-            // "XXXX Total (N Flights): [numbers] total landings"
-            // We want the "Total" line, and the second-to-last number is total hours
+            // Format: "SR22 267 626.2 8.4 449.3 167.2 94.0"
+            // Pattern: AIRCRAFT_CODE FLIGHTS TOTAL [other numbers...]
             
-            const aircraftData = {};
+            const lines = text.split('\n');
             
-            // Find all "Total" lines (not "for Period")
-            const totalLinePattern = /([A-Z][A-Z0-9]{2,3})\s+Total\s+\((\d+)\s+Flights\):\s+([\d.\s]+)/g;
-            let match;
-            
-            while ((match = totalLinePattern.exec(text)) !== null) {
-                const type = match[1];
-                const flights = match[2];
-                const numbersText = match[3];
+            for (const line of lines) {
+                // Look for lines with aircraft codes (3-4 uppercase letters/numbers followed by numbers)
+                const match = line.match(/^([A-Z][A-Z0-9]{2,3})\s+(\d+)\s+([\d.\s]+)/);
                 
-                // Extract all numbers
-                const numbers = numbersText.trim().split(/\s+/).map(n => parseFloat(n)).filter(n => !isNaN(n));
-                
-                console.log(`Found ${type} Total line with numbers:`, numbers);
-                
-                if (numbers.length >= 2) {
-                    // The pattern is: [various columns...] TOTAL_HOURS LANDINGS
-                    // So second-to-last is total hours, last is landings
-                    const hours = numbers[numbers.length - 2];
-                    const landings = numbers[numbers.length - 1];
+                if (match) {
+                    const type = match[1];
+                    const flights = parseInt(match[2]);
+                    const numbersText = match[3];
                     
-                    console.log(`  → ${type}: ${hours} hours, ${landings} landings`);
+                    // First number after flights is the total hours
+                    const numbers = numbersText.trim().split(/\s+/).map(n => parseFloat(n));
                     
-                    // Skip SIM and validate
-                    if (type !== 'SIM' && hours > 0 && hours < 10000) {
-                        aircraftData[type] = hours;
-                    }
-                } else if (numbers.length === 1) {
-                    // Some aircraft might only have total hours, no separate landings
-                    console.log(`  → ${type}: ${numbers[0]} hours (only one number)`);
-                    if (type !== 'SIM' && numbers[0] > 0 && numbers[0] < 10000) {
-                        aircraftData[type] = numbers[0];
+                    if (numbers.length > 0) {
+                        const hours = numbers[0];  // First number is total
+                        
+                        console.log(`Found ${type}: ${flights} flights, ${hours} hours`);
+                        
+                        // Skip SIM and validate
+                        if (type !== 'SIM' && hours > 0) {
+                            data.aircraft.push({ type, hours });
+                        }
                     }
                 }
             }
             
-            // Convert to array and sort
-            data.aircraft = Object.entries(aircraftData)
-                .map(([type, hours]) => ({ type, hours }))
-                .sort((a, b) => b.hours - a.hours);
+            // Sort by hours descending
+            data.aircraft.sort((a, b) => b.hours - a.hours);
             
-            console.log("Final parsed aircraft:", data.aircraft);
+            console.log("Parsed aircraft:", data.aircraft);
 
             // Step 3: Calculate turbine hours
-            // Turbine aircraft: P46T (Piper Meridian) and SF34 (Saab 340)
             const turbineTypes = ['P46T', 'SF34'];
             data.turbine = data.aircraft
                 .filter(a => turbineTypes.includes(a.type))
