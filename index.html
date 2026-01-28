@@ -330,31 +330,30 @@
             background: rgba(59, 130, 246, 0.08);
             border-color: rgba(59, 130, 246, 0.4);
             transform: translateY(-2px);
-            z-index: 100;
+            z-index: 10000;
         }
 
         /* SF34 Special Highlight - Current Aircraft */
         .aircraft-item.current-aircraft {
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(59, 130, 246, 0.15));
-            border: 2px solid rgba(168, 85, 247, 0.5);
+            background: rgba(168, 85, 247, 0.1);
+            border: 2px solid rgba(168, 85, 247, 0.4);
             box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
             animation: pulse-glow 3s ease-in-out infinite;
         }
 
         .aircraft-item.current-aircraft:hover {
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(59, 130, 246, 0.25));
-            border-color: rgba(168, 85, 247, 0.7);
+            background: rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.6);
             box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+            z-index: 10000;
         }
 
-        .aircraft-item.current-aircraft .aircraft-type::after {
-            content: 'Current';
-            display: block;
-            font-size: 0.65rem;
-            color: var(--accent-purple);
-            margin-top: 4px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 500;
+        .aircraft-item.current-aircraft .aircraft-type {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
         }
 
         @keyframes pulse-glow {
@@ -380,7 +379,7 @@
             visibility: hidden;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
-            z-index: 1000;
+            z-index: 9999;
         }
 
         .aircraft-item:hover .aircraft-tooltip {
