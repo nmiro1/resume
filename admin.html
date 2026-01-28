@@ -597,7 +597,7 @@
                 turbine: data.turbine.toFixed(1),
                 night: data.night.toFixed(1),
                 multiEngine: data.multiEngine.toFixed(1),
-                aircraft: data.aircraft.slice(0, 9).map(a => ({
+                aircraft: data.aircraft.map(a => ({
                     type: a.type,
                     hours: a.hours.toFixed(1)
                 })),
