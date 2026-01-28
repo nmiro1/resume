@@ -189,6 +189,11 @@
             left: 100%;
         }
 
+        /* Allow tooltips to overflow aircraft card */
+        .card.aircraft-card {
+            overflow: visible;
+        }
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -302,6 +307,9 @@
             margin-top: 15px;
             margin-bottom: auto;
             align-content: start;
+            overflow: visible;
+            position: relative;
+            z-index: 1;
         }
 
         .aircraft-item {
@@ -340,7 +348,7 @@
         }
 
         .aircraft-item.current-aircraft .aircraft-type::after {
-            content: '✈️ Current';
+            content: 'Current';
             display: block;
             font-size: 0.65rem;
             color: var(--accent-purple);
@@ -755,7 +763,7 @@
                 <div class="data-note">Data correct as of 02/05/25</div>
             </div>
 
-            <div class="card">
+            <div class="card aircraft-card">
                 <h2>Aircraft Experience</h2>
                 <div class="aircraft-list">
                     <div class="aircraft-item">
@@ -798,39 +806,43 @@
                 <div class="data-note">Data correct as of 02/05/25</div>
             </div>
 
-            <div class="card">
-                <h2>Education</h2>
-                <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
-                    <div class="education-item">
-                        <div style="font-weight: 600; color: var(--text-primary); font-size: 1.05rem;">B. Aviation Management</div>
-                        <div style="color: var(--accent-purple); font-size: 0.95rem; margin-top: 4px;">Griffith University, Brisbane</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">2022 – 2026</div>
-                    </div>
-                    <div class="education-item">
-                        <div style="font-weight: 600; color: var(--text-primary); font-size: 1.05rem;">ATPL (Frozen)</div>
-                        <div style="color: var(--accent-blue); font-size: 0.95rem; margin-top: 4px;">AFT, Sunshine Coast</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">2025 – 2026</div>
-                    </div>
-                    <div class="education-item">
-                        <div style="font-weight: 600; color: var(--text-primary); font-size: 1.05rem;">CPL</div>
-                        <div style="color: var(--accent-pink); font-size: 0.95rem; margin-top: 4px;">Archerfield</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">2022</div>
+            <div style="display: flex; flex-direction: column; gap: 28px;">
+                <div class="card">
+                    <h2>Education</h2>
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <div class="education-item">
+                            <div style="font-weight: 600; color: var(--text-primary); font-size: 1.05rem;">B. Aviation Management</div>
+                            <div style="color: var(--accent-purple); font-size: 0.95rem; margin-top: 4px;">Griffith University, Brisbane</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">2022 – 2026</div>
+                        </div>
+                        <div class="education-item">
+                            <div style="font-weight: 600; color: var(--text-primary); font-size: 1.05rem;">ATPL (Frozen)</div>
+                            <div style="color: var(--accent-blue); font-size: 0.95rem; margin-top: 4px;">AFT, Sunshine Coast</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">2025 – 2026</div>
+                        </div>
+                        <div class="education-item">
+                            <div style="font-weight: 600; color: var(--text-primary); font-size: 1.05rem;">CPL</div>
+                            <div style="color: var(--accent-pink); font-size: 0.95rem; margin-top: 4px;">Archerfield</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">2022</div>
+                        </div>
                     </div>
                 </div>
-                
-                <h2 style="margin-top: 0;">Contact</h2>
-                <div class="contact-grid">
-                    <div class="contact-item">
-                        <span class="contact-label">Phone:</span>
-                        <a href="tel:0488759979" class="contact-value">0488 759 979</a>
-                    </div>
-                    <div class="contact-item">
-                        <span class="contact-label">Email:</span>
-                        <a href="/cdn-cgi/l/email-protection#e5be8088848c89c595978a918086918081b8" class="contact-value">[email protected]</a>
-                    </div>
-                    <div class="contact-item">
-                        <span class="contact-label">LinkedIn:</span>
-                        <a href="https://linkedin.com/in/noah-mirosch" target="_blank" class="contact-value">noah-mirosch</a>
+
+                <div class="card">
+                    <h2>Contact</h2>
+                    <div class="contact-grid">
+                        <div class="contact-item">
+                            <span class="contact-label">Phone:</span>
+                            <a href="tel:0488759979" class="contact-value">0488 759 979</a>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-label">Email:</span>
+                            <a href="/cdn-cgi/l/email-protection#e5be8088848c89c595978a918086918081b8" class="contact-value">[email protected]</a>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-label">LinkedIn:</span>
+                            <a href="https://linkedin.com/in/noah-mirosch" target="_blank" class="contact-value">noah-mirosch</a>
+                        </div>
                     </div>
                 </div>
             </div>
