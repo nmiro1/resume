@@ -1,0 +1,16 @@
+type_code,name,description,mtow_kg,horsepower,is_retract,is_turbine,is_multi,is_multicrew,cruise_speed_kt
+AC11,Rockwell Commander 112/114,A low-wing single-engine touring aircraft with responsive handling and good IFR stability,1500,200,true,false,false,false,140
+BE55,Beechcraft Baron 55,A light twin piston aircraft known for solid systems and balanced multi-engine handling,2300,520,true,false,true,false,170
+BE58,Beechcraft Baron 58,A refined light twin offering higher payload and speed with excellent engine-out performance,2500,600,true,false,true,false,190
+C162,Cessna 162 Skycatcher,A light sport aircraft designed for ab-initio training with simple systems and low operating costs,600,100,false,false,false,false,100
+C172,Cessna 172 Skyhawk,The most widely used training aircraft worldwide offering benign handling and excellent reliability,1110,160,false,false,false,false,120
+C72R,Cessna 172R Skyhawk,A fuel-injected variant of the C172 with improved reliability and modest performance gains,1110,160,false,false,false,false,122
+C182,Cessna 182 Skylane,A high-performance fixed-gear single offering strong climb and useful load,1400,230,false,false,false,false,145
+C210,Cessna 210 Centurion,A complex high-performance single with retractable gear and strong cross-country capability,1725,300,true,false,false,false,165
+P46T,Piper PA-46 Meridian,A single-engine turboprop combining turbine reliability with owner-operator practicality,2327,500,true,true,false,false,260
+PA31,Piper PA-31 Navajo/Chieftain,A cabin-class light twin commonly used for charter and freight with robust systems,3175,700,true,false,true,true,210
+PA34,Piper PA-34 Seneca,A training and touring light twin designed for multi-engine instruction,2155,400,true,false,true,false,170
+PA44,Piper PA-44 Seminole,A purpose-built multi-engine trainer with predictable asymmetric handling,1635,360,true,false,true,false,160
+SF34,Saab 340,A twin-engine turboprop airliner designed for regional airline operations under multi-crew IFR,13155,3740,true,true,true,true,260
+SR20,Cirrus SR20,A modern composite single featuring advanced avionics and whole-airframe parachute,1370,215,false,false,false,false,155
+SR22,Cirrus SR22,A high-performance composite single known for speed, avionics integration, and CAPS,1633,310,false,false,false,false,180

@@ -315,12 +315,173 @@
             transition: all 0.3s ease;
             position: relative;
             z-index: 1;
+            cursor: pointer;
         }
 
         .aircraft-item:hover {
             background: rgba(59, 130, 246, 0.08);
             border-color: rgba(59, 130, 246, 0.4);
             transform: translateY(-2px);
+            z-index: 100;
+        }
+
+        /* SF34 Special Highlight - Current Aircraft */
+        .aircraft-item.current-aircraft {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(59, 130, 246, 0.15));
+            border: 2px solid rgba(168, 85, 247, 0.5);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        .aircraft-item.current-aircraft:hover {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(59, 130, 246, 0.25));
+            border-color: rgba(168, 85, 247, 0.7);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+        }
+
+        .aircraft-item.current-aircraft .aircraft-type::after {
+            content: '✈️ Current';
+            display: block;
+            font-size: 0.65rem;
+            color: var(--accent-purple);
+            margin-top: 4px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(168, 85, 247, 0.5); }
+        }
+
+        /* Aircraft Info Tooltip */
+        .aircraft-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.98), rgba(20, 20, 20, 0.98));
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 16px;
+            padding: 20px;
+            width: 340px;
+            max-width: 90vw;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(168, 85, 247, 0.2);
+            backdrop-filter: blur(20px) saturate(180%);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .aircraft-item:hover .aircraft-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        .aircraft-tooltip::before {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid rgba(168, 85, 247, 0.4);
+        }
+
+        .tooltip-header {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tooltip-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tooltip-description {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        .tooltip-specs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .tooltip-spec {
+            font-size: 0.75rem;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .tooltip-spec-label {
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .tooltip-spec-value {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .tooltip-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tooltip-badge {
+            padding: 4px 10px;
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            font-size: 0.7rem;
+            color: var(--accent-purple);
+            font-weight: 500;
+        }
+
+        .tooltip-badge.turbine {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: var(--accent-blue);
+        }
+
+        .tooltip-badge.multi {
+            background: rgba(236, 72, 153, 0.15);
+            border-color: rgba(236, 72, 153, 0.3);
+            color: var(--accent-pink);
+        }
+
+        .tooltip-badge.multicrew {
+            background: rgba(249, 115, 22, 0.15);
+            border-color: rgba(249, 115, 22, 0.3);
+            color: var(--accent-orange);
         }
 
         .aircraft-type {
@@ -638,7 +799,26 @@
             </div>
 
             <div class="card">
-                <h2>Contact</h2>
+                <h2>Education</h2>
+                <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                    <div class="education-item">
+                        <div style="font-weight: 600; color: var(--text-primary); font-size: 1.05rem;">B. Aviation Management</div>
+                        <div style="color: var(--accent-purple); font-size: 0.95rem; margin-top: 4px;">Griffith University, Brisbane</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">2022 – 2026</div>
+                    </div>
+                    <div class="education-item">
+                        <div style="font-weight: 600; color: var(--text-primary); font-size: 1.05rem;">ATPL (Frozen)</div>
+                        <div style="color: var(--accent-blue); font-size: 0.95rem; margin-top: 4px;">AFT, Sunshine Coast</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">2025 – 2026</div>
+                    </div>
+                    <div class="education-item">
+                        <div style="font-weight: 600; color: var(--text-primary); font-size: 1.05rem;">CPL</div>
+                        <div style="color: var(--accent-pink); font-size: 0.95rem; margin-top: 4px;">Archerfield</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">2022</div>
+                    </div>
+                </div>
+                
+                <h2 style="margin-top: 0;">Contact</h2>
                 <div class="contact-grid">
                     <div class="contact-item">
                         <span class="contact-label">Phone:</span>
@@ -727,6 +907,76 @@
     </div>
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Load aircraft database
+        let aircraftDatabase = {};
+        
+        async function loadAircraftDatabase() {
+            try {
+                const response = await fetch('aircraft-database.csv');
+                const csvText = await response.text();
+                
+                // Parse CSV
+                const lines = csvText.trim().split('\n');
+                const headers = lines[0].split(',');
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].split(',');
+                    const aircraft = {};
+                    
+                    headers.forEach((header, index) => {
+                        aircraft[header] = values[index];
+                    });
+                    
+                    aircraftDatabase[aircraft.type_code] = aircraft;
+                }
+                
+                console.log('Aircraft database loaded:', Object.keys(aircraftDatabase).length, 'aircraft');
+            } catch (error) {
+                console.error('Error loading aircraft database:', error);
+            }
+        }
+        
+        function createAircraftTooltip(type, hours) {
+            const aircraft = aircraftDatabase[type];
+            
+            if (!aircraft) {
+                return ''; // No tooltip if aircraft not in database
+            }
+            
+            const badges = [];
+            if (aircraft.is_turbine === 'true') badges.push('<span class="tooltip-badge turbine">Turbine</span>');
+            if (aircraft.is_retract === 'true') badges.push('<span class="tooltip-badge">Retractable</span>');
+            if (aircraft.is_multi === 'true') badges.push('<span class="tooltip-badge multi">Multi-Engine</span>');
+            if (aircraft.is_multicrew === 'true') badges.push('<span class="tooltip-badge multicrew">Multi-Crew</span>');
+            
+            return `
+                <div class="aircraft-tooltip">
+                    <div class="tooltip-header">${aircraft.name}</div>
+                    <div class="tooltip-subtitle">${type} • ${hours} hrs experience</div>
+                    <div class="tooltip-description">${aircraft.description}</div>
+                    <div class="tooltip-specs">
+                        <div class="tooltip-spec">
+                            <span class="tooltip-spec-label">MTOW</span>
+                            <span class="tooltip-spec-value">${aircraft.mtow_kg} kg</span>
+                        </div>
+                        <div class="tooltip-spec">
+                            <span class="tooltip-spec-label">Power</span>
+                            <span class="tooltip-spec-value">${aircraft.horsepower} HP</span>
+                        </div>
+                        <div class="tooltip-spec">
+                            <span class="tooltip-spec-label">Cruise Speed</span>
+                            <span class="tooltip-spec-value">${aircraft.cruise_speed_kt} kts</span>
+                        </div>
+                        <div class="tooltip-spec">
+                            <span class="tooltip-spec-label">Configuration</span>
+                            <span class="tooltip-spec-value">${aircraft.is_multi === 'true' ? 'Twin' : 'Single'}</span>
+                        </div>
+                    </div>
+                    ${badges.length > 0 ? `<div class="tooltip-badges">${badges.join('')}</div>` : ''}
+                </div>
+            `;
+        }
+
         // Load data from Vercel API (permanent storage)
         async function loadResumeData() {
             console.log('Attempting to load resume data...');
@@ -798,12 +1048,18 @@
                     console.log('Aircraft list element:', aircraftList);
                     
                     if (aircraftList && data.aircraft && data.aircraft.length > 0) {
-                        aircraftList.innerHTML = data.aircraft.map(a => `
-                            <div class="aircraft-item">
-                                <span class="aircraft-type">${a.type}</span>
-                                <span class="aircraft-hours">${a.hours} hrs</span>
-                            </div>
-                        `).join('');
+                        aircraftList.innerHTML = data.aircraft.map(a => {
+                            const isCurrent = a.type === 'SF34';
+                            const tooltip = createAircraftTooltip(a.type, a.hours);
+                            
+                            return `
+                                <div class="aircraft-item ${isCurrent ? 'current-aircraft' : ''}">
+                                    <span class="aircraft-type">${a.type}</span>
+                                    <span class="aircraft-hours">${a.hours} hrs</span>
+                                    ${tooltip}
+                                </div>
+                            `;
+                        }).join('');
                         console.log('Updated aircraft list with', data.aircraft.length, 'aircraft');
                     }
                     
@@ -825,8 +1081,10 @@
             }
         }
 
-        // Load data on page load
-        loadResumeData();
+        // Load aircraft database first, then resume data
+        loadAircraftDatabase().then(() => {
+            loadResumeData();
+        });
 
         // Scroll animation observer
         const observerOptions = {
