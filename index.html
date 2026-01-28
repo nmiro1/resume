@@ -772,28 +772,48 @@
             if (data) {
                 try {
                     console.log('Applying data to resume...');
+                    console.log('Data to apply:', data);
                     
                     // Update flight time stats
-                    document.querySelector('.stat-primary .stat-value').textContent = data.totalTime;
+                    const primaryStat = document.querySelector('.stat-primary .stat-value');
+                    console.log('Primary stat element:', primaryStat);
+                    if (primaryStat) {
+                        primaryStat.textContent = data.totalTime;
+                        console.log('Set total time to:', data.totalTime);
+                    }
+                    
                     const stats = document.querySelectorAll('.stat:not(.stat-primary) .stat-value');
-                    stats[0].textContent = data.pic;
-                    stats[1].textContent = data.turbine;
-                    stats[2].textContent = data.night;
-                    stats[3].textContent = data.multiEngine;
+                    console.log('Found stat elements:', stats.length);
+                    
+                    if (stats.length >= 4) {
+                        stats[0].textContent = data.pic;
+                        stats[1].textContent = data.turbine;
+                        stats[2].textContent = data.night;
+                        stats[3].textContent = data.multiEngine;
+                        console.log('Updated all stats');
+                    }
                     
                     // Update aircraft list
                     const aircraftList = document.querySelector('.aircraft-list');
-                    aircraftList.innerHTML = data.aircraft.map(a => `
-                        <div class="aircraft-item">
-                            <span class="aircraft-type">${a.type}</span>
-                            <span class="aircraft-hours">${a.hours} hrs</span>
-                        </div>
-                    `).join('');
+                    console.log('Aircraft list element:', aircraftList);
+                    
+                    if (aircraftList && data.aircraft && data.aircraft.length > 0) {
+                        aircraftList.innerHTML = data.aircraft.map(a => `
+                            <div class="aircraft-item">
+                                <span class="aircraft-type">${a.type}</span>
+                                <span class="aircraft-hours">${a.hours} hrs</span>
+                            </div>
+                        `).join('');
+                        console.log('Updated aircraft list with', data.aircraft.length, 'aircraft');
+                    }
                     
                     // Update data notes
                     const dateNotes = document.querySelectorAll('.data-note');
-                    dateNotes.forEach(note => {
+                    console.log('Found date note elements:', dateNotes.length);
+                    
+                    dateNotes.forEach((note, index) => {
                         note.textContent = `Data correct as of ${data.lastUpdated}`;
+                        console.log(`Updated date note ${index}`);
                     });
                     
                     console.log('✅ Resume data loaded and applied successfully!');
