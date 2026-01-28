@@ -147,6 +147,8 @@
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 28px;
             margin-bottom: 56px;
+            position: relative;
+            z-index: 1;
         }
 
         .card {
@@ -751,12 +753,20 @@
                         <div class="stat-value">49.3</div>
                     </div>
                     <div class="stat">
+                        <div class="stat-label">Multi Engine</div>
+                        <div class="stat-value">178.7</div>
+                    </div>
+                    <div class="stat">
                         <div class="stat-label">Night</div>
                         <div class="stat-value">190.3</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-label">Multi Engine</div>
-                        <div class="stat-value">178.7</div>
+                        <div class="stat-label">Cross Country</div>
+                        <div class="stat-value">0.0</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Dual</div>
+                        <div class="stat-value">0.0</div>
                     </div>
                 </div>
                 <div class="data-note">Data correct as of 02/05/25</div>
@@ -1046,11 +1056,13 @@
                     const stats = document.querySelectorAll('.stat:not(.stat-primary) .stat-value');
                     console.log('Found stat elements:', stats.length);
                     
-                    if (stats.length >= 4) {
-                        stats[0].textContent = data.pic;
-                        stats[1].textContent = data.turbine;
-                        stats[2].textContent = data.night;
-                        stats[3].textContent = data.multiEngine;
+                    if (stats.length >= 6) {
+                        stats[0].textContent = data.pic;           // Row 1 Left
+                        stats[1].textContent = data.turbine;       // Row 1 Right
+                        stats[2].textContent = data.multiEngine;   // Row 2 Left
+                        stats[3].textContent = data.night;         // Row 2 Right
+                        stats[4].textContent = '0.0';              // Row 3 Left (Cross Country)
+                        stats[5].textContent = '0.0';              // Row 3 Right (Dual)
                         console.log('Updated all stats');
                     }
                     
