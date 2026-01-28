@@ -67,6 +67,7 @@
             padding: 64px 40px;
             position: relative;
             z-index: 1;
+            overflow: visible;
         }
 
         header {
@@ -149,6 +150,7 @@
             margin-bottom: 56px;
             position: relative;
             z-index: 1;
+            overflow: visible;
         }
 
         .card {
@@ -194,6 +196,7 @@
         /* Allow tooltips to overflow aircraft card */
         .card.aircraft-card {
             overflow: visible;
+            z-index: 100;
         }
 
         @keyframes fadeInUp {
@@ -332,7 +335,7 @@
             background: rgba(59, 130, 246, 0.08);
             border-color: rgba(59, 130, 246, 0.4);
             transform: translateY(-2px);
-            z-index: 10000;
+            z-index: 99999;
         }
 
         /* SF34 Special Highlight - Current Aircraft */
@@ -347,7 +350,7 @@
             background: rgba(168, 85, 247, 0.15);
             border-color: rgba(168, 85, 247, 0.6);
             box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
-            z-index: 10000;
+            z-index: 99999;
         }
 
         .aircraft-item.current-aircraft .aircraft-type {
@@ -381,7 +384,7 @@
             visibility: hidden;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
-            z-index: 9999;
+            z-index: 999999;
         }
 
         .aircraft-item:hover .aircraft-tooltip {
@@ -761,11 +764,11 @@
                         <div class="stat-value">190.3</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-label">Cross Country</div>
+                        <div class="stat-label">IFR</div>
                         <div class="stat-value">0.0</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-label">Dual</div>
+                        <div class="stat-label">Multi PIC</div>
                         <div class="stat-value">0.0</div>
                     </div>
                 </div>
@@ -1057,12 +1060,12 @@
                     console.log('Found stat elements:', stats.length);
                     
                     if (stats.length >= 6) {
-                        stats[0].textContent = data.pic;           // Row 1 Left
-                        stats[1].textContent = data.turbine;       // Row 1 Right
-                        stats[2].textContent = data.multiEngine;   // Row 2 Left
-                        stats[3].textContent = data.night;         // Row 2 Right
-                        stats[4].textContent = '0.0';              // Row 3 Left (Cross Country)
-                        stats[5].textContent = '0.0';              // Row 3 Right (Dual)
+                        stats[0].textContent = data.pic;           // Row 1 Left - PIC
+                        stats[1].textContent = data.turbine;       // Row 1 Right - Turbine
+                        stats[2].textContent = data.multiEngine;   // Row 2 Left - Multi Engine
+                        stats[3].textContent = data.night;         // Row 2 Right - Night
+                        stats[4].textContent = data.ifr || '0.0';  // Row 3 Left - IFR
+                        stats[5].textContent = data.multiPIC || '0.0';  // Row 3 Right - Multi PIC
                         console.log('Updated all stats');
                     }
                     

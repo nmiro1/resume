@@ -402,6 +402,8 @@
                                 turbine: parsedData.turbine.toFixed(1),
                                 night: parsedData.night.toFixed(1),
                                 multiEngine: parsedData.multiEngine.toFixed(1),
+                                ifr: parsedData.ifr.toFixed(1),
+                                multiPIC: parsedData.multiPIC.toFixed(1),
                                 aircraft: parsedData.aircraft.map(a => ({
                                     type: a.type,
                                     hours: a.hours.toFixed(1)
@@ -473,6 +475,8 @@
                 turbine: 0,
                 night: 0,
                 multiEngine: 0,
+                ifr: 0,
+                multiPIC: 0,
                 aircraft: []
             };
 
@@ -527,8 +531,16 @@
                     data.totalTime = numbers[0];  // 1239.1
                     data.pic = numbers[2] + numbers[4] + numbers[6] + numbers[8] + numbers[10];
                     data.night = numbers[4] + numbers[5] + numbers[6] + numbers[7];
+                    data.ifr = numbers[12];  // IFR Actual hours (174.4 in your PDF)
                     
-                    console.log(`Parsed: Total=${data.totalTime}, PIC=${data.pic}, Night=${data.night}`);
+                    // Multi PIC = Multi-Engine PIC/P1 for Day + Night
+                    // Looking at the Grand Totals structure:
+                    // Multi-Engine Day: Dual(8), PIC/P1(9), SIC/P2(10), P1 U/S(11)
+                    // Multi-Engine Night would be after, but in this PDF we only have day columns
+                    // So Multi PIC = numbers[9] (Multi Day PIC/P1) + any Multi Night PIC if present
+                    data.multiPIC = numbers[9];  // Multi-Engine Day PIC/P1 (1.0 in your PDF)
+                    
+                    console.log(`Parsed: Total=${data.totalTime}, PIC=${data.pic}, Night=${data.night}, IFR=${data.ifr}, Multi PIC=${data.multiPIC}`);
                 }
             }
             
@@ -577,6 +589,14 @@
                     <span class="stat-label">Multi Engine:</span>
                     <span class="stat-value">${data.multiEngine.toFixed(1)} hrs</span>
                 </div>
+                <div class="stat-row">
+                    <span class="stat-label">IFR:</span>
+                    <span class="stat-value">${data.ifr.toFixed(1)} hrs</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Multi PIC:</span>
+                    <span class="stat-value">${data.multiPIC.toFixed(1)} hrs</span>
+                </div>
                 <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
                     <strong style="color: var(--text-primary);">Top Aircraft (${data.aircraft.length} types):</strong>
                     ${data.aircraft.map(a => `
@@ -597,6 +617,8 @@
                 turbine: data.turbine.toFixed(1),
                 night: data.night.toFixed(1),
                 multiEngine: data.multiEngine.toFixed(1),
+                ifr: data.ifr.toFixed(1),
+                multiPIC: data.multiPIC.toFixed(1),
                 aircraft: data.aircraft.map(a => ({
                     type: a.type,
                     hours: a.hours.toFixed(1)
