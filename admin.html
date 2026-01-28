@@ -300,10 +300,8 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
-        // Set PDF.js worker
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        // No PDF.js needed - we're parsing server-side now!
 
         let parsedData = null;
 
@@ -359,12 +357,34 @@
             document.getElementById('uploadBtn').textContent = 'Parsing PDF...';
 
             try {
-                const text = await extractTextFromPDF(file);
-                parsedData = parseFlightData(text);
+                // Convert PDF to base64
+                const base64Data = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+
+                // Send to server for parsing
+                const response = await fetch('https://password-nine-weld.vercel.app/api/parse-pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ pdfBase64: base64Data })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+
+                parsedData = await response.json();
+                
                 displayStats(parsedData);
                 document.getElementById('statsPreview').classList.remove('hidden');
                 showMessage('uploadMessage', 'PDF parsed successfully! Review and click "Update Resume" to save.', 'success');
             } catch (error) {
+                console.error('Parsing error:', error);
                 showMessage('uploadMessage', 'Error parsing PDF: ' + error.message, 'error');
             } finally {
                 document.getElementById('uploadBtn').disabled = false;
@@ -427,8 +447,59 @@
                 aircraft: []
             };
 
+            // Step 0: Convert the table structure to CSV-like format
+            // The PDF has a table with columns: Aircraft, Flights, Total, Dual, PIC, etc.
+            // Let's extract rows by finding aircraft codes
+            
+            const lines = text.split('\n');
+            const csvRows = [];
+            
+            // Find the data rows (between headers and Grand Totals)
+            let inDataSection = false;
+            
+            for (const line of lines) {
+                // Start capturing after the header
+                if (line.includes('Flights Total') || line.includes('Day Night')) {
+                    inDataSection = true;
+                    continue;
+                }
+                
+                // Stop at Grand Totals
+                if (line.includes('Grand Totals')) {
+                    inDataSection = false;
+                }
+                
+                // If we're in the data section, look for aircraft rows
+                if (inDataSection && line.trim()) {
+                    // Try to extract aircraft code at the start
+                    const match = line.match(/^([A-Z][A-Z0-9]{2,3})\s+(.+)/);
+                    if (match) {
+                        const aircraftCode = match[1];
+                        const restOfLine = match[2];
+                        csvRows.push(`${aircraftCode},${restOfLine.replace(/\s+/g, ',')}`);
+                    }
+                }
+            }
+            
+            console.log("CSV rows created:", csvRows);
+            
+            // Parse CSV rows
+            for (const row of csvRows) {
+                const columns = row.split(',').filter(c => c.trim());
+                
+                if (columns.length >= 3) {
+                    const type = columns[0];
+                    const flights = parseInt(columns[1]);
+                    const hours = parseFloat(columns[2]);
+                    
+                    if (type !== 'SIM' && !isNaN(hours) && hours > 0) {
+                        console.log(`Parsed from CSV: ${type} = ${hours} hours`);
+                        data.aircraft.push({ type, hours });
+                    }
+                }
+            }
+
             // Step 1: Parse Grand Totals
-            // Format: "Grand Totals 578 1239.1 206.7 575.5 20.8 173.3 35.7 141.3 3.5 60.7 1.0 10.1 8.0 174.4 42.5"
             const grandTotalsMatch = text.match(/Grand Totals\s+(\d+)\s+([\d.\s]+)/);
             
             if (grandTotalsMatch) {
@@ -437,83 +508,33 @@
                 
                 console.log("Grand Totals numbers:", numbers);
                 
-                // Simple PDF format:
-                // Grand Totals 578 1239.1 206.7 575.5 20.8 173.3 35.7 141.3 3.5 60.7 1.0 10.1 8.0 174.4 42.5
-                // [0] = 1239.1 (Total Time) ✓
-                // [1] = 206.7 (Single Day Dual)
-                // [2] = 575.5 (Single Day PIC) ✓
-                // [3] = 20.8 (Single Day P1 U/S)
-                // [4] = 173.3 (Single Night Dual) ✓
-                // [5] = 35.7 (Single Night PIC)
-                // [6] = 141.3 (Single Night SIC) ✓
-                // [7] = 3.5 (Single Night P1 U/S)
-                // [8] = 60.7 (Multi Day Dual) ✓
-                // [9] = 1.0 (Multi Day PIC/P1)
-                // [10] = 10.1 (Multi Day SIC/P2) ✓
-                // [11] = 8.0 (Multi Day P1 U/S)
-                // [12] = 174.4 (IFR Act)
-                // [13] = 42.5 (Simulator)
-                
                 if (numbers.length >= 14) {
                     data.totalTime = numbers[0];  // 1239.1
-                    
-                    // PIC: 575.5 + 173.3 + 141.3 + 60.7 + 10.1 = 960.9
                     data.pic = numbers[2] + numbers[4] + numbers[6] + numbers[8] + numbers[10];
-                    
-                    // Night: Single Night columns (indices 4,5,6,7)
-                    data.night = numbers[4] + numbers[5] + numbers[6] + numbers[7];  // 173.3 + 35.7 + 141.3 + 3.5 = 353.8
+                    data.night = numbers[4] + numbers[5] + numbers[6] + numbers[7];
                     
                     console.log(`Parsed: Total=${data.totalTime}, PIC=${data.pic}, Night=${data.night}`);
                 }
             }
-
-            // Step 2: Parse individual aircraft
-            // The PDF text extraction isn't line-based, so search the entire text
             
-            // Pattern: AIRCRAFT_CODE (2-4 chars) followed by FLIGHTS (number) followed by TOTAL_HOURS (decimal)
-            const aircraftPattern = /\b([A-Z][A-Z0-9]{2,3})\s+(\d+)\s+(\d+\.\d+)/g;
-            let match;
-            
-            while ((match = aircraftPattern.exec(text)) !== null) {
-                const type = match[1];
-                const flights = parseInt(match[2]);
-                const hours = parseFloat(match[3]);
-                
-                // Skip header words and SIM
-                const skipWords = ['SIM', 'Dual', 'Night', 'Flights', 'Total', 'Grand', 'PAGE', 'PIC', 'Day'];
-                if (skipWords.includes(type)) {
-                    continue;
-                }
-                
-                // Validate realistic values
-                if (hours > 0 && hours < 1000 && flights > 0 && flights < 1000) {
-                    console.log(`Found aircraft: ${type} = ${hours} hours (${flights} flights)`);
-                    
-                    // Avoid duplicates
-                    if (!data.aircraft.find(a => a.type === type)) {
-                        data.aircraft.push({ type, hours });
-                    }
-                }
-            }
-            
-            // Sort by hours descending
+            // Sort aircraft by hours descending
             data.aircraft.sort((a, b) => b.hours - a.hours);
             
-            console.log("Parsed aircraft:", data.aircraft);
+            console.log("Final aircraft list:", data.aircraft);
 
-            // Step 3: Calculate turbine hours
+            // Calculate turbine hours
             const turbineTypes = ['P46T', 'SF34'];
             data.turbine = data.aircraft
                 .filter(a => turbineTypes.includes(a.type))
                 .reduce((sum, a) => sum + a.hours, 0);
 
-            // Step 4: Calculate multi-engine hours
+            // Calculate multi-engine hours
             const multiEngineTypes = ['PA31', 'PA34', 'PA44', 'BE55', 'BE58', 'SF34', 'AC11'];
             data.multiEngine = data.aircraft
                 .filter(a => multiEngineTypes.includes(a.type))
                 .reduce((sum, a) => sum + a.hours, 0);
 
-            console.log("Final parsed data:", data);
+            console.log("Final data:", data);
             
             return data;
         }
