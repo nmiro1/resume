@@ -305,6 +305,37 @@
             background-clip: text;
         }
 
+        /* Airport flip board animation for numbers */
+        @keyframes flipIn {
+            0% {
+                transform: rotateX(90deg);
+                opacity: 0;
+            }
+            50% {
+                transform: rotateX(-10deg);
+            }
+            100% {
+                transform: rotateX(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* Wrap each digit/character in a span for individual animation */
+        .stat-value span {
+            display: inline-block;
+            animation: flipIn 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) backwards;
+            transform-origin: 50% 0%;
+        }
+
+        .stat-value span:nth-child(1) { animation-delay: 0.05s; }
+        .stat-value span:nth-child(2) { animation-delay: 0.1s; }
+        .stat-value span:nth-child(3) { animation-delay: 0.15s; }
+        .stat-value span:nth-child(4) { animation-delay: 0.2s; }
+        .stat-value span:nth-child(5) { animation-delay: 0.25s; }
+        .stat-value span:nth-child(6) { animation-delay: 0.3s; }
+        .stat-value span:nth-child(7) { animation-delay: 0.35s; }
+        .stat-value span:nth-child(8) { animation-delay: 0.4s; }
+
         .aircraft-list {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1048,11 +1079,18 @@
                     console.log('Applying data to resume...');
                     console.log('Data to apply:', data);
                     
-                    // Update flight time stats
+                    // Helper function to wrap each character in a span for flip animation (airport board style)
+                    function animateNumber(element, value) {
+                        const text = value.toString();
+                        const spans = text.split('').map(char => `<span>${char}</span>`).join('');
+                        element.innerHTML = spans;
+                    }
+                    
+                    // Update flight time stats with flip animation
                     const primaryStat = document.querySelector('.stat-primary .stat-value');
                     console.log('Primary stat element:', primaryStat);
                     if (primaryStat) {
-                        primaryStat.textContent = data.totalTime;
+                        animateNumber(primaryStat, data.totalTime);
                         console.log('Set total time to:', data.totalTime);
                     }
                     
@@ -1060,13 +1098,13 @@
                     console.log('Found stat elements:', stats.length);
                     
                     if (stats.length >= 6) {
-                        stats[0].textContent = data.pic;           // Row 1 Left - PIC
-                        stats[1].textContent = data.turbine;       // Row 1 Right - Turbine
-                        stats[2].textContent = data.multiEngine;   // Row 2 Left - Multi Engine
-                        stats[3].textContent = data.night;         // Row 2 Right - Night
-                        stats[4].textContent = data.ifr || '0.0';  // Row 3 Left - IFR
-                        stats[5].textContent = data.multiPIC || '0.0';  // Row 3 Right - Multi PIC
-                        console.log('Updated all stats');
+                        animateNumber(stats[0], data.pic);                    // Row 1 Left - PIC
+                        animateNumber(stats[1], data.turbine);                // Row 1 Right - Turbine
+                        animateNumber(stats[2], data.multiEngine);            // Row 2 Left - Multi Engine
+                        animateNumber(stats[3], data.night);                  // Row 2 Right - Night
+                        animateNumber(stats[4], data.ifr || '0.0');           // Row 3 Left - IFR
+                        animateNumber(stats[5], data.multiPIC || '0.0');      // Row 3 Right - Multi PIC
+                        console.log('Updated all stats with flip animation');
                     }
                     
                     // Update aircraft list
