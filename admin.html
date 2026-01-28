@@ -477,53 +477,39 @@
             };
 
             // Step 0: Convert the table structure to CSV-like format
-            // The PDF has a table with columns: Aircraft, Flights, Total, Dual, PIC, etc.
-            // Let's extract rows by finding aircraft codes
+            // The PDF extracts all aircraft on one continuous line, so we need to tokenize it
             
-            const lines = text.split('\n');
-            const csvRows = [];
+            console.log("Splitting text into tokens...");
+            const tokens = text.split(/\s+/);
             
-            // Find the data rows (between headers and Grand Totals)
-            let inDataSection = false;
-            
-            for (const line of lines) {
-                // Start capturing after the header
-                if (line.includes('Flights Total') || line.includes('Day Night')) {
-                    inDataSection = true;
-                    continue;
-                }
+            // Find aircraft by looking for pattern: AIRCRAFT_CODE FLIGHTS HOURS
+            for (let i = 0; i < tokens.length - 2; i++) {
+                const token = tokens[i];
                 
-                // Stop at Grand Totals
-                if (line.includes('Grand Totals')) {
-                    inDataSection = false;
-                }
-                
-                // If we're in the data section, look for aircraft rows
-                if (inDataSection && line.trim()) {
-                    // Try to extract aircraft code at the start
-                    const match = line.match(/^([A-Z][A-Z0-9]{2,3})\s+(.+)/);
-                    if (match) {
-                        const aircraftCode = match[1];
-                        const restOfLine = match[2];
-                        csvRows.push(`${aircraftCode},${restOfLine.replace(/\s+/g, ',')}`);
+                // Check if this looks like an aircraft code (3-4 uppercase letters/numbers)
+                if (/^[A-Z][A-Z0-9]{2,3}$/.test(token)) {
+                    // Skip known header words and SIM
+                    const skipWords = ['SIM', 'Dual', 'Night', 'Flights', 'Total', 'Grand', 'PAGE', 'Day', 'Multi'];
+                    if (skipWords.includes(token)) {
+                        continue;
                     }
-                }
-            }
-            
-            console.log("CSV rows created:", csvRows);
-            
-            // Parse CSV rows
-            for (const row of csvRows) {
-                const columns = row.split(',').filter(c => c.trim());
-                
-                if (columns.length >= 3) {
-                    const type = columns[0];
-                    const flights = parseInt(columns[1]);
-                    const hours = parseFloat(columns[2]);
                     
-                    if (type !== 'SIM' && !isNaN(hours) && hours > 0) {
-                        console.log(`Parsed from CSV: ${type} = ${hours} hours`);
-                        data.aircraft.push({ type, hours });
+                    // Next token should be flights (integer)
+                    const flights = parseInt(tokens[i + 1]);
+                    // Token after that should be hours (decimal)
+                    const hours = parseFloat(tokens[i + 2]);
+                    
+                    // Validate
+                    if (!isNaN(flights) && !isNaN(hours) && 
+                        flights > 0 && flights < 1000 && 
+                        hours > 0 && hours < 1000) {
+                        
+                        console.log(`Found: ${token} = ${hours} hours (${flights} flights)`);
+                        
+                        // Check for duplicates
+                        if (!data.aircraft.find(a => a.type === token)) {
+                            data.aircraft.push({ type: token, hours: hours });
+                        }
                     }
                 }
             }
