@@ -727,34 +727,81 @@
     </div>
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // Load data from localStorage if available
-        function loadResumeData() {
-            const savedData = localStorage.getItem('noahResumeData');
-            if (savedData) {
-                const data = JSON.parse(savedData);
-                
-                // Update flight time stats
-                document.querySelector('.stat-primary .stat-value').textContent = data.totalTime;
-                const stats = document.querySelectorAll('.stat:not(.stat-primary) .stat-value');
-                stats[0].textContent = data.pic;
-                stats[1].textContent = data.turbine;
-                stats[2].textContent = data.night;
-                stats[3].textContent = data.multiEngine;
-                
-                // Update aircraft list
-                const aircraftList = document.querySelector('.aircraft-list');
-                aircraftList.innerHTML = data.aircraft.map(a => `
-                    <div class="aircraft-item">
-                        <span class="aircraft-type">${a.type}</span>
-                        <span class="aircraft-hours">${a.hours} hrs</span>
-                    </div>
-                `).join('');
-                
-                // Update data notes
-                const dateNotes = document.querySelectorAll('.data-note');
-                dateNotes.forEach(note => {
-                    note.textContent = `Data correct as of ${data.lastUpdated}`;
-                });
+        // Load data from Vercel API (permanent storage)
+        async function loadResumeData() {
+            console.log('Attempting to load resume data...');
+            
+            let data = null;
+            
+            // Try loading from Vercel API first (permanent storage)
+            try {
+                console.log('Loading from Vercel API...');
+                const response = await fetch('https://password-nine-weld.vercel.app/api/resume-data');
+                if (response.ok) {
+                    data = await response.json();
+                    console.log('Loaded data from Vercel API:', data);
+                }
+            } catch (error) {
+                console.log('Could not load from Vercel API:', error.message);
+            }
+            
+            // Fallback to localStorage
+            if (!data) {
+                console.log('Trying localStorage...');
+                const savedData = localStorage.getItem('noahResumeData');
+                if (savedData) {
+                    data = JSON.parse(savedData);
+                    console.log('Loaded data from localStorage');
+                }
+            }
+            
+            // Fallback to local JSON file
+            if (!data) {
+                console.log('Trying resume-data.json file...');
+                try {
+                    const response = await fetch('resume-data.json');
+                    if (response.ok) {
+                        data = await response.json();
+                        console.log('Loaded data from resume-data.json');
+                    }
+                } catch (error) {
+                    console.log('No resume-data.json file found');
+                }
+            }
+            
+            if (data) {
+                try {
+                    console.log('Applying data to resume...');
+                    
+                    // Update flight time stats
+                    document.querySelector('.stat-primary .stat-value').textContent = data.totalTime;
+                    const stats = document.querySelectorAll('.stat:not(.stat-primary) .stat-value');
+                    stats[0].textContent = data.pic;
+                    stats[1].textContent = data.turbine;
+                    stats[2].textContent = data.night;
+                    stats[3].textContent = data.multiEngine;
+                    
+                    // Update aircraft list
+                    const aircraftList = document.querySelector('.aircraft-list');
+                    aircraftList.innerHTML = data.aircraft.map(a => `
+                        <div class="aircraft-item">
+                            <span class="aircraft-type">${a.type}</span>
+                            <span class="aircraft-hours">${a.hours} hrs</span>
+                        </div>
+                    `).join('');
+                    
+                    // Update data notes
+                    const dateNotes = document.querySelectorAll('.data-note');
+                    dateNotes.forEach(note => {
+                        note.textContent = `Data correct as of ${data.lastUpdated}`;
+                    });
+                    
+                    console.log('✅ Resume data loaded and applied successfully!');
+                } catch (error) {
+                    console.error('Error applying data:', error);
+                }
+            } else {
+                console.log('No data found from any source, using default values');
             }
         }
 

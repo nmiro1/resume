@@ -329,6 +329,7 @@
 
                 if (result.success) {
                     sessionStorage.setItem('adminLoggedIn', 'true');
+                    sessionStorage.setItem('adminPassword', password); // Store for API calls
                     showUploadSection();
                     showMessage('loginMessage', 'Login successful!', 'success');
                     setTimeout(() => {
@@ -393,10 +394,57 @@
         });
 
         // Update resume button
-        document.getElementById('updateResumeBtn').addEventListener('click', () => {
+        document.getElementById('updateResumeBtn').addEventListener('click', async () => {
             if (parsedData) {
-                updateResume(parsedData);
-                showMessage('uploadMessage', 'Resume data updated! You can now close this page.', 'success');
+                const password = sessionStorage.getItem('adminPassword');
+                
+                if (!password) {
+                    showMessage('uploadMessage', 'Session expired. Please refresh and login again.', 'error');
+                    return;
+                }
+                
+                document.getElementById('updateResumeBtn').disabled = true;
+                document.getElementById('updateResumeBtn').textContent = 'Saving...';
+                
+                try {
+                    // Save to Vercel API
+                    const response = await fetch('https://password-nine-weld.vercel.app/api/resume-data', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            password: password,
+                            data: {
+                                totalTime: parsedData.totalTime.toFixed(1),
+                                pic: parsedData.pic.toFixed(1),
+                                turbine: parsedData.turbine.toFixed(1),
+                                night: parsedData.night.toFixed(1),
+                                multiEngine: parsedData.multiEngine.toFixed(1),
+                                aircraft: parsedData.aircraft.slice(0, 9).map(a => ({
+                                    type: a.type,
+                                    hours: a.hours.toFixed(1)
+                                })),
+                                lastUpdated: new Date().toLocaleDateString('en-GB')
+                            }
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        // Also save to localStorage as backup
+                        updateResume(parsedData);
+                        showMessage('uploadMessage', 'Resume permanently updated! Your changes are now live.', 'success');
+                    } else {
+                        showMessage('uploadMessage', 'Error saving: ' + result.error, 'error');
+                    }
+                } catch (error) {
+                    showMessage('uploadMessage', 'Error connecting to server: ' + error.message, 'error');
+                } finally {
+                    document.getElementById('updateResumeBtn').disabled = false;
+                    document.getElementById('updateResumeBtn').textContent = 'Update Resume';
+                }
             }
         });
 
@@ -575,7 +623,7 @@
         }
 
         function updateResume(data) {
-            // Store data in localStorage to be accessed by the resume page
+            // Store data in localStorage (works if admin and resume are on same domain)
             const resumeData = {
                 totalTime: data.totalTime.toFixed(1),
                 pic: data.pic.toFixed(1),
@@ -590,6 +638,41 @@
             };
 
             localStorage.setItem('noahResumeData', JSON.stringify(resumeData));
+            
+            // Also offer to download as a JSON file
+            const jsonString = JSON.stringify(resumeData, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = 'resume-data.json';
+            downloadLink.textContent = 'Download resume-data.json';
+            downloadLink.style.display = 'block';
+            downloadLink.style.marginTop = '20px';
+            downloadLink.style.padding = '12px 24px';
+            downloadLink.style.background = 'rgba(59, 130, 246, 0.1)';
+            downloadLink.style.border = '1px solid rgba(59, 130, 246, 0.3)';
+            downloadLink.style.borderRadius = '8px';
+            downloadLink.style.textAlign = 'center';
+            downloadLink.style.color = 'var(--text-primary)';
+            downloadLink.style.textDecoration = 'none';
+            downloadLink.style.transition = 'all 0.3s ease';
+            
+            downloadLink.onmouseover = () => {
+                downloadLink.style.background = 'rgba(59, 130, 246, 0.2)';
+            };
+            downloadLink.onmouseout = () => {
+                downloadLink.style.background = 'rgba(59, 130, 246, 0.1)';
+            };
+            
+            // Add download link after the update button
+            const updateBtn = document.getElementById('updateResumeBtn');
+            const existingLink = updateBtn.parentElement.querySelector('a[download]');
+            if (existingLink) {
+                existingLink.remove();
+            }
+            updateBtn.parentElement.insertBefore(downloadLink, updateBtn.nextSibling);
         }
     </script>
 </body>
