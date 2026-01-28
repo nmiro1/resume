@@ -579,7 +579,7 @@
                 </div>
                 <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
                     <strong style="color: var(--text-primary);">Top Aircraft (${data.aircraft.length} types):</strong>
-                    ${data.aircraft.slice(0, 9).map(a => `
+                    ${data.aircraft.map(a => `
                         <div class="stat-row">
                             <span class="stat-label">${a.type}:</span>
                             <span class="stat-value">${a.hours.toFixed(1)} hrs</span>
