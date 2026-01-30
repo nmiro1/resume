@@ -20,6 +20,7 @@
             --accent-blue: #3b82f6;
             --accent-pink: #ec4899;
             --accent-green: #10b981;
+            --accent-red: #ef4444;
         }
 
         * {
@@ -29,155 +30,158 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
-            animation: float 20s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(30px, -30px) rotate(120deg); }
-            66% { transform: translate(-20px, 20px) rotate(240deg); }
         }
 
         .container {
-            max-width: 600px;
-            width: 100%;
-            position: relative;
-            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
         }
 
-        .card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 40px;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
         }
 
         h1 {
             font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 8px;
-            text-align: center;
         }
 
         .subtitle {
-            text-align: center;
             color: var(--text-secondary);
-            margin-bottom: 32px;
-            font-size: 0.9375rem;
+            font-size: 0.9rem;
         }
 
-        .login-form, .upload-form {
+        /* Tabs */
+        .tabs {
             display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
             gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--glass-border);
+            overflow-x: auto;
+            padding-bottom: 2px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            color: var(--accent-purple);
+            border-bottom-color: var(--accent-purple);
+        }
+
+        /* Tab content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        /* Form elements */
+        .form-group {
+            margin-bottom: 20px;
         }
 
         label {
-            font-size: 0.875rem;
-            font-weight: 500;
+            display: block;
+            margin-bottom: 8px;
             color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
         }
 
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        input[type="file"],
         input[type="password"],
-        input[type="file"] {
+        textarea {
+            width: 100%;
             padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--bg-secondary);
             border: 1px solid var(--glass-border);
-            border-radius: 10px;
+            border-radius: 8px;
             color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9375rem;
-            backdrop-filter: blur(10px);
+            font-family: inherit;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
         }
 
-        input[type="password"]:focus,
-        input[type="file"]:focus {
+        input:focus,
+        textarea:focus {
             outline: none;
             border-color: var(--accent-purple);
-            background: rgba(168, 85, 247, 0.08);
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
         }
 
-        input[type="file"] {
-            cursor: pointer;
-        }
-
-        input[type="file"]::file-selector-button {
-            padding: 8px 16px;
-            background: rgba(168, 85, 247, 0.1);
-            border: 1px solid rgba(168, 85, 247, 0.3);
-            border-radius: 6px;
-            color: var(--text-primary);
-            cursor: pointer;
-            margin-right: 12px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.875rem;
-            transition: all 0.3s ease;
-        }
-
-        input[type="file"]::file-selector-button:hover {
-            background: rgba(168, 85, 247, 0.2);
-            border-color: rgba(168, 85, 247, 0.5);
+        textarea {
+            min-height: 120px;
+            resize: vertical;
         }
 
         button {
-            padding: 14px 24px;
-            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9375rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(168, 85, 247, 0.4);
-        }
-
-        button:active {
-            transform: translateY(0);
+            box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);
         }
 
         button:disabled {
@@ -186,15 +190,69 @@
             transform: none;
         }
 
-        .hidden {
-            display: none;
+        .btn-secondary {
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
         }
 
+        .btn-secondary:hover {
+            background: var(--glass-bg);
+            box-shadow: none;
+        }
+
+        .btn-danger {
+            background: var(--accent-red);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+        }
+
+        /* Lists */
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .list-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .list-item-content {
+            flex: 1;
+        }
+
+        .list-item-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .list-item-meta {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .list-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Messages */
         .message {
             padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 0.875rem;
+            border-radius: 8px;
             margin-bottom: 20px;
+            font-size: 0.9rem;
         }
 
         .message.success {
@@ -206,30 +264,60 @@
         .message.error {
             background: rgba(239, 68, 68, 0.1);
             border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #ef4444;
+            color: var(--accent-red);
         }
 
-        .stats-preview {
-            margin-top: 24px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.03);
+        .hidden {
+            display: none !important;
+        }
+
+        /* Login screen */
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+        }
+
+        .logout-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            background: var(--bg-secondary);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
         }
 
-        .stats-preview h3 {
-            font-size: 1rem;
-            margin-bottom: 16px;
+        .logout-btn:hover {
             color: var(--text-primary);
+            border-color: var(--accent-red);
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Grid layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        /* Flight data specific */
+        .stats-preview {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
         }
 
         .stat-row {
             display: flex;
             justify-content: space-between;
             padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875rem;
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .stat-row:last-child {
@@ -241,61 +329,177 @@
         }
 
         .stat-value {
-            color: var(--accent-purple);
+            color: var(--text-primary);
             font-weight: 600;
-        }
-
-        .logout-btn {
-            margin-top: 20px;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.2);
-            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+            font-family: 'JetBrains Mono', monospace;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="loginSection" class="login-container">
         <div class="card">
-            <!-- Login Form -->
-            <div id="loginSection">
-                <h1>Admin Login</h1>
-                <p class="subtitle">Enter password to update resume data</p>
-                <div id="loginMessage"></div>
-                <form class="login-form" id="loginForm">
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" required autocomplete="current-password">
-                    </div>
-                    <button type="submit">Login</button>
-                </form>
+            <h1>Resume Admin</h1>
+            <p class="subtitle" style="text-align: center; margin-bottom: 24px;">Enter password to continue</p>
+            <div id="loginMessage"></div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required autofocus>
+                </div>
+                <button type="submit" style="width: 100%;">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="adminSection" class="hidden">
+        <button class="logout-btn" id="logoutBtn">Logout</button>
+        
+        <div class="container">
+            <div class="header">
+                <h1>Resume Admin Panel</h1>
+                <p class="subtitle">Manage your resume content</p>
             </div>
 
-            <!-- Upload Form -->
-            <div id="uploadSection" class="hidden">
-                <h1>Update Resume Data</h1>
-                <p class="subtitle">Upload your flight data PDF to update the resume</p>
-                <div id="uploadMessage"></div>
-                <form class="upload-form" id="uploadForm">
-                    <div class="form-group">
-                        <label for="pdfFile">Flight Data PDF</label>
-                        <input type="file" id="pdfFile" accept=".pdf" required>
-                    </div>
-                    <button type="submit" id="uploadBtn">Parse and Preview</button>
-                </form>
+            <div class="tabs">
+                <button class="tab active" data-tab="flight-data">Flight Data</button>
+                <button class="tab" data-tab="education">Education</button>
+                <button class="tab" data-tab="contact">Contact</button>
+                <button class="tab" data-tab="about">About</button>
+                <button class="tab" data-tab="experience">Experience</button>
+            </div>
 
-                <div id="statsPreview" class="hidden">
-                    <div class="stats-preview">
-                        <h3>Parsed Flight Data</h3>
-                        <div id="statsContent"></div>
+            <div id="flight-data" class="tab-content active">
+                <div class="card">
+                    <h2>Upload Flight Data PDF</h2>
+                    <div id="flightDataMessage"></div>
+                    <form id="uploadForm">
+                        <div class="form-group">
+                            <label for="pdfFile">Flight Data PDF</label>
+                            <input type="file" id="pdfFile" accept=".pdf" required>
+                        </div>
+                        <button type="submit" id="uploadBtn">Parse and Preview</button>
+                    </form>
+
+                    <div id="statsPreview" class="hidden">
+                        <div class="stats-preview">
+                            <h3>Parsed Flight Data</h3>
+                            <div id="statsContent"></div>
+                        </div>
+                        <button id="updateFlightDataBtn" style="margin-top: 20px; width: 100%;">Save Flight Data</button>
                     </div>
-                    <button id="updateResumeBtn" style="margin-top: 20px; width: 100%;">Update Resume</button>
                 </div>
+            </div>
 
-                <button class="logout-btn" id="logoutBtn">Logout</button>
+            <div id="education" class="tab-content">
+                <div class="card">
+                    <h2>Education</h2>
+                    <div id="educationMessage"></div>
+                    
+                    <div id="educationList" class="item-list"></div>
+                    
+                    <button id="addEducationBtn" class="btn-secondary" style="margin-top: 20px; width: 100%;">+ Add Education</button>
+                    
+                    <div id="educationForm" class="hidden" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border);">
+                        <h3 style="margin-bottom: 16px;">Add/Edit Education</h3>
+                        <div class="form-group">
+                            <label>Degree/Certificate</label>
+                            <input type="text" id="eduDegree" placeholder="e.g., B. Aviation Management">
+                        </div>
+                        <div class="form-group">
+                            <label>Institution</label>
+                            <input type="text" id="eduInstitution" placeholder="e.g., Griffith University, Brisbane">
+                        </div>
+                        <div class="form-group">
+                            <label>Year/Period</label>
+                            <input type="text" id="eduYear" placeholder="e.g., 2022 – 2026">
+                        </div>
+                        <div style="display: flex; gap: 12px;">
+                            <button id="saveEducationBtn">Save</button>
+                            <button id="cancelEducationBtn" class="btn-secondary">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="contact" class="tab-content">
+                <div class="card">
+                    <h2>Contact Information</h2>
+                    <div id="contactMessage"></div>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="contactPhone" placeholder="0488 759 979">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="contactEmail" placeholder="[email protected]">
+                        </div>
+                        <div class="form-group">
+                            <label>LinkedIn</label>
+                            <input type="text" id="contactLinkedIn" placeholder="noah-mirosch">
+                        </div>
+                    </div>
+                    
+                    <button id="saveContactBtn" style="width: 100%; margin-top: 20px;">Save Contact Info</button>
+                </div>
+            </div>
+
+            <div id="about" class="tab-content">
+                <div class="card">
+                    <h2>About Section</h2>
+                    <div id="aboutMessage"></div>
+                    
+                    <div class="form-group">
+                        <label>About Text</label>
+                        <textarea id="aboutText" placeholder="Write your professional summary here..." rows="8"></textarea>
+                    </div>
+                    
+                    <button id="saveAboutBtn" style="width: 100%;">Save About</button>
+                </div>
+            </div>
+
+            <div id="experience" class="tab-content">
+                <div class="card">
+                    <h2>Work Experience</h2>
+                    <div id="experienceMessage"></div>
+                    
+                    <div id="experienceList" class="item-list"></div>
+                    
+                    <button id="addExperienceBtn" class="btn-secondary" style="margin-top: 20px; width: 100%;">+ Add Experience</button>
+                    
+                    <div id="experienceForm" class="hidden" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border);">
+                        <h3 style="margin-bottom: 16px;">Add/Edit Experience</h3>
+                        <div class="form-group">
+                            <label>Job Title</label>
+                            <input type="text" id="expTitle" placeholder="e.g., Multi-Engine Line Pilot">
+                        </div>
+                        <div class="form-group">
+                            <label>Company & Location</label>
+                            <input type="text" id="expCompany" placeholder="e.g., FLY2HEALTH SYDNEY, BANKSTOWN">
+                        </div>
+                        <div class="form-group">
+                            <label>Date Range</label>
+                            <input type="text" id="expDate" placeholder="e.g., January 2025 – Current">
+                        </div>
+                        <div class="form-group">
+                            <label>Responsibilities (one per line)</label>
+                            <textarea id="expResponsibilities" placeholder="Operating a PA-31
+Flying single pilot IFR
+Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
+                        </div>
+                        <div style="display: flex; gap: 12px;">
+                            <button id="saveExperienceBtn">Save</button>
+                            <button id="cancelExperienceBtn" class="btn-secondary">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <button id="publishBtn" style="width: 100%; padding: 16px; font-size: 1rem;">
+                    🚀 Publish All Changes to Resume
+                </button>
             </div>
         </div>
     </div>
@@ -305,151 +509,145 @@
         // Set PDF.js worker
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-        let parsedData = null;
+        // State management
+        let resumeData = {
+            flightData: null,
+            education: [],
+            contact: {},
+            about: '',
+            experience: []
+        };
 
-        // Check if already logged in
+        let currentEditIndex = -1;
+        let currentEditType = null;
+
+        // Check if logged in
         if (sessionStorage.getItem('adminLoggedIn') === 'true') {
-            showUploadSection();
+            showAdminSection();
+            loadExistingData();
         }
 
-        // Login form handler
+        // Login handler
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const password = document.getElementById('password').value;
             
             try {
-                // Call Vercel serverless function for authentication only
                 const response = await fetch('https://password-nine-weld.vercel.app/api/auth', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ password })
                 });
-
+                
                 const result = await response.json();
-
+                
                 if (result.success) {
                     sessionStorage.setItem('adminLoggedIn', 'true');
-                    sessionStorage.setItem('adminPassword', password); // Store for API calls
-                    showUploadSection();
-                    showMessage('loginMessage', 'Login successful!', 'success');
-                    setTimeout(() => {
-                        document.getElementById('loginMessage').innerHTML = '';
-                    }, 2000);
+                    sessionStorage.setItem('adminPassword', password);
+                    showAdminSection();
+                    loadExistingData();
                 } else {
-                    showMessage('loginMessage', 'Incorrect password', 'error');
+                    showMessage('loginMessage', 'Invalid password', 'error');
                 }
             } catch (error) {
-                showMessage('loginMessage', 'Error connecting to authentication server', 'error');
+                showMessage('loginMessage', 'Connection error', 'error');
             }
         });
 
-        // Upload form handler
+        // Logout handler
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            sessionStorage.clear();
+            location.reload();
+        });
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        function showAdminSection() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('adminSection').classList.remove('hidden');
+        }
+
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="message ${type}">${message}</div>`;
+            setTimeout(() => { element.innerHTML = ''; }, 5000);
+        }
+
+        // Load existing data from API
+        async function loadExistingData() {
+            try {
+                const response = await fetch('https://password-nine-weld.vercel.app/api/resume-data');
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Load all sections
+                    if (data.education) {
+                        resumeData.education = data.education;
+                        renderEducationList();
+                    }
+                    if (data.contact) {
+                        resumeData.contact = data.contact;
+                        document.getElementById('contactPhone').value = data.contact.phone || '';
+                        document.getElementById('contactEmail').value = data.contact.email || '';
+                        document.getElementById('contactLinkedIn').value = data.contact.linkedin || '';
+                    }
+                    if (data.about) {
+                        resumeData.about = data.about;
+                        document.getElementById('aboutText').value = data.about;
+                    }
+                    if (data.experience) {
+                        resumeData.experience = data.experience;
+                        renderExperienceList();
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        // ===== FLIGHT DATA =====
+        let parsedFlightData = null;
+
         document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const fileInput = document.getElementById('pdfFile');
-            const file = fileInput.files[0];
-
-            if (!file) {
-                showMessage('uploadMessage', 'Please select a PDF file', 'error');
-                return;
-            }
-
+            const file = document.getElementById('pdfFile').files[0];
+            
+            if (!file) return;
+            
             document.getElementById('uploadBtn').disabled = true;
-            document.getElementById('uploadBtn').textContent = 'Parsing PDF...';
-
+            document.getElementById('uploadBtn').textContent = 'Parsing...';
+            
             try {
                 const text = await extractTextFromPDF(file);
-                parsedData = parseFlightData(text);
-                displayStats(parsedData);
+                parsedFlightData = parseFlightData(text);
+                
+                displayFlightStats(parsedFlightData);
                 document.getElementById('statsPreview').classList.remove('hidden');
-                showMessage('uploadMessage', 'PDF parsed successfully! Review and click "Update Resume" to save.', 'success');
+                
+                showMessage('flightDataMessage', 'PDF parsed successfully!', 'success');
             } catch (error) {
-                console.error('Parsing error:', error);
-                showMessage('uploadMessage', 'Error parsing PDF: ' + error.message, 'error');
+                showMessage('flightDataMessage', 'Error parsing PDF: ' + error.message, 'error');
             } finally {
                 document.getElementById('uploadBtn').disabled = false;
                 document.getElementById('uploadBtn').textContent = 'Parse and Preview';
             }
         });
 
-        // Update resume button
-        document.getElementById('updateResumeBtn').addEventListener('click', async () => {
-            if (parsedData) {
-                const password = sessionStorage.getItem('adminPassword');
-                
-                if (!password) {
-                    showMessage('uploadMessage', 'Session expired. Please refresh and login again.', 'error');
-                    return;
-                }
-                
-                document.getElementById('updateResumeBtn').disabled = true;
-                document.getElementById('updateResumeBtn').textContent = 'Saving...';
-                
-                try {
-                    // Save to Vercel API
-                    const response = await fetch('https://password-nine-weld.vercel.app/api/resume-data', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            password: password,
-                            data: {
-                                totalTime: parsedData.totalTime.toFixed(1),
-                                pic: parsedData.pic.toFixed(1),
-                                turbine: parsedData.turbine.toFixed(1),
-                                night: parsedData.night.toFixed(1),
-                                multiEngine: parsedData.multiEngine.toFixed(1),
-                                ifr: parsedData.ifr.toFixed(1),
-                                multiPIC: parsedData.multiPIC.toFixed(1),
-                                aircraft: parsedData.aircraft.map(a => ({
-                                    type: a.type,
-                                    hours: a.hours.toFixed(1)
-                                })),
-                                lastUpdated: new Date().toLocaleDateString('en-GB')
-                            }
-                        })
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (result.success) {
-                        // Also save to localStorage as backup
-                        updateResume(parsedData);
-                        showMessage('uploadMessage', 'Resume permanently updated! Your changes are now live.', 'success');
-                    } else {
-                        showMessage('uploadMessage', 'Error saving: ' + result.error, 'error');
-                    }
-                } catch (error) {
-                    showMessage('uploadMessage', 'Error connecting to server: ' + error.message, 'error');
-                } finally {
-                    document.getElementById('updateResumeBtn').disabled = false;
-                    document.getElementById('updateResumeBtn').textContent = 'Update Resume';
-                }
+        document.getElementById('updateFlightDataBtn').addEventListener('click', () => {
+            if (parsedFlightData) {
+                resumeData.flightData = parsedFlightData;
+                showMessage('flightDataMessage', 'Flight data saved! Click "Publish" to update resume.', 'success');
             }
         });
-
-        // Logout button
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            sessionStorage.removeItem('adminLoggedIn');
-            document.getElementById('uploadSection').classList.add('hidden');
-            document.getElementById('loginSection').classList.remove('hidden');
-            document.getElementById('password').value = '';
-            document.getElementById('statsPreview').classList.add('hidden');
-            document.getElementById('uploadMessage').innerHTML = '';
-        });
-
-        function showUploadSection() {
-            document.getElementById('loginSection').classList.add('hidden');
-            document.getElementById('uploadSection').classList.remove('hidden');
-        }
-
-        function showMessage(elementId, message, type) {
-            const element = document.getElementById(elementId);
-            element.innerHTML = `<div class="message ${type}">${message}</div>`;
-        }
 
         async function extractTextFromPDF(file) {
             const arrayBuffer = await file.arrayBuffer();
@@ -480,37 +678,25 @@
                 aircraft: []
             };
 
-            // Step 0: Convert the table structure to CSV-like format
-            // The PDF extracts all aircraft on one continuous line, so we need to tokenize it
-            
             console.log("Splitting text into tokens...");
             const tokens = text.split(/\s+/);
             
-            // Find aircraft by looking for pattern: AIRCRAFT_CODE FLIGHTS HOURS
             for (let i = 0; i < tokens.length - 2; i++) {
                 const token = tokens[i];
                 
-                // Check if this looks like an aircraft code (3-4 uppercase letters/numbers)
                 if (/^[A-Z][A-Z0-9]{2,3}$/.test(token)) {
-                    // Skip known header words and SIM
                     const skipWords = ['SIM', 'Dual', 'Night', 'Flights', 'Total', 'Grand', 'PAGE', 'Day', 'Multi'];
-                    if (skipWords.includes(token)) {
-                        continue;
-                    }
+                    if (skipWords.includes(token)) continue;
                     
-                    // Next token should be flights (integer)
                     const flights = parseInt(tokens[i + 1]);
-                    // Token after that should be hours (decimal)
                     const hours = parseFloat(tokens[i + 2]);
                     
-                    // Validate
                     if (!isNaN(flights) && !isNaN(hours) && 
                         flights > 0 && flights < 1000 && 
                         hours > 0 && hours < 1000) {
                         
                         console.log(`Found: ${token} = ${hours} hours (${flights} flights)`);
                         
-                        // Check for duplicates
                         if (!data.aircraft.find(a => a.type === token)) {
                             data.aircraft.push({ type: token, hours: hours });
                         }
@@ -518,7 +704,6 @@
                 }
             }
 
-            // Step 1: Parse Grand Totals
             const grandTotalsMatch = text.match(/Grand Totals\s+(\d+)\s+([\d.\s]+)/);
             
             if (grandTotalsMatch) {
@@ -528,21 +713,12 @@
                 console.log("Grand Totals numbers:", numbers);
                 console.log("Numbers array length:", numbers.length);
                 
-                if (numbers.length >= 13) {  // Changed from 14 to 13 since we need index 12
-                    data.totalTime = numbers[0];  // 1239.1
+                if (numbers.length >= 13) {
+                    data.totalTime = numbers[0];
                     data.pic = numbers[2] + numbers[4] + numbers[6] + numbers[8] + numbers[10];
                     data.night = numbers[4] + numbers[5] + numbers[6] + numbers[7];
-                    data.ifr = numbers[12] || 0;  // IFR Actual hours (174.4 in your PDF)
-                    
-                    // Multi PIC = Multi-Engine PIC/P1 for Day + Night
-                    // From your simple PDF Grand Totals line:
-                    // 1239.1 206.7 575.5 20.8 173.3 35.7 141.3 3.5 60.7 1.0 10.1 8.0 174.4 42.5
-                    // Index:  [0]   [1]   [2]   [3]  [4]   [5]  [6]   [7] [8]   [9]  [10]  [11] [12]   [13]
-                    // So Multi-Engine Night PIC should be at index 6 (141.3) and index 10 (10.1)
-                    // Wait, let me recalculate based on the structure...
-                    // Looking at your data: 141.3 and 10.1 are the values you mentioned
-                    // These appear to be at indices [6] and [10]
-                    data.multiPIC = (numbers[6] || 0) + (numbers[10] || 0);  // 141.3 + 10.1 = 151.4
+                    data.ifr = numbers[12] || 0;
+                    data.multiPIC = (numbers[6] || 0) + (numbers[10] || 0);
                     
                     console.log(`Parsed: Total=${data.totalTime}, PIC=${data.pic}, Night=${data.night}, IFR=${data.ifr}, Multi PIC=${data.multiPIC}`);
                     console.log(`Multi PIC calculation: numbers[6]=${numbers[6]} + numbers[10]=${numbers[10]} = ${data.multiPIC}`);
@@ -551,18 +727,15 @@
                 }
             }
             
-            // Sort aircraft by hours descending
             data.aircraft.sort((a, b) => b.hours - a.hours);
             
             console.log("Final aircraft list:", data.aircraft);
 
-            // Calculate turbine hours
             const turbineTypes = ['P46T', 'SF34'];
             data.turbine = data.aircraft
                 .filter(a => turbineTypes.includes(a.type))
                 .reduce((sum, a) => sum + a.hours, 0);
 
-            // Calculate multi-engine hours
             const multiEngineTypes = ['PA31', 'PA34', 'PA44', 'BE55', 'BE58', 'SF34', 'AC11'];
             data.multiEngine = data.aircraft
                 .filter(a => multiEngineTypes.includes(a.type))
@@ -573,7 +746,7 @@
             return data;
         }
 
-        function displayStats(data) {
+        function displayFlightStats(data) {
             const content = document.getElementById('statsContent');
             content.innerHTML = `
                 <div class="stat-row">
@@ -593,7 +766,7 @@
                     <span class="stat-value">${data.night.toFixed(1)} hrs</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-label">Multi Engine:</span>
+                    <span class="stat-label">Multi-Eng:</span>
                     <span class="stat-value">${data.multiEngine.toFixed(1)} hrs</span>
                 </div>
                 <div class="stat-row">
@@ -616,60 +789,233 @@
             `;
         }
 
-        function updateResume(data) {
-            // Store data in localStorage (works if admin and resume are on same domain)
-            const resumeData = {
-                totalTime: data.totalTime.toFixed(1),
-                pic: data.pic.toFixed(1),
-                turbine: data.turbine.toFixed(1),
-                night: data.night.toFixed(1),
-                multiEngine: data.multiEngine.toFixed(1),
-                ifr: data.ifr.toFixed(1),
-                multiPIC: data.multiPIC.toFixed(1),
-                aircraft: data.aircraft.map(a => ({
-                    type: a.type,
-                    hours: a.hours.toFixed(1)
-                })),
-                lastUpdated: new Date().toLocaleDateString('en-GB')
+        // ===== EDUCATION =====
+        document.getElementById('addEducationBtn').addEventListener('click', () => {
+            currentEditIndex = -1;
+            document.getElementById('eduDegree').value = '';
+            document.getElementById('eduInstitution').value = '';
+            document.getElementById('eduYear').value = '';
+            document.getElementById('educationForm').classList.remove('hidden');
+        });
+
+        document.getElementById('cancelEducationBtn').addEventListener('click', () => {
+            document.getElementById('educationForm').classList.add('hidden');
+        });
+
+        document.getElementById('saveEducationBtn').addEventListener('click', () => {
+            const edu = {
+                degree: document.getElementById('eduDegree').value,
+                institution: document.getElementById('eduInstitution').value,
+                year: document.getElementById('eduYear').value
             };
 
-            localStorage.setItem('noahResumeData', JSON.stringify(resumeData));
-            
-            // Also offer to download as a JSON file
-            const jsonString = JSON.stringify(resumeData, null, 2);
-            const blob = new Blob([jsonString], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            
-            const downloadLink = document.createElement('a');
-            downloadLink.href = url;
-            downloadLink.download = 'resume-data.json';
-            downloadLink.textContent = 'Download resume-data.json';
-            downloadLink.style.display = 'block';
-            downloadLink.style.marginTop = '20px';
-            downloadLink.style.padding = '12px 24px';
-            downloadLink.style.background = 'rgba(59, 130, 246, 0.1)';
-            downloadLink.style.border = '1px solid rgba(59, 130, 246, 0.3)';
-            downloadLink.style.borderRadius = '8px';
-            downloadLink.style.textAlign = 'center';
-            downloadLink.style.color = 'var(--text-primary)';
-            downloadLink.style.textDecoration = 'none';
-            downloadLink.style.transition = 'all 0.3s ease';
-            
-            downloadLink.onmouseover = () => {
-                downloadLink.style.background = 'rgba(59, 130, 246, 0.2)';
-            };
-            downloadLink.onmouseout = () => {
-                downloadLink.style.background = 'rgba(59, 130, 246, 0.1)';
-            };
-            
-            // Add download link after the update button
-            const updateBtn = document.getElementById('updateResumeBtn');
-            const existingLink = updateBtn.parentElement.querySelector('a[download]');
-            if (existingLink) {
-                existingLink.remove();
+            if (!edu.degree || !edu.institution || !edu.year) {
+                showMessage('educationMessage', 'Please fill all fields', 'error');
+                return;
             }
-            updateBtn.parentElement.insertBefore(downloadLink, updateBtn.nextSibling);
+
+            if (currentEditIndex >= 0) {
+                resumeData.education[currentEditIndex] = edu;
+            } else {
+                resumeData.education.push(edu);
+            }
+
+            renderEducationList();
+            document.getElementById('educationForm').classList.add('hidden');
+            showMessage('educationMessage', 'Education saved! Click "Publish" to update resume.', 'success');
+        });
+
+        function renderEducationList() {
+            const list = document.getElementById('educationList');
+            
+            if (resumeData.education.length === 0) {
+                list.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 20px;">No education entries yet</p>';
+                return;
+            }
+
+            list.innerHTML = resumeData.education.map((edu, index) => `
+                <div class="list-item">
+                    <div class="list-item-content">
+                        <div class="list-item-title">${edu.degree}</div>
+                        <div class="list-item-meta">${edu.institution} • ${edu.year}</div>
+                    </div>
+                    <div class="list-item-actions">
+                        <button class="btn-small btn-secondary" onclick="editEducation(${index})">Edit</button>
+                        <button class="btn-small btn-danger" onclick="deleteEducation(${index})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
         }
+
+        function editEducation(index) {
+            currentEditIndex = index;
+            const edu = resumeData.education[index];
+            document.getElementById('eduDegree').value = edu.degree;
+            document.getElementById('eduInstitution').value = edu.institution;
+            document.getElementById('eduYear').value = edu.year;
+            document.getElementById('educationForm').classList.remove('hidden');
+        }
+
+        function deleteEducation(index) {
+            if (confirm('Delete this education entry?')) {
+                resumeData.education.splice(index, 1);
+                renderEducationList();
+                showMessage('educationMessage', 'Education deleted! Click "Publish" to update resume.', 'success');
+            }
+        }
+
+        // ===== CONTACT =====
+        document.getElementById('saveContactBtn').addEventListener('click', () => {
+            resumeData.contact = {
+                phone: document.getElementById('contactPhone').value,
+                email: document.getElementById('contactEmail').value,
+                linkedin: document.getElementById('contactLinkedIn').value
+            };
+            showMessage('contactMessage', 'Contact info saved! Click "Publish" to update resume.', 'success');
+        });
+
+        // ===== ABOUT =====
+        document.getElementById('saveAboutBtn').addEventListener('click', () => {
+            resumeData.about = document.getElementById('aboutText').value;
+            showMessage('aboutMessage', 'About section saved! Click "Publish" to update resume.', 'success');
+        });
+
+        // ===== EXPERIENCE =====
+        document.getElementById('addExperienceBtn').addEventListener('click', () => {
+            currentEditIndex = -1;
+            document.getElementById('expTitle').value = '';
+            document.getElementById('expCompany').value = '';
+            document.getElementById('expDate').value = '';
+            document.getElementById('expResponsibilities').value = '';
+            document.getElementById('experienceForm').classList.remove('hidden');
+        });
+
+        document.getElementById('cancelExperienceBtn').addEventListener('click', () => {
+            document.getElementById('experienceForm').classList.add('hidden');
+        });
+
+        document.getElementById('saveExperienceBtn').addEventListener('click', () => {
+            const exp = {
+                title: document.getElementById('expTitle').value,
+                company: document.getElementById('expCompany').value,
+                date: document.getElementById('expDate').value,
+                responsibilities: document.getElementById('expResponsibilities').value.split('\n').filter(r => r.trim())
+            };
+
+            if (!exp.title || !exp.company || !exp.date) {
+                showMessage('experienceMessage', 'Please fill all required fields', 'error');
+                return;
+            }
+
+            if (currentEditIndex >= 0) {
+                resumeData.experience[currentEditIndex] = exp;
+            } else {
+                resumeData.experience.push(exp);
+            }
+
+            renderExperienceList();
+            document.getElementById('experienceForm').classList.add('hidden');
+            showMessage('experienceMessage', 'Experience saved! Click "Publish" to update resume.', 'success');
+        });
+
+        function renderExperienceList() {
+            const list = document.getElementById('experienceList');
+            
+            if (resumeData.experience.length === 0) {
+                list.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 20px;">No experience entries yet</p>';
+                return;
+            }
+
+            list.innerHTML = resumeData.experience.map((exp, index) => `
+                <div class="list-item">
+                    <div class="list-item-content">
+                        <div class="list-item-title">${exp.title}</div>
+                        <div class="list-item-meta">${exp.company} • ${exp.date}</div>
+                    </div>
+                    <div class="list-item-actions">
+                        <button class="btn-small btn-secondary" onclick="editExperience(${index})">Edit</button>
+                        <button class="btn-small btn-danger" onclick="deleteExperience(${index})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editExperience(index) {
+            currentEditIndex = index;
+            const exp = resumeData.experience[index];
+            document.getElementById('expTitle').value = exp.title;
+            document.getElementById('expCompany').value = exp.company;
+            document.getElementById('expDate').value = exp.date;
+            document.getElementById('expResponsibilities').value = exp.responsibilities.join('\n');
+            document.getElementById('experienceForm').classList.remove('hidden');
+        }
+
+        function deleteExperience(index) {
+            if (confirm('Delete this experience entry?')) {
+                resumeData.experience.splice(index, 1);
+                renderExperienceList();
+                showMessage('experienceMessage', 'Experience deleted! Click "Publish" to update resume.', 'success');
+            }
+        }
+
+        // ===== PUBLISH ALL =====
+        document.getElementById('publishBtn').addEventListener('click', async () => {
+            const password = sessionStorage.getItem('adminPassword');
+            
+            if (!password) {
+                alert('Session expired. Please log in again.');
+                return;
+            }
+
+            const publishBtn = document.getElementById('publishBtn');
+            publishBtn.disabled = true;
+            publishBtn.textContent = 'Publishing...';
+
+            try {
+                // Prepare data for API
+                const dataToSave = {
+                    // Flight data
+                    totalTime: resumeData.flightData?.totalTime.toFixed(1) || '0.0',
+                    pic: resumeData.flightData?.pic.toFixed(1) || '0.0',
+                    turbine: resumeData.flightData?.turbine.toFixed(1) || '0.0',
+                    night: resumeData.flightData?.night.toFixed(1) || '0.0',
+                    multiEngine: resumeData.flightData?.multiEngine.toFixed(1) || '0.0',
+                    ifr: resumeData.flightData?.ifr.toFixed(1) || '0.0',
+                    multiPIC: resumeData.flightData?.multiPIC.toFixed(1) || '0.0',
+                    aircraft: resumeData.flightData?.aircraft.map(a => ({
+                        type: a.type,
+                        hours: a.hours.toFixed(1)
+                    })) || [],
+                    
+                    // Other sections
+                    education: resumeData.education,
+                    contact: resumeData.contact,
+                    about: resumeData.about,
+                    experience: resumeData.experience,
+                    
+                    lastUpdated: new Date().toLocaleDateString('en-GB')
+                };
+
+                const response = await fetch('https://password-nine-weld.vercel.app/api/resume-data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password, data: dataToSave })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('✅ Resume published successfully! Your changes are now live.');
+                } else {
+                    alert('❌ Error publishing: ' + (result.error || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('❌ Connection error: ' + error.message);
+            } finally {
+                publishBtn.disabled = false;
+                publishBtn.textContent = '🚀 Publish All Changes to Resume';
+            }
+        });
     </script>
 </body>
 </html>

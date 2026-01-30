@@ -312,6 +312,16 @@
             letter-spacing: 0.08em;
             margin-bottom: 8px;
             font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media (max-width: 768px) {
+            .stat-label {
+                font-size: 0.65rem;
+                letter-spacing: 0.05em;
+            }
         }
 
         .stat-value {
@@ -991,7 +1001,7 @@
                         <div class="stat-value">49.3</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-label">Multi Engine</div>
+                        <div class="stat-label">Multi-Eng</div>
                         <div class="stat-value">178.7</div>
                     </div>
                     <div class="stat">
@@ -1056,22 +1066,8 @@
             <div style="display: flex; flex-direction: column; gap: 28px;">
                 <div class="card">
                     <h2>Education</h2>
-                    <div style="display: flex; flex-direction: column; gap: 16px;">
-                        <div class="education-item">
-                            <div style="font-weight: 600; color: var(--text-primary); font-size: 1.05rem;">B. Aviation Management</div>
-                            <div style="color: var(--accent-purple); font-size: 0.95rem; margin-top: 4px;">Griffith University, Brisbane</div>
-                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">2022 – 2026</div>
-                        </div>
-                        <div class="education-item">
-                            <div style="font-weight: 600; color: var(--text-primary); font-size: 1.05rem;">ATPL (Frozen)</div>
-                            <div style="color: var(--accent-blue); font-size: 0.95rem; margin-top: 4px;">AFT, Sunshine Coast</div>
-                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">2025 – 2026</div>
-                        </div>
-                        <div class="education-item">
-                            <div style="font-weight: 600; color: var(--text-primary); font-size: 1.05rem;">CPL</div>
-                            <div style="color: var(--accent-pink); font-size: 0.95rem; margin-top: 4px;">Archerfield</div>
-                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">2022</div>
-                        </div>
+                    <div id="educationContainer" style="display: flex; flex-direction: column; gap: 16px;">
+                        <!-- Education entries will be loaded dynamically -->
                     </div>
                 </div>
 
@@ -1080,15 +1076,15 @@
                     <div class="contact-grid">
                         <div class="contact-item">
                             <span class="contact-label">Phone:</span>
-                            <a href="tel:0488759979" class="contact-value">0488 759 979</a>
+                            <a href="tel:0488759979" class="contact-value" id="contactPhone">0488 759 979</a>
                         </div>
                         <div class="contact-item">
                             <span class="contact-label">Email:</span>
-                            <a href="/cdn-cgi/l/email-protection#e5be8088848c89c595978a918086918081b8" class="contact-value">[email protected]</a>
+                            <a href="mailto:[email protected]" class="contact-value" id="contactEmail">[email protected]</a>
                         </div>
                         <div class="contact-item">
                             <span class="contact-label">LinkedIn:</span>
-                            <a href="https://linkedin.com/in/noah-mirosch" target="_blank" class="contact-value">noah-mirosch</a>
+                            <a href="https://linkedin.com/in/noah-mirosch" target="_blank" class="contact-value" id="contactLinkedIn">noah-mirosch</a>
                         </div>
                     </div>
                 </div>
@@ -1097,15 +1093,17 @@
 
         <section class="section animate-on-scroll">
             <h2 style="text-align: center; font-size: 1.75rem; margin-bottom: 32px; font-weight: 600; background: linear-gradient(135deg, #a855f7, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">About</h2>
-            <div class="about-text">
-                I am an Aviation professional with a strong background in both <strong>IFR</strong> flying and operations management. I have experience in flying large piston twins such as the <strong>Piper Chieftain</strong> and single engine turbine aircraft such as the <strong>Piper Meridian</strong>. I'm also skilled in creating efficient business processes, leading teams, and managing aircraft operations. I'm proficient in utilising technology for data analysis and process improvement. I am committed to maintaining high standards of safety and compliance in all aspects of aviation. Air safety starts on the ground.
+            <div class="about-text" id="aboutText">
+                <!-- About text will be loaded dynamically -->
             </div>
         </section>
 
         <section class="section animate-on-scroll">
             <h2 style="text-align: center; font-size: 1.75rem; margin-bottom: 36px; font-weight: 600; background: linear-gradient(135deg, #ec4899, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Experience</h2>
-
-            <div class="experience-item">
+            <div id="experienceContainer">
+                <!-- Experience items will be loaded dynamically -->
+            </div>
+        </section>
                 <div class="job-title">Multi-Engine Line Pilot</div>
                 <div class="company">FLY2HEALTH SYDNEY, BANKSTOWN</div>
                 <div class="date">January 2025 – Current</div>
@@ -1116,52 +1114,6 @@
                 </ul>
             </div>
 
-            <div class="experience-item">
-                <div class="job-title">Pilot / Python Development Manager</div>
-                <div class="company">WESTAL WINDOWS, ORANGE</div>
-                <div class="date">May 2023 – December 2024</div>
-                <ul>
-                    <li>Operating a SR22 and PA46 privately from Orange airport to various ports throughout NSW, QLD and VIC</li>
-                    <li>Creating business processes and teams of up to 10 people</li>
-                    <li>Flying single pilot under the IFR</li>
-                    <li>Managing aircraft airworthiness, maintenance and presentation</li>
-                    <li>Managing passengers and freight</li>
-                    <li>Leading and managing a team of Python developers</li>
-                    <li>Project management, stakeholder engagement and staff training</li>
-                    <li>High level technical Python skills</li>
-                </ul>
-            </div>
-
-            <div class="experience-item">
-                <div class="job-title">Operations Manager / Pilot</div>
-                <div class="company">TEAM AVIATION, ARCHERFIELD</div>
-                <div class="date">April 2022 – May 2023</div>
-                <ul>
-                    <li>Operating the Cirrus SR22 and SR20 fleet for maintenance flights and positioning</li>
-                    <li>Managing and leading small teams</li>
-                    <li>AD-HOC 135 charter duties as required</li>
-                    <li>Running day-to-day operations</li>
-                    <li>Managing schedules and staff to optimise aircraft utilisation and reduce staff downtimes</li>
-                    <li>Creating staff rosters compliant to CAO 48.1</li>
-                    <li>Management of the office, hangar, staff and equipment</li>
-                    <li>Project management including integration plans for C208B RPT and charter</li>
-                    <li>Writing and document control of operations manuals and SOP manuals</li>
-                </ul>
-            </div>
-
-            <div class="experience-item">
-                <div class="job-title">Aviation Consultant</div>
-                <div class="company">LAMBERT AND REHBIEN, BRISBANE</div>
-                <div class="date">June 2019 – April 2022</div>
-                <ul>
-                    <li>Utilizing CAD, Python, and GIS technologies to design airport ground surfaces</li>
-                    <li>Improving aircraft turnaround times through data analysis techniques</li>
-                    <li>Creating attractive and easily comprehensible data presentations and infographics for major airport master plans</li>
-                    <li>Managing a large remote record database and assisting regional airports with compliance issues</li>
-                    <li>Performing aircraft performance calculations, creating disruption management plans</li>
-                    <li>Completing data analysis using Python, C# and Excel, and maintaining a 5000-line codebase</li>
-                </ul>
-            </div>
         </section>
     </div>
 
@@ -1373,6 +1325,62 @@
                         note.textContent = `Data correct as of ${data.lastUpdated}`;
                         console.log(`Updated date note ${index}`);
                     });
+                    
+                    // Update Education section
+                    if (data.education && data.education.length > 0) {
+                        const educationContainer = document.getElementById('educationContainer');
+                        const colors = ['var(--accent-purple)', 'var(--accent-blue)', 'var(--accent-pink)'];
+                        educationContainer.innerHTML = data.education.map((edu, index) => `
+                            <div class="education-item">
+                                <div style="font-weight: 600; color: var(--text-primary); font-size: 1.05rem;">${edu.degree}</div>
+                                <div style="color: ${colors[index % colors.length]}; font-size: 0.95rem; margin-top: 4px;">${edu.institution}</div>
+                                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">${edu.year}</div>
+                            </div>
+                        `).join('');
+                        console.log('Updated education with', data.education.length, 'entries');
+                    }
+                    
+                    // Update Contact section
+                    if (data.contact) {
+                        if (data.contact.phone) {
+                            const phoneEl = document.getElementById('contactPhone');
+                            phoneEl.textContent = data.contact.phone;
+                            phoneEl.href = `tel:${data.contact.phone.replace(/\s/g, '')}`;
+                        }
+                        if (data.contact.email) {
+                            const emailEl = document.getElementById('contactEmail');
+                            emailEl.textContent = data.contact.email;
+                            emailEl.href = `mailto:${data.contact.email}`;
+                        }
+                        if (data.contact.linkedin) {
+                            const linkedinEl = document.getElementById('contactLinkedIn');
+                            linkedinEl.textContent = data.contact.linkedin;
+                            linkedinEl.href = `https://linkedin.com/in/${data.contact.linkedin}`;
+                        }
+                        console.log('Updated contact info');
+                    }
+                    
+                    // Update About section
+                    if (data.about) {
+                        document.getElementById('aboutText').innerHTML = data.about;
+                        console.log('Updated about section');
+                    }
+                    
+                    // Update Experience section
+                    if (data.experience && data.experience.length > 0) {
+                        const experienceContainer = document.getElementById('experienceContainer');
+                        experienceContainer.innerHTML = data.experience.map(exp => `
+                            <div class="experience-item">
+                                <div class="job-title">${exp.title}</div>
+                                <div class="company">${exp.company}</div>
+                                <div class="date">${exp.date}</div>
+                                <ul>
+                                    ${exp.responsibilities.map(r => `<li>${r}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `).join('');
+                        console.log('Updated experience with', data.experience.length, 'entries');
+                    }
                     
                     console.log('✅ Resume data loaded and applied successfully!');
                 } catch (error) {
