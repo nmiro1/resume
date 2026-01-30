@@ -406,6 +406,13 @@
             cursor: pointer;
         }
 
+        /* Desktop: add top space for consistent height */
+        @media (min-width: 769px) {
+            .aircraft-item {
+                padding-top: 28px;
+            }
+        }
+
         .aircraft-item:hover {
             background: rgba(59, 130, 246, 0.08);
             border-color: rgba(59, 130, 246, 0.4);
@@ -444,7 +451,7 @@
             background: linear-gradient(135deg, #a855f7, #ec4899);
             color: white;
             font-weight: 700;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
             box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
             z-index: 10;
             animation: badgePulse 3s ease-in-out infinite;
@@ -461,20 +468,16 @@
             }
         }
 
-        /* Desktop: diagonal top-left ribbon */
+        /* Desktop: elegant top banner */
         @media (min-width: 769px) {
-            .aircraft-item.current-aircraft {
-                overflow: hidden;
-            }
-
             .aircraft-item.current-aircraft::before {
-                top: 8px;
-                left: -28px;
-                font-size: 0.55rem;
-                padding: 3px 32px;
-                border-radius: 0;
-                transform: rotate(-45deg);
-                transform-origin: center;
+                top: 0;
+                left: 0;
+                right: 0;
+                font-size: 0.5rem;
+                padding: 3px 0;
+                border-radius: 10px 10px 0 0;
+                text-align: center;
             }
         }
 
