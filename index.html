@@ -441,28 +441,49 @@
         .aircraft-item.current-aircraft::before {
             content: 'TYPE RATED';
             position: absolute;
-            top: -8px;
-            right: -8px;
             background: linear-gradient(135deg, #a855f7, #ec4899);
             color: white;
-            font-size: 0.6rem;
             font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 8px;
             letter-spacing: 0.05em;
             box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
             z-index: 10;
             animation: badgePulse 3s ease-in-out infinite;
         }
 
+        /* Mobile: top-right badge */
+        @media (max-width: 768px) {
+            .aircraft-item.current-aircraft::before {
+                top: -8px;
+                right: -8px;
+                font-size: 0.6rem;
+                padding: 4px 10px;
+                border-radius: 8px;
+            }
+        }
+
+        /* Desktop: diagonal top-left ribbon */
+        @media (min-width: 769px) {
+            .aircraft-item.current-aircraft {
+                overflow: hidden;
+            }
+
+            .aircraft-item.current-aircraft::before {
+                top: 8px;
+                left: -28px;
+                font-size: 0.55rem;
+                padding: 3px 32px;
+                border-radius: 0;
+                transform: rotate(-45deg);
+                transform-origin: center;
+            }
+        }
+
         @keyframes badgePulse {
             0%, 100% { 
                 box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
-                transform: scale(1);
             }
             50% { 
                 box-shadow: 0 4px 20px rgba(168, 85, 247, 0.6);
-                transform: scale(1.05);
             }
         }
 
