@@ -225,6 +225,50 @@
             justify-content: space-between;
             align-items: flex-start;
             gap: 16px;
+            transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+
+        /* Drag handle */
+        .drag-handle {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            padding: 4px 0;
+            cursor: grab;
+            flex-shrink: 0;
+            opacity: 0.35;
+            transition: opacity 0.2s;
+            align-self: center;
+        }
+
+        .drag-handle:hover {
+            opacity: 0.7;
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .drag-handle span {
+            display: block;
+            width: 16px;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 1px;
+        }
+
+        /* Dragging state */
+        .list-item.dragging {
+            opacity: 0.4;
+            background: rgba(168, 85, 247, 0.08);
+            border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        /* Drop target highlight */
+        .list-item.drag-over {
+            border-color: var(--accent-purple);
+            background: rgba(168, 85, 247, 0.1);
+            box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.2);
         }
 
         .list-item-content {
@@ -589,29 +633,198 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
                 if (response.ok) {
                     const data = await response.json();
                     
-                    // Load all sections
-                    if (data.education) {
+                    // Load Education
+                    if (data.education && data.education.length > 0) {
                         resumeData.education = data.education;
                         renderEducationList();
+                    } else {
+                        // Load default education if none exists
+                        resumeData.education = [
+                            {
+                                degree: 'B. Aviation Management',
+                                institution: 'Griffith University, Brisbane',
+                                year: '2022 – 2026'
+                            },
+                            {
+                                degree: 'ATPL (Frozen)',
+                                institution: 'AFT, Sunshine Coast',
+                                year: '2025 – 2026'
+                            },
+                            {
+                                degree: 'CPL',
+                                institution: 'Archerfield',
+                                year: '2022'
+                            }
+                        ];
+                        renderEducationList();
                     }
-                    if (data.contact) {
+                    
+                    // Load Contact
+                    if (data.contact && Object.keys(data.contact).length > 0) {
                         resumeData.contact = data.contact;
                         document.getElementById('contactPhone').value = data.contact.phone || '';
                         document.getElementById('contactEmail').value = data.contact.email || '';
                         document.getElementById('contactLinkedIn').value = data.contact.linkedin || '';
+                    } else {
+                        // Load default contact if none exists
+                        resumeData.contact = {
+                            phone: '0488 759 979',
+                            email: '[email protected]',
+                            linkedin: 'noah-mirosch'
+                        };
+                        document.getElementById('contactPhone').value = resumeData.contact.phone;
+                        document.getElementById('contactEmail').value = resumeData.contact.email;
+                        document.getElementById('contactLinkedIn').value = resumeData.contact.linkedin;
                     }
+                    
+                    // Load About
                     if (data.about) {
                         resumeData.about = data.about;
                         document.getElementById('aboutText').value = data.about;
+                    } else {
+                        // Load default about if none exists
+                        resumeData.about = 'I am an Aviation professional with a strong background in both IFR flying and operations management. I have experience in flying large piston twins such as the Piper Chieftain and single engine turbine aircraft such as the Piper Meridian. I\'m also skilled in creating efficient business processes, leading teams, and managing aircraft operations. I\'m proficient in utilising technology for data analysis and process improvement. I am committed to maintaining high standards of safety and compliance in all aspects of aviation. Air safety starts on the ground.';
+                        document.getElementById('aboutText').value = resumeData.about;
                     }
-                    if (data.experience) {
+                    
+                    // Load Experience
+                    if (data.experience && data.experience.length > 0) {
                         resumeData.experience = data.experience;
                         renderExperienceList();
+                    } else {
+                        // Load default experience if none exists
+                        resumeData.experience = [
+                            {
+                                title: 'Multi-Engine Line Pilot',
+                                company: 'FLY2HEALTH SYDNEY, BANKSTOWN',
+                                date: 'January 2025 – Current',
+                                responsibilities: [
+                                    'Operating a PA-31',
+                                    'Flying single pilot IFR',
+                                    'Operating to a wide number of airfields throughout NSW'
+                                ]
+                            },
+                            {
+                                title: 'Pilot / Python Development Manager',
+                                company: 'WESTAL WINDOWS, ORANGE',
+                                date: 'May 2023 – December 2024',
+                                responsibilities: [
+                                    'Operating a SR22 and PA46 privately from Orange airport to various ports throughout NSW, QLD and VIC',
+                                    'Creating business processes and teams of up to 10 people',
+                                    'Flying single pilot under the IFR',
+                                    'Managing aircraft airworthiness, maintenance and presentation',
+                                    'Managing passengers and freight',
+                                    'Leading and managing a team of Python developers',
+                                    'Project management, stakeholder engagement and staff training',
+                                    'High level technical Python skills'
+                                ]
+                            },
+                            {
+                                title: 'Operations Manager / Pilot',
+                                company: 'TEAM AVIATION, ARCHERFIELD',
+                                date: 'April 2022 – May 2023',
+                                responsibilities: [
+                                    'Operating the Cirrus SR22 and SR20 fleet for maintenance flights and positioning',
+                                    'Managing and leading small teams',
+                                    'AD-HOC 135 charter duties as required',
+                                    'Running day-to-day operations',
+                                    'Managing schedules and staff to optimise aircraft utilisation and reduce staff downtimes',
+                                    'Creating staff rosters compliant to CAO 48.1',
+                                    'Management of the office, hangar, staff and equipment',
+                                    'Project management including integration plans for C208B RPT and charter',
+                                    'Writing and document control of operations manuals and SOP manuals'
+                                ]
+                            }
+                        ];
+                        renderExperienceList();
                     }
+                    
+                    console.log('Loaded existing data:', resumeData);
                 }
             } catch (error) {
                 console.error('Error loading data:', error);
+                // Load defaults even if API fails
+                loadDefaultData();
             }
+        }
+        
+        function loadDefaultData() {
+            // Set all default data if API fails
+            resumeData.education = [
+                {
+                    degree: 'B. Aviation Management',
+                    institution: 'Griffith University, Brisbane',
+                    year: '2022 – 2026'
+                },
+                {
+                    degree: 'ATPL (Frozen)',
+                    institution: 'AFT, Sunshine Coast',
+                    year: '2025 – 2026'
+                },
+                {
+                    degree: 'CPL',
+                    institution: 'Archerfield',
+                    year: '2022'
+                }
+            ];
+            renderEducationList();
+            
+            resumeData.contact = {
+                phone: '0488 759 979',
+                email: '[email protected]',
+                linkedin: 'noah-mirosch'
+            };
+            document.getElementById('contactPhone').value = resumeData.contact.phone;
+            document.getElementById('contactEmail').value = resumeData.contact.email;
+            document.getElementById('contactLinkedIn').value = resumeData.contact.linkedin;
+            
+            resumeData.about = 'I am an Aviation professional with a strong background in both IFR flying and operations management. I have experience in flying large piston twins such as the Piper Chieftain and single engine turbine aircraft such as the Piper Meridian. I\'m also skilled in creating efficient business processes, leading teams, and managing aircraft operations. I\'m proficient in utilising technology for data analysis and process improvement. I am committed to maintaining high standards of safety and compliance in all aspects of aviation. Air safety starts on the ground.';
+            document.getElementById('aboutText').value = resumeData.about;
+            
+            resumeData.experience = [
+                {
+                    title: 'Multi-Engine Line Pilot',
+                    company: 'FLY2HEALTH SYDNEY, BANKSTOWN',
+                    date: 'January 2025 – Current',
+                    responsibilities: [
+                        'Operating a PA-31',
+                        'Flying single pilot IFR',
+                        'Operating to a wide number of airfields throughout NSW'
+                    ]
+                },
+                {
+                    title: 'Pilot / Python Development Manager',
+                    company: 'WESTAL WINDOWS, ORANGE',
+                    date: 'May 2023 – December 2024',
+                    responsibilities: [
+                        'Operating a SR22 and PA46 privately from Orange airport to various ports throughout NSW, QLD and VIC',
+                        'Creating business processes and teams of up to 10 people',
+                        'Flying single pilot under the IFR',
+                        'Managing aircraft airworthiness, maintenance and presentation',
+                        'Managing passengers and freight',
+                        'Leading and managing a team of Python developers',
+                        'Project management, stakeholder engagement and staff training',
+                        'High level technical Python skills'
+                    ]
+                },
+                {
+                    title: 'Operations Manager / Pilot',
+                    company: 'TEAM AVIATION, ARCHERFIELD',
+                    date: 'April 2022 – May 2023',
+                    responsibilities: [
+                        'Operating the Cirrus SR22 and SR20 fleet for maintenance flights and positioning',
+                        'Managing and leading small teams',
+                        'AD-HOC 135 charter duties as required',
+                        'Running day-to-day operations',
+                        'Managing schedules and staff to optimise aircraft utilisation and reduce staff downtimes',
+                        'Creating staff rosters compliant to CAO 48.1',
+                        'Management of the office, hangar, staff and equipment',
+                        'Project management including integration plans for C208B RPT and charter',
+                        'Writing and document control of operations manuals and SOP manuals'
+                    ]
+                }
+            ];
+            renderExperienceList();
         }
 
         // ===== FLIGHT DATA =====
@@ -834,7 +1047,11 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
             }
 
             list.innerHTML = resumeData.education.map((edu, index) => `
-                <div class="list-item">
+                <div class="list-item" draggable="true" data-index="${index}" data-list="education">
+                    <div class="drag-handle">
+                        <span></span><span></span><span></span>
+                        <span></span><span></span><span></span>
+                    </div>
                     <div class="list-item-content">
                         <div class="list-item-title">${edu.degree}</div>
                         <div class="list-item-meta">${edu.institution} • ${edu.year}</div>
@@ -845,6 +1062,8 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
                     </div>
                 </div>
             `).join('');
+
+            attachDragEvents('educationList', 'education');
         }
 
         function editEducation(index) {
@@ -927,7 +1146,11 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
             }
 
             list.innerHTML = resumeData.experience.map((exp, index) => `
-                <div class="list-item">
+                <div class="list-item" draggable="true" data-index="${index}" data-list="experience">
+                    <div class="drag-handle">
+                        <span></span><span></span><span></span>
+                        <span></span><span></span><span></span>
+                    </div>
                     <div class="list-item-content">
                         <div class="list-item-title">${exp.title}</div>
                         <div class="list-item-meta">${exp.company} • ${exp.date}</div>
@@ -938,6 +1161,8 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
                     </div>
                 </div>
             `).join('');
+
+            attachDragEvents('experienceList', 'experience');
         }
 
         function editExperience(index) {
@@ -958,6 +1183,130 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
             }
         }
 
+        // ===== DRAG AND DROP =====
+        function attachDragEvents(listId, dataKey) {
+            const items = document.querySelectorAll(`#${listId} .list-item`);
+
+            items.forEach(item => {
+                // Desktop drag
+                item.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', item.dataset.index);
+                    item.classList.add('dragging');
+                });
+
+                item.addEventListener('dragend', () => {
+                    item.classList.remove('dragging');
+                    document.querySelectorAll(`#${listId} .list-item`).forEach(el => el.classList.remove('drag-over'));
+                });
+
+                item.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    const dragging = document.querySelector(`#${listId} .dragging`);
+                    if (dragging && dragging !== item) {
+                        item.classList.add('drag-over');
+                    }
+                });
+
+                item.addEventListener('dragleave', () => {
+                    item.classList.remove('drag-over');
+                });
+
+                item.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    item.classList.remove('drag-over');
+                    const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
+                    const toIndex = parseInt(item.dataset.index);
+                    reorderItem(dataKey, fromIndex, toIndex);
+                });
+
+                // Touch drag (mobile)
+                const handle = item.querySelector('.drag-handle');
+                let touchStartY = 0;
+                let touchStartIndex = 0;
+                let cloneEl = null;
+
+                handle.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    touchStartY = e.touches[0].clientY;
+                    touchStartIndex = parseInt(item.dataset.index);
+                    item.classList.add('dragging');
+
+                    // Create a visual clone to follow the finger
+                    cloneEl = item.cloneNode(true);
+                    cloneEl.style.position = 'fixed';
+                    cloneEl.style.width = item.offsetWidth + 'px';
+                    cloneEl.style.left = item.getBoundingClientRect().left + 'px';
+                    cloneEl.style.top = item.getBoundingClientRect().top + 'px';
+                    cloneEl.style.zIndex = '9999';
+                    cloneEl.style.opacity = '0.85';
+                    cloneEl.style.boxShadow = '0 8px 30px rgba(168,85,247,0.4)';
+                    cloneEl.style.borderColor = 'rgba(168,85,247,0.6)';
+                    cloneEl.style.pointerEvents = 'none';
+                    cloneEl.style.transition = 'none';
+                    document.body.appendChild(cloneEl);
+                }, { passive: false });
+
+                handle.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                    const touchY = e.touches[0].clientY;
+
+                    if (cloneEl) {
+                        cloneEl.style.top = (touchY - item.offsetHeight / 2) + 'px';
+                    }
+
+                    // Find which item we're hovering over
+                    const list = document.getElementById(listId);
+                    const allItems = [...list.querySelectorAll('.list-item:not(.dragging)')];
+                    allItems.forEach(el => el.classList.remove('drag-over'));
+
+                    const hovered = allItems.find(el => {
+                        const rect = el.getBoundingClientRect();
+                        return touchY > rect.top && touchY < rect.bottom;
+                    });
+
+                    if (hovered) {
+                        hovered.classList.add('drag-over');
+                    }
+                }, { passive: false });
+
+                handle.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    item.classList.remove('dragging');
+                    if (cloneEl) {
+                        cloneEl.remove();
+                        cloneEl = null;
+                    }
+
+                    const touchY = e.changedTouches[0].clientY;
+                    const list = document.getElementById(listId);
+                    const allItems = [...list.querySelectorAll('.list-item')];
+                    allItems.forEach(el => el.classList.remove('drag-over'));
+
+                    const hovered = allItems.find(el => {
+                        const rect = el.getBoundingClientRect();
+                        return touchY > rect.top && touchY < rect.bottom;
+                    });
+
+                    if (hovered) {
+                        const toIndex = parseInt(hovered.dataset.index);
+                        reorderItem(dataKey, touchStartIndex, toIndex);
+                    }
+                });
+            });
+        }
+
+        function reorderItem(dataKey, fromIndex, toIndex) {
+            if (fromIndex === toIndex) return;
+            const arr = resumeData[dataKey];
+            const moved = arr.splice(fromIndex, 1)[0];
+            arr.splice(toIndex, 0, moved);
+
+            if (dataKey === 'education') renderEducationList();
+            if (dataKey === 'experience') renderExperienceList();
+        }
+
         // ===== PUBLISH ALL =====
         document.getElementById('publishBtn').addEventListener('click', async () => {
             const password = sessionStorage.getItem('adminPassword');
@@ -972,27 +1321,47 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
             publishBtn.textContent = 'Publishing...';
 
             try {
-                // Prepare data for API
+                // If no new PDF was uploaded this session, fetch existing flight data from API
+                let flightFields = {};
+                if (resumeData.flightData) {
+                    // New PDF was parsed — use that
+                    flightFields = {
+                        totalTime: resumeData.flightData.totalTime.toFixed(1),
+                        pic: resumeData.flightData.pic.toFixed(1),
+                        turbine: resumeData.flightData.turbine.toFixed(1),
+                        night: resumeData.flightData.night.toFixed(1),
+                        multiEngine: resumeData.flightData.multiEngine.toFixed(1),
+                        ifr: resumeData.flightData.ifr.toFixed(1),
+                        multiPIC: resumeData.flightData.multiPIC.toFixed(1),
+                        aircraft: resumeData.flightData.aircraft.map(a => ({
+                            type: a.type,
+                            hours: a.hours.toFixed(1)
+                        }))
+                    };
+                } else {
+                    // No new PDF — pull existing flight data from API so we don't wipe it
+                    const existingRes = await fetch('https://password-nine-weld.vercel.app/api/resume-data');
+                    if (existingRes.ok) {
+                        const existing = await existingRes.json();
+                        flightFields = {
+                            totalTime: existing.totalTime || '0.0',
+                            pic: existing.pic || '0.0',
+                            turbine: existing.turbine || '0.0',
+                            night: existing.night || '0.0',
+                            multiEngine: existing.multiEngine || '0.0',
+                            ifr: existing.ifr || '0.0',
+                            multiPIC: existing.multiPIC || '0.0',
+                            aircraft: existing.aircraft || []
+                        };
+                    }
+                }
+
                 const dataToSave = {
-                    // Flight data
-                    totalTime: resumeData.flightData?.totalTime.toFixed(1) || '0.0',
-                    pic: resumeData.flightData?.pic.toFixed(1) || '0.0',
-                    turbine: resumeData.flightData?.turbine.toFixed(1) || '0.0',
-                    night: resumeData.flightData?.night.toFixed(1) || '0.0',
-                    multiEngine: resumeData.flightData?.multiEngine.toFixed(1) || '0.0',
-                    ifr: resumeData.flightData?.ifr.toFixed(1) || '0.0',
-                    multiPIC: resumeData.flightData?.multiPIC.toFixed(1) || '0.0',
-                    aircraft: resumeData.flightData?.aircraft.map(a => ({
-                        type: a.type,
-                        hours: a.hours.toFixed(1)
-                    })) || [],
-                    
-                    // Other sections
+                    ...flightFields,
                     education: resumeData.education,
                     contact: resumeData.contact,
                     about: resumeData.about,
                     experience: resumeData.experience,
-                    
                     lastUpdated: new Date().toLocaleDateString('en-GB')
                 };
 
