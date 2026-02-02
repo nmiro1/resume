@@ -717,7 +717,7 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
                         document.getElementById('contactEmail').value = data.contact.email || '';
                         document.getElementById('contactLinkedIn').value = data.contact.linkedin || '';
                     } else {
-                        // Load default contact if none exists
+                        // Load default contact if none exists and save to resumeData
                         resumeData.contact = {
                             phone: '0488 759 979',
                             email: '[email protected]',
@@ -726,6 +726,7 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
                         document.getElementById('contactPhone').value = resumeData.contact.phone;
                         document.getElementById('contactEmail').value = resumeData.contact.email;
                         document.getElementById('contactLinkedIn').value = resumeData.contact.linkedin;
+                        console.log('Loaded default contact data into resumeData');
                     }
                     
                     // Load About
