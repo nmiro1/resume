@@ -332,6 +332,8 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            user-select: text;
+            -webkit-user-select: text;
         }
 
         .stat-primary .stat-value {
@@ -361,34 +363,40 @@
         /* Wrap each digit/character in a span for individual animation */
         .stat-value span {
             display: inline-block;
-            animation: flipIn 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) backwards;
             transform-origin: 50% 0%;
         }
 
-        .stat-value span:nth-child(1) { animation-delay: 0.1s; }
-        .stat-value span:nth-child(2) { animation-delay: 0.2s; }
-        .stat-value span:nth-child(3) { animation-delay: 0.3s; }
-        .stat-value span:nth-child(4) { animation-delay: 0.4s; }
-        .stat-value span:nth-child(5) { animation-delay: 0.5s; }
-        .stat-value span:nth-child(6) { animation-delay: 0.6s; }
-        .stat-value span:nth-child(7) { animation-delay: 0.7s; }
-        .stat-value span:nth-child(8) { animation-delay: 0.8s; }
+        .stat-value span.flip {
+            animation: flipIn 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) both;
+        }
+
+        .stat-value span.flip:nth-child(1) { animation-delay: 0.1s; }
+        .stat-value span.flip:nth-child(2) { animation-delay: 0.2s; }
+        .stat-value span.flip:nth-child(3) { animation-delay: 0.3s; }
+        .stat-value span.flip:nth-child(4) { animation-delay: 0.4s; }
+        .stat-value span.flip:nth-child(5) { animation-delay: 0.5s; }
+        .stat-value span.flip:nth-child(6) { animation-delay: 0.6s; }
+        .stat-value span.flip:nth-child(7) { animation-delay: 0.7s; }
+        .stat-value span.flip:nth-child(8) { animation-delay: 0.8s; }
 
         /* Also animate aircraft hours */
         .aircraft-hours span {
             display: inline-block;
-            animation: flipIn 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) backwards;
             transform-origin: 50% 0%;
         }
 
-        .aircraft-hours span:nth-child(1) { animation-delay: 0.1s; }
-        .aircraft-hours span:nth-child(2) { animation-delay: 0.2s; }
-        .aircraft-hours span:nth-child(3) { animation-delay: 0.3s; }
-        .aircraft-hours span:nth-child(4) { animation-delay: 0.4s; }
-        .aircraft-hours span:nth-child(5) { animation-delay: 0.5s; }
-        .aircraft-hours span:nth-child(6) { animation-delay: 0.6s; }
-        .aircraft-hours span:nth-child(7) { animation-delay: 0.7s; }
-        .aircraft-hours span:nth-child(8) { animation-delay: 0.8s; }
+        .aircraft-hours span.flip {
+            animation: flipIn 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) both;
+        }
+
+        .aircraft-hours span.flip:nth-child(1) { animation-delay: 0.1s; }
+        .aircraft-hours span.flip:nth-child(2) { animation-delay: 0.2s; }
+        .aircraft-hours span.flip:nth-child(3) { animation-delay: 0.3s; }
+        .aircraft-hours span.flip:nth-child(4) { animation-delay: 0.4s; }
+        .aircraft-hours span.flip:nth-child(5) { animation-delay: 0.5s; }
+        .aircraft-hours span.flip:nth-child(6) { animation-delay: 0.6s; }
+        .aircraft-hours span.flip:nth-child(7) { animation-delay: 0.7s; }
+        .aircraft-hours span.flip:nth-child(8) { animation-delay: 0.8s; }
 
         .aircraft-list {
             display: grid;
@@ -1073,19 +1081,8 @@
 
                 <div class="card">
                     <h2>Contact</h2>
-                    <div class="contact-grid">
-                        <div class="contact-item">
-                            <span class="contact-label">Phone:</span>
-                            <a href="tel:0488759979" class="contact-value" id="contactPhone">0488 759 979</a>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-label">Email:</span>
-                            <a href="/cdn-cgi/l/email-protection#075c626a666e6b277775687362647362635a" class="contact-value" id="contactEmail">[email protected]</a>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-label">LinkedIn:</span>
-                            <a href="https://linkedin.com/in/noah-mirosch" target="_blank" class="contact-value" id="contactLinkedIn">noah-mirosch</a>
-                        </div>
+                    <div class="contact-grid" id="contactGrid">
+                        <!-- Contact info loaded dynamically -->
                     </div>
                 </div>
             </div>
@@ -1254,8 +1251,15 @@
                     // Helper function to wrap each character in a span for flip animation (airport board style)
                     function animateNumber(element, value) {
                         const text = value.toString();
-                        const spans = text.split('').map(char => `<span>${char}</span>`).join('');
-                        element.innerHTML = spans;
+                        element.innerHTML = text.split('').map(char => `<span class="flip">${char}</span>`).join('');
+                        element.querySelectorAll('span').forEach(span => {
+                            span.addEventListener('animationend', () => {
+                                span.classList.remove('flip');
+                                // Force final state so parent hover transforms don't trigger re-evaluation
+                                span.style.transform = 'rotateX(0deg)';
+                                span.style.opacity = '1';
+                            }, { once: true });
+                        });
                     }
                     
                     // Update flight time stats with flip animation
@@ -1290,7 +1294,7 @@
                             
                             // Animate the hours value
                             const hoursText = a.hours.toString();
-                            const hoursSpans = hoursText.split('').map(char => `<span>${char}</span>`).join('');
+                            const hoursSpans = hoursText.split('').map(char => `<span class="flip">${char}</span>`).join('');
                             
                             return `
                                 <div class="aircraft-item ${isCurrent ? 'current-aircraft' : ''}" 
@@ -1303,6 +1307,15 @@
                                 </div>
                             `;
                         }).join('');
+                        // Strip .flip class off aircraft hour spans once they finish
+                        aircraftList.querySelectorAll('.aircraft-hours span').forEach(span => {
+                            span.addEventListener('animationend', () => {
+                                span.classList.remove('flip');
+                                // Force final state so hover transforms don't trigger re-evaluation
+                                span.style.transform = 'rotateX(0deg)';
+                                span.style.opacity = '1';
+                            }, { once: true });
+                        });
                         console.log('Updated aircraft list with', data.aircraft.length, 'aircraft');
                     }
                     
@@ -1331,21 +1344,23 @@
                     
                     // Update Contact section
                     if (data.contact) {
-                        if (data.contact.phone) {
-                            const phoneEl = document.getElementById('contactPhone');
-                            phoneEl.textContent = data.contact.phone;
-                            phoneEl.href = `tel:${data.contact.phone.replace(/\s/g, '')}`;
-                        }
-                        if (data.contact.email) {
-                            const emailEl = document.getElementById('contactEmail');
-                            emailEl.textContent = data.contact.email;
-                            emailEl.href = `mailto:${data.contact.email}`;
-                        }
-                        if (data.contact.linkedin) {
-                            const linkedinEl = document.getElementById('contactLinkedIn');
-                            linkedinEl.textContent = data.contact.linkedin;
-                            linkedinEl.href = `https://linkedin.com/in/${data.contact.linkedin}`;
-                        }
+                        const phone = data.contact.phone || '';
+                        const email = data.contact.email || '';
+                        const linkedin = data.contact.linkedin || '';
+                        document.getElementById('contactGrid').innerHTML = `
+                            <div class="contact-item">
+                                <span class="contact-label">Phone:</span>
+                                <a href="tel:${phone.replace(/\s/g, '')}" class="contact-value">${phone}</a>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-label">Email:</span>
+                                <a href="mailto:${email}" class="contact-value">${email}</a>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-label">LinkedIn:</span>
+                                <a href="https://linkedin.com/in/${linkedin}" target="_blank" class="contact-value">${linkedin}</a>
+                            </div>
+                        `;
                         console.log('Updated contact info');
                     }
                     
