@@ -66,6 +66,7 @@
             animation: float 20s ease-in-out infinite;
             pointer-events: none;
             z-index: 0;
+            will-change: transform;
         }
 
         @keyframes float {
@@ -215,6 +216,9 @@
             );
             transform: rotate(45deg);
             transition: all 0.6s ease;
+            pointer-events: none;
+            will-change: left;
+            z-index: -1;
         }
 
         .card:hover::before {
@@ -364,6 +368,7 @@
         .stat-value span {
             display: inline-block;
             transform-origin: 50% 0%;
+            pointer-events: none;
         }
 
         .stat-value span.flip {
@@ -383,6 +388,7 @@
         .aircraft-hours span {
             display: inline-block;
             transform-origin: 50% 0%;
+            pointer-events: none;
         }
 
         .aircraft-hours span.flip {
