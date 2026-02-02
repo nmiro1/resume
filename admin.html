@@ -406,6 +406,7 @@
 
             <div class="tabs">
                 <button class="tab active" data-tab="flight-data">Flight Data</button>
+                <button class="tab" data-tab="certifications">Certifications</button>
                 <button class="tab" data-tab="education">Education</button>
                 <button class="tab" data-tab="contact">Contact</button>
                 <button class="tab" data-tab="about">About</button>
@@ -431,6 +432,36 @@
                             <div id="statsContent"></div>
                         </div>
                         <button id="updateFlightDataBtn" style="margin-top: 20px; width: 100%;">Save Flight Data</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="certifications" class="tab-content">
+                <div class="card">
+                    <h2>Certifications & Ratings</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 20px;">Manage your pilot certifications and type ratings. Display name appears on website badges, full name on PDF resume.</p>
+                    <div id="certificationsMessage"></div>
+                    
+                    <div id="certificationsList" class="item-list"></div>
+                    
+                    <button id="addCertificationBtn" class="btn-secondary" style="margin-top: 20px; width: 100%;">+ Add Certification</button>
+                    
+                    <div id="certificationForm" class="hidden" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border);">
+                        <h3 style="margin-bottom: 16px;">Add/Edit Certification</h3>
+                        <div class="form-group">
+                            <label>Display Name (Badge)</label>
+                            <input type="text" id="certDisplayName" placeholder="e.g., CPL / ME-IR, RU">
+                            <small style="color: var(--text-muted); display: block; margin-top: 4px;">Short acronym shown on website (e.g., "CPL / ME-IR")</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Full Name (Resume)</label>
+                            <input type="text" id="certFullName" placeholder="e.g., Commercial Pilot License (CPL)">
+                            <small style="color: var(--text-muted); display: block; margin-top: 4px;">Full text shown on PDF resume</small>
+                        </div>
+                        <div style="display: flex; gap: 12px; margin-top: 20px;">
+                            <button id="saveCertificationBtn" style="flex: 1;">Save Certification</button>
+                            <button id="cancelCertificationBtn" class="btn-secondary" style="flex: 1;">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -607,6 +638,7 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
         // State management
         let resumeData = {
             flightData: null,
+            certifications: [],
             education: [],
             contact: {},
             about: '',
@@ -708,6 +740,21 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
                             }
                         ];
                         renderEducationList();
+                    }
+                    
+                    // Load Certifications
+                    if (data.certifications && data.certifications.length > 0) {
+                        resumeData.certifications = data.certifications;
+                        renderCertificationsList();
+                    } else {
+                        // Load default certifications if none exist
+                        resumeData.certifications = [
+                            { displayName: 'CPL / ME-IR', fullName: 'Commercial Pilot License (CPL)' },
+                            { displayName: 'CPL / ME-IR', fullName: 'Multi-Engine Instrument Rating (ME-IR)' },
+                            { displayName: 'RU', fullName: 'Retractable Undercarriage (RU)' },
+                            { displayName: 'RU', fullName: 'Type Rating: Saab 340 (SF34)' }
+                        ];
+                        renderCertificationsList();
                     }
                     
                     // Load Contact
@@ -1052,6 +1099,84 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
                     `).join('')}
                 </div>
             `;
+        }
+
+        // ===== CERTIFICATIONS =====
+        document.getElementById('addCertificationBtn').addEventListener('click', () => {
+            currentEditIndex = -1;
+            document.getElementById('certDisplayName').value = '';
+            document.getElementById('certFullName').value = '';
+            document.getElementById('certificationForm').classList.remove('hidden');
+        });
+
+        document.getElementById('cancelCertificationBtn').addEventListener('click', () => {
+            document.getElementById('certificationForm').classList.add('hidden');
+        });
+
+        document.getElementById('saveCertificationBtn').addEventListener('click', () => {
+            const cert = {
+                displayName: document.getElementById('certDisplayName').value,
+                fullName: document.getElementById('certFullName').value
+            };
+
+            if (!cert.displayName || !cert.fullName) {
+                showMessage('certificationsMessage', 'Please fill all fields', 'error');
+                return;
+            }
+
+            if (currentEditIndex >= 0) {
+                resumeData.certifications[currentEditIndex] = cert;
+            } else {
+                resumeData.certifications.push(cert);
+            }
+
+            renderCertificationsList();
+            document.getElementById('certificationForm').classList.add('hidden');
+            showMessage('certificationsMessage', 'Certification saved! Click "Publish" to update resume.', 'success');
+        });
+
+        function renderCertificationsList() {
+            const list = document.getElementById('certificationsList');
+            
+            if (resumeData.certifications.length === 0) {
+                list.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 20px;">No certifications yet</p>';
+                return;
+            }
+
+            list.innerHTML = resumeData.certifications.map((cert, index) => `
+                <div class="list-item" draggable="true" data-index="${index}" data-list="certifications">
+                    <div class="drag-handle">
+                        <span></span><span></span><span></span>
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="list-item-content">
+                        <div class="list-item-title">${cert.fullName}</div>
+                        <div class="list-item-meta">Badge: ${cert.displayName}</div>
+                    </div>
+                    <div class="list-item-actions">
+                        <button class="btn-small btn-secondary" onclick="editCertification(${index})">Edit</button>
+                        <button class="btn-small btn-danger" onclick="deleteCertification(${index})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+
+            attachDragEvents('certificationsList', 'certifications');
+        }
+
+        function editCertification(index) {
+            currentEditIndex = index;
+            const cert = resumeData.certifications[index];
+            document.getElementById('certDisplayName').value = cert.displayName;
+            document.getElementById('certFullName').value = cert.fullName;
+            document.getElementById('certificationForm').classList.remove('hidden');
+        }
+
+        function deleteCertification(index) {
+            if (confirm('Delete this certification?')) {
+                resumeData.certifications.splice(index, 1);
+                renderCertificationsList();
+                showMessage('certificationsMessage', 'Certification deleted! Click "Publish" to update resume.', 'success');
+            }
         }
 
         // ===== EDUCATION =====
@@ -1411,6 +1536,7 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
                 const dataToSave = {
                     ...flightFields,
                     education: resumeData.education,
+                    certifications: resumeData.certifications,
                     contact: resumeData.contact,
                     about: resumeData.about,
                     experience: resumeData.experience,
@@ -1529,18 +1655,22 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
                         y += 5;
                         
                         doc.setFont('helvetica', 'normal');
-                        flightData.aircraft.forEach((aircraft, index) => {
+                        // Only show top 10 aircraft
+                        const topAircraft = flightData.aircraft.slice(0, 10);
+                        const colWidth = pageWidth / 3;
+                        
+                        topAircraft.forEach((aircraft, index) => {
                             const aircraftText = `${aircraft.type}: ${aircraft.hours} hrs`;
-                            if (index % 3 === 0) {
-                                doc.text(aircraftText, col1X, y);
-                            } else if (index % 3 === 1) {
-                                doc.text(aircraftText, col2X, y);
-                            } else {
-                                doc.text(aircraftText, col2X + 42, y);
+                            const colIndex = index % 3;
+                            const xPos = col1X + (colIndex * colWidth);
+                            
+                            doc.text(aircraftText, xPos, y);
+                            
+                            if (index % 3 === 2) {
                                 y += 5;
                             }
                         });
-                        if (flightData.aircraft.length % 3 !== 0) y += 5;
+                        if (topAircraft.length % 3 !== 0) y += 5;
                     }
                 }
                 y += 5;
@@ -1558,17 +1688,21 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
 
                 doc.setFontSize(10);
                 doc.setFont('helvetica', 'normal');
-                doc.text('• Commercial Pilot License (CPL)', leftMargin, y);
-                y += 5;
-                doc.text('• Multi-Engine Instrument Rating (ME-IR)', leftMargin, y);
-                y += 5;
-                doc.text('• Multi-Engine Command Instrument Rating (MECIR)', leftMargin, y);
-                y += 5;
-                doc.text('• Restricted Radiotelephone Operator Certificate (RU)', leftMargin, y);
-                y += 5;
-                doc.text('• Night Visual Flight Rules Rating (NVFR)', leftMargin, y);
-                y += 5;
-                doc.text('• Type Rating: Saab 340 (SF34)', leftMargin, y);
+                
+                // Use certifications from resumeData if available, otherwise use defaults
+                const certifications = resumeData.certifications && resumeData.certifications.length > 0 
+                    ? resumeData.certifications.map(c => c.fullName)
+                    : [
+                        'Commercial Pilot License (CPL)',
+                        'Multi-Engine Instrument Rating (ME-IR)',
+                        'Retractable Undercarriage (RU)',
+                        'Type Rating: Saab 340 (SF34)'
+                    ];
+                    
+                certifications.forEach(cert => {
+                    doc.text(`• ${cert}`, leftMargin, y);
+                    y += 5;
+                });
                 y += 10;
 
                 // Professional Summary
@@ -1743,9 +1877,13 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
 
                     // Aircraft Experience box
                     if (flightData.aircraft && flightData.aircraft.length > 0) {
+                        // Only show top 10 aircraft
+                        const topAircraft = flightData.aircraft.slice(0, 10);
+                        const numRows = Math.ceil(topAircraft.length / 3);
+                        
                         // Light blue background box
                         doc.setFillColor(59, 130, 246, 0.1);
-                        doc.roundedRect(leftMargin - 2, y - 2, pageWidth + 4, 5 + Math.ceil(flightData.aircraft.length / 3) * 5 + 2, 2, 2, 'F');
+                        doc.roundedRect(leftMargin - 2, y - 2, pageWidth + 4, 5 + numRows * 5 + 2, 2, 2, 'F');
                         
                         doc.setTextColor(59, 130, 246);
                         doc.setFont('helvetica', 'bold');
@@ -1754,18 +1892,20 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
                         
                         doc.setTextColor(0, 0, 0);
                         doc.setFont('helvetica', 'normal');
-                        flightData.aircraft.forEach((aircraft, index) => {
+                        const colWidth = pageWidth / 3;
+                        
+                        topAircraft.forEach((aircraft, index) => {
                             const aircraftText = `${aircraft.type}: ${aircraft.hours} hrs`;
-                            if (index % 3 === 0) {
-                                doc.text(aircraftText, col1X, y);
-                            } else if (index % 3 === 1) {
-                                doc.text(aircraftText, col2X, y);
-                            } else {
-                                doc.text(aircraftText, col2X + 42, y);
+                            const colIndex = index % 3;
+                            const xPos = col1X + (colIndex * colWidth);
+                            
+                            doc.text(aircraftText, xPos, y);
+                            
+                            if (index % 3 === 2) {
                                 y += 5;
                             }
                         });
-                        if (flightData.aircraft.length % 3 !== 0) y += 5;
+                        if (topAircraft.length % 3 !== 0) y += 5;
                         y += 3;
                     }
                 }
@@ -1781,14 +1921,17 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
                 doc.setTextColor(0, 0, 0);
                 doc.setFontSize(10);
                 doc.setFont('helvetica', 'normal');
-                const certs = [
-                    'Commercial Pilot License (CPL)',
-                    'Multi-Engine Instrument Rating (ME-IR)',
-                    'Multi-Engine Command Instrument Rating (MECIR)',
-                    'Restricted Radiotelephone Operator Certificate (RU)',
-                    'Night Visual Flight Rules Rating (NVFR)',
-                    'Type Rating: Saab 340 (SF34)'
-                ];
+                
+                // Use certifications from resumeData if available, otherwise use defaults
+                const certs = resumeData.certifications && resumeData.certifications.length > 0 
+                    ? resumeData.certifications.map(c => c.fullName)
+                    : [
+                        'Commercial Pilot License (CPL)',
+                        'Multi-Engine Instrument Rating (ME-IR)',
+                        'Retractable Undercarriage (RU)',
+                        'Type Rating: Saab 340 (SF34)'
+                    ];
+                    
                 certs.forEach(cert => {
                     doc.text(`• ${cert}`, leftMargin, y);
                     y += 5;

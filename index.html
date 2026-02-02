@@ -991,10 +991,8 @@
         <header>
             <h1>Noah Mirosch</h1>
             <div class="subtitle">Commercial Pilot</div>
-            <div class="credentials">
-                <span>CPL / ME-IR</span>
-                <span>MPPC</span>
-                <span>RU</span>
+            <div class="credentials" id="certificationBadges">
+                <!-- Certification badges will be loaded dynamically -->
             </div>
         </header>
 
@@ -1333,6 +1331,22 @@
                         note.textContent = `Data correct as of ${data.lastUpdated}`;
                         console.log(`Updated date note ${index}`);
                     });
+                    
+                    // Update Certification Badges
+                    if (data.certifications && data.certifications.length > 0) {
+                        const badgesContainer = document.getElementById('certificationBadges');
+                        badgesContainer.innerHTML = data.certifications
+                            .map(cert => `<span>${cert.displayName}</span>`)
+                            .join('');
+                        console.log('Updated certification badges with', data.certifications.length, 'certifications');
+                    } else {
+                        // Default badges if none exist
+                        document.getElementById('certificationBadges').innerHTML = `
+                            <span>CPL / ME-IR</span>
+                            <span>MPPC</span>
+                            <span>RU</span>
+                        `;
+                    }
                     
                     // Update Education section
                     if (data.education && data.education.length > 0) {
