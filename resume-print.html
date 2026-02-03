@@ -41,7 +41,12 @@
         /* Use A4 page size and conservative margins for printing */
         @page {
             size: A4;
-            margin: 12mm;
+            margin: 18mm;
+        }
+
+        /* Reduce top margin on the first page so header can sit higher */
+        @page :first {
+            margin-top: 6mm;
         }
 
         @media print {
@@ -89,16 +94,8 @@
                 page-break-inside: avoid;
             }
 
-            /* Add modest top spacing after each page break so pages 2+ don't sit at the top */
-            .resume-container .page-break + * {
-                padding-top: 10mm;
-            }
-
-            /* Ensure experience items that begin a new page don't sit flush to the top */
-            .resume-container .page-break + .section .experience-item:first-child,
-            .resume-container .page-break + .experience-item {
-                margin-top: 6mm;
-            }
+            /* We now use larger page top margins (via @page) for pages 2+.
+               Remove per-break padding rules to avoid inconsistencies. */
 
             /* Prevent individual job blocks from being split across pages when possible */
             .experience-item {
@@ -114,10 +111,7 @@
                 font-size: 14px;
             }
 
-            /* Pull the header up on the first page so subsequent pages keep top padding */
-            .header {
-                margin-top: -12mm;
-            }
+            /* No negative header margin needed; first-page margin is handled by @page :first */
 
             .contact-info {
                 gap: 12px;
