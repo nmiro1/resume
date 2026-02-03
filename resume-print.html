@@ -735,16 +735,35 @@
                 // Try to get data from URL parameters first (passed from admin panel)
                 const urlParams = new URLSearchParams(window.location.search);
                 const dataParam = urlParams.get('data');
-                
+
                 let data = null;
-                
+
                 if (dataParam) {
-                    // Data passed via URL parameter (base64 encoded)
+                    // Try URI-encoded JSON first (safe for Unicode)
                     try {
-                        data = JSON.parse(atob(dataParam));
-                        console.log('Loaded data from URL parameter');
-                    } catch (e) {
-                        console.error('Failed to parse URL parameter data:', e);
+                        data = JSON.parse(decodeURIComponent(dataParam));
+                        console.log('Loaded data from URL parameter (URI-encoded)');
+                    } catch (errUri) {
+                        // Fallback: try base64 (may be legacy or simple ASCII)
+                        try {
+                            // atob may throw for malformed input
+                            const raw = atob(dataParam);
+                            try {
+                                data = JSON.parse(raw);
+                                console.log('Loaded data from URL parameter (base64 simple)');
+                            } catch (errJson) {
+                                // If JSON.parse fails due to UTF-8 characters, decode as UTF-8
+                                try {
+                                    const utf8 = decodeURIComponent(escape(raw));
+                                    data = JSON.parse(utf8);
+                                    console.log('Loaded data from URL parameter (base64 UTF-8)');
+                                } catch (errUtf8) {
+                                    console.error('Failed to parse URL parameter data (UTF-8):', errUtf8);
+                                }
+                            }
+                        } catch (errAtob) {
+                            console.error('Failed to decode URL parameter data:', errUri, errAtob);
+                        }
                     }
                 }
                 

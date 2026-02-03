@@ -1830,10 +1830,10 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
                 }
                 
                 // Open the print-friendly resume page
-                // Pass data via URL parameter (base64 encoded JSON)
-                const encodedData = dataToPass ? btoa(JSON.stringify(dataToPass)) : '';
-                const url = encodedData 
-                    ? `resume-print.html?data=${encodedData}` 
+                // Pass data via URL parameter (URI-encoded JSON to support Unicode)
+                const encodedData = dataToPass ? encodeURIComponent(JSON.stringify(dataToPass)) : '';
+                const url = encodedData
+                    ? `resume-print.html?data=${encodedData}`
                     : 'resume-print.html';
                 
                 window.open(url, '_blank');
