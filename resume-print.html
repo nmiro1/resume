@@ -89,6 +89,11 @@
                 page-break-inside: avoid;
             }
 
+            /* Add top spacing after each page break so pages 2+ don't sit at the top */
+            .resume-container .page-break + * {
+                padding-top: 18mm;
+            }
+
             /* Typography tweaks for print */
             .name {
                 font-size: 36px;
