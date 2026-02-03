@@ -38,34 +38,88 @@
         }
 
         /* Print styles */
+        /* Use A4 page size and conservative margins for printing */
+        @page {
+            size: A4;
+            margin: 12mm;
+        }
+
         @media print {
             body {
                 padding: 0;
                 margin: 0;
-            }
-            
-            .no-print {
-                display: none !important;
-            }
-            
-            .resume-container {
-                max-width: 100%;
-                padding: 0;
-                margin: 0;
-            }
-
-            /* Ask browsers to preserve background colors/gradients when printing */
-            body, .resume-container, .resume-content, .header, .flight-grid, .aircraft-grid {
+                background: #ffffff;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
-            
+
+            .no-print {
+                display: none !important;
+            }
+
+            /* Set the resume to match A4 printable area */
+            .resume-container {
+                width: 210mm;
+                max-width: 210mm;
+                margin: 0 auto;
+                background: white;
+                box-shadow: none;
+                position: relative;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Reduce large paddings for print to fit A4 without ugly margins */
+            .resume-content {
+                padding: 18mm;
+            }
+
+            /* Keep decorative orbs but let print-color-adjust handle them; remove heavy shadows */
+            .resume-container::before {
+                height: 220px;
+                opacity: 0.9;
+            }
+
+            /* Make sure page breaks are honoured */
             .page-break {
                 page-break-after: always;
             }
-            
+
             .page-break-avoid {
                 page-break-inside: avoid;
+            }
+
+            /* Typography tweaks for print */
+            .name {
+                font-size: 36px;
+            }
+
+            .title {
+                font-size: 14px;
+            }
+
+            .contact-info {
+                gap: 12px;
+            }
+
+            /* Tighter grids for A4 */
+            .flight-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px 16px;
+                padding: 16px;
+            }
+
+            .aircraft-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            /* Remove visual-only decorations that don't print well */
+            .print-btn, .print-controls { display: none !important; }
+
+            /* Remove shadows from panels */
+            .experience-item, .education-item, .resume-container, .resume-content, .flight-grid, .aircraft-grid {
+                box-shadow: none !important;
             }
         }
 
