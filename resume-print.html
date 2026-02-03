@@ -53,6 +53,12 @@
                 padding: 0;
                 margin: 0;
             }
+
+            /* Ask browsers to preserve background colors/gradients when printing */
+            body, .resume-container, .resume-content, .header, .flight-grid, .aircraft-grid {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
             
             .page-break {
                 page-break-after: always;
@@ -471,9 +477,9 @@
 </head>
 <body>
     <!-- Print Controls (hidden when printing) -->
-    <div class="print-controls no-print">
+        <div class="print-controls no-print">
         <button class="print-btn secondary" onclick="window.close()">← Back</button>
-        <button class="print-btn" onclick="window.print()">🖨️ Print to PDF</button>
+        <button class="print-btn" onclick="delayedPrint()">🖨️ Print to PDF</button>
     </div>
 
     <div class="resume-container">
@@ -783,6 +789,26 @@
                 }
             } catch (error) {
                 console.error('Error loading resume data:', error);
+            }
+        }
+
+        // Ensure fonts and paints are ready before printing to preserve formatting
+        async function delayedPrint() {
+            try {
+                if (document.fonts && document.fonts.ready) {
+                    await document.fonts.ready;
+                } else {
+                    await new Promise(r => setTimeout(r, 150));
+                }
+
+                // Wait a frame for layout to stabilise
+                await new Promise(requestAnimationFrame);
+
+                // Trigger print
+                window.print();
+            } catch (err) {
+                console.error('Error during delayedPrint:', err);
+                window.print();
             }
         }
 
