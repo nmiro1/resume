@@ -89,9 +89,20 @@
                 page-break-inside: avoid;
             }
 
-            /* Add top spacing after each page break so pages 2+ don't sit at the top */
+            /* Add modest top spacing after each page break so pages 2+ don't sit at the top */
             .resume-container .page-break + * {
-                padding-top: 18mm;
+                padding-top: 10mm;
+            }
+
+            /* Ensure experience items that begin a new page don't sit flush to the top */
+            .resume-container .page-break + .section .experience-item:first-child,
+            .resume-container .page-break + .experience-item {
+                margin-top: 6mm;
+            }
+
+            /* Prevent individual job blocks from being split across pages when possible */
+            .experience-item {
+                page-break-inside: avoid;
             }
 
             /* Typography tweaks for print */
