@@ -57,145 +57,21 @@
         .btn-danger { background: var(--accent-red); }
         .btn-small { padding: 8px 16px; font-size: 0.85rem; }
 
-        /* Lists */
-        .item-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .list-item {
-            background: var(--bg-secondary);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            padding: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 16px;
-            transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
-        }
-
-        /* Drag handle */
-        .drag-handle {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            padding: 4px 0;
-            cursor: grab;
-            flex-shrink: 0;
-            opacity: 0.35;
-            transition: opacity 0.2s;
-            align-self: center;
-        }
-
-        .drag-handle:hover {
-            opacity: 0.7;
-        }
-
-        .drag-handle:active {
-            cursor: grabbing;
-        }
-
-        .drag-handle span {
-            display: block;
-            width: 16px;
-            height: 2px;
-            background: var(--text-primary);
-            border-radius: 1px;
-        }
-
-        /* Dragging state */
-        .list-item.dragging {
-            opacity: 0.4;
-            background: rgba(168, 85, 247, 0.08);
-            border-color: rgba(168, 85, 247, 0.3);
-        }
-
-        /* Drop target highlight */
-        .list-item.drag-over {
-            border-color: var(--accent-purple);
-            background: rgba(168, 85, 247, 0.1);
-            box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.2);
-        }
-
-        .list-item-content {
-            flex: 1;
-        }
-
-        .list-item-title {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-
-        .list-item-meta {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .list-item-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        /* Messages */
-        .message {
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-        }
-
-        .message.success {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: var(--accent-green);
-        }
-
-        .message.error {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: var(--accent-red);
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Login screen */
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-        }
-
-        .logout-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 8px 16px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            color: var(--text-primary);
-            border-color: var(--accent-red);
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Grid layouts */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
-        }
+        /* Lists & Messages */
+        .item-list { display: flex; flex-direction: column; gap: 12px; }
+        .list-item { background: var(--bg-secondary); border: 1px solid var(--glass-border); border-radius: 8px; padding: 16px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+        .list-item-content { flex: 1; }
+        .list-item-title { font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+        .list-item-meta { font-size: 0.85rem; color: var(--text-secondary); }
+        .list-item-actions { display: flex; gap: 8px; }
+        .message { padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; }
+        .message.success { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--accent-green); }
+        .message.error { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--accent-red); }
+        .hidden { display: none !important; }
+        .login-container { max-width: 400px; margin: 100px auto; }
+        .logout-btn { position: fixed; top: 20px; right: 20px; padding: 8px 16px; background: var(--bg-secondary); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-secondary); cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease; }
+        .logout-btn:hover { color: var(--text-primary); border-color: var(--accent-red); transform: none; box-shadow: none; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
 
         /* Flight Stats */
         .stats-preview { background: var(--bg-secondary); border-radius: 8px; padding: 20px; margin-top: 20px; }
@@ -239,12 +115,11 @@
 
             <div class="tabs">
                 <button class="tab active" data-tab="flight-data">Flight Data</button>
-                <button class="tab" data-tab="certifications">Certifications</button>
+                <button class="tab" data-tab="themes">Themes</button>
                 <button class="tab" data-tab="education">Education</button>
                 <button class="tab" data-tab="contact">Contact</button>
                 <button class="tab" data-tab="about">About</button>
                 <button class="tab" data-tab="experience">Experience</button>
-                <button class="tab" data-tab="pdf-generator">📄 Generate PDF</button>
             </div>
 
             <div id="flight-data" class="tab-content active">
@@ -269,33 +144,47 @@
                 </div>
             </div>
 
-            <div id="certifications" class="tab-content">
+            <div id="themes" class="tab-content">
                 <div class="card">
-                    <h2>Certifications & Ratings</h2>
-                    <p style="color: var(--text-secondary); margin-bottom: 20px;">Manage your pilot certifications and type ratings. Display name appears on website badges, full name on PDF resume.</p>
-                    <div id="certificationsMessage"></div>
+                    <h2>Select Website Theme</h2>
+                    <div id="themeMessage"></div>
                     
-                    <div id="certificationsList" class="item-list"></div>
-                    
-                    <button id="addCertificationBtn" class="btn-secondary" style="margin-top: 20px; width: 100%;">+ Add Certification</button>
-                    
-                    <div id="certificationForm" class="hidden" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border);">
-                        <h3 style="margin-bottom: 16px;">Add/Edit Certification</h3>
-                        <div class="form-group">
-                            <label>Display Name (Badge)</label>
-                            <input type="text" id="certDisplayName" placeholder="e.g., CPL / ME-IR, RU">
-                            <small style="color: var(--text-muted); display: block; margin-top: 4px;">Short acronym shown on website (e.g., "CPL / ME-IR")</small>
-                        </div>
-                        <div class="form-group">
-                            <label>Full Name (Resume)</label>
-                            <input type="text" id="certFullName" placeholder="e.g., Commercial Pilot License (CPL)">
-                            <small style="color: var(--text-muted); display: block; margin-top: 4px;">Full text shown on PDF resume</small>
-                        </div>
-                        <div style="display: flex; gap: 12px; margin-top: 20px;">
-                            <button id="saveCertificationBtn" style="flex: 1;">Save Certification</button>
-                            <button id="cancelCertificationBtn" class="btn-secondary" style="flex: 1;">Cancel</button>
-                        </div>
+                    <div class="theme-grid">
+                        <label class="theme-option">
+                            <input type="radio" name="theme" value="theme-glass" style="position: absolute; opacity: 0;">
+                            <div class="theme-preview">
+                                <div style="height: 100px; background: linear-gradient(135deg, #141414, #0a0a0a); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; color: white;">
+                                    Dark Glass
+                                </div>
+                                <strong style="display: block; color: var(--text-primary);">Aero Glass (Default)</strong>
+                                <p style="font-size: 0.8rem; color: var(--text-secondary);">Dark mode, gradients, modern grid.</p>
+                            </div>
+                        </label>
+
+                        <label class="theme-option">
+                            <input type="radio" name="theme" value="theme-paper" style="position: absolute; opacity: 0;">
+                            <div class="theme-preview">
+                                <div style="height: 100px; background: #f5f5f5; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; color: #333; border: 1px solid #ddd;">
+                                    Paper
+                                </div>
+                                <strong style="display: block; color: var(--text-primary);">Swiss Minimal</strong>
+                                <p style="font-size: 0.8rem; color: var(--text-secondary);">Light mode, sharp typography, vertical layout.</p>
+                            </div>
+                        </label>
+
+                        <label class="theme-option">
+                            <input type="radio" name="theme" value="theme-hud" style="position: absolute; opacity: 0;">
+                            <div class="theme-preview">
+                                <div style="height: 100px; background: #001100; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; color: #00ff00; font-family: monospace; border: 1px solid #004400;">
+                                    HUD
+                                </div>
+                                <strong style="display: block; color: var(--text-primary);">Cockpit HUD</strong>
+                                <p style="font-size: 0.8rem; color: var(--text-secondary);">Monospace, high contrast green, tactical data.</p>
+                            </div>
+                        </label>
                     </div>
+                    
+                    <button id="saveThemeBtn" style="width: 100%;">Save Theme Selection</button>
                 </div>
             </div>
 
@@ -307,22 +196,10 @@
                     <button id="addEducationBtn" class="btn-secondary" style="margin-top: 20px; width: 100%;">+ Add Education</button>
                     <div id="educationForm" class="hidden" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border);">
                         <h3 style="margin-bottom: 16px;">Add/Edit Education</h3>
-                        <div class="form-group">
-                            <label>Degree/Certificate</label>
-                            <input type="text" id="eduDegree" placeholder="e.g., B. Aviation Management">
-                        </div>
-                        <div class="form-group">
-                            <label>Institution</label>
-                            <input type="text" id="eduInstitution" placeholder="e.g., Griffith University, Brisbane">
-                        </div>
-                        <div class="form-group">
-                            <label>Year/Period</label>
-                            <input type="text" id="eduYear" placeholder="e.g., 2022 – 2026">
-                        </div>
-                        <div style="display: flex; gap: 12px;">
-                            <button id="saveEducationBtn">Save</button>
-                            <button id="cancelEducationBtn" class="btn-secondary">Cancel</button>
-                        </div>
+                        <div class="form-group"><label>Degree/Certificate</label><input type="text" id="eduDegree" placeholder="e.g., B. Aviation Management"></div>
+                        <div class="form-group"><label>Institution</label><input type="text" id="eduInstitution" placeholder="e.g., Griffith University, Brisbane"></div>
+                        <div class="form-group"><label>Year/Period</label><input type="text" id="eduYear" placeholder="e.g., 2022 – 2026"></div>
+                        <div style="display: flex; gap: 12px;"><button id="saveEducationBtn">Save</button><button id="cancelEducationBtn" class="btn-secondary">Cancel</button></div>
                     </div>
                 </div>
             </div>
@@ -332,20 +209,10 @@
                     <h2>Contact Information</h2>
                     <div id="contactMessage"></div>
                     <div class="grid-2">
-                        <div class="form-group">
-                            <label>Phone</label>
-                            <input type="tel" id="contactPhone" placeholder="0488 759 979">
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="contactEmail" placeholder="[email protected]">
-                        </div>
-                        <div class="form-group">
-                            <label>LinkedIn</label>
-                            <input type="text" id="contactLinkedIn" placeholder="noah-mirosch">
-                        </div>
+                        <div class="form-group"><label>Phone</label><input type="tel" id="contactPhone" placeholder="0488 759 979"></div>
+                        <div class="form-group"><label>Email</label><input type="email" id="contactEmail" placeholder="[email protected]"></div>
+                        <div class="form-group"><label>LinkedIn</label><input type="text" id="contactLinkedIn" placeholder="noah-mirosch"></div>
                     </div>
-                    
                     <button id="saveContactBtn" style="width: 100%; margin-top: 20px;">Save Contact Info</button>
                 </div>
             </div>
@@ -367,80 +234,12 @@
                     <button id="addExperienceBtn" class="btn-secondary" style="margin-top: 20px; width: 100%;">+ Add Experience</button>
                     <div id="experienceForm" class="hidden" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--glass-border);">
                         <h3 style="margin-bottom: 16px;">Add/Edit Experience</h3>
-                        <div class="form-group">
-                            <label>Job Title</label>
-                            <input type="text" id="expTitle" placeholder="e.g., Multi-Engine Line Pilot">
-                        </div>
-                        <div class="form-group">
-                            <label>Company & Location</label>
-                            <input type="text" id="expCompany" placeholder="e.g., FLY2HEALTH SYDNEY, BANKSTOWN">
-                        </div>
-                        <div class="form-group">
-                            <label>Date Range</label>
-                            <input type="text" id="expDate" placeholder="e.g., January 2025 – Current">
-                        </div>
-                        <div class="form-group">
-                            <label>Responsibilities (one per line)</label>
-                            <textarea id="expResponsibilities" placeholder="Operating a PA-31
-Flying single pilot IFR
-Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
-                        </div>
-                        <div style="display: flex; gap: 12px;">
-                            <button id="saveExperienceBtn">Save</button>
-                            <button id="cancelExperienceBtn" class="btn-secondary">Cancel</button>
-                        </div>
+                        <div class="form-group"><label>Job Title</label><input type="text" id="expTitle" placeholder="e.g., Multi-Engine Line Pilot"></div>
+                        <div class="form-group"><label>Company & Location</label><input type="text" id="expCompany" placeholder="e.g., FLY2HEALTH SYDNEY"></div>
+                        <div class="form-group"><label>Date Range</label><input type="text" id="expDate" placeholder="e.g., January 2025 – Current"></div>
+                        <div class="form-group"><label>Responsibilities (one per line)</label><textarea id="expResponsibilities" placeholder="Operating a PA-31..." rows="6"></textarea></div>
+                        <div style="display: flex; gap: 12px;"><button id="saveExperienceBtn">Save</button><button id="cancelExperienceBtn" class="btn-secondary">Cancel</button></div>
                     </div>
-
-                    <div id="pdfMessage" style="margin-top: 20px;"></div>
-                </div>
-            </div>
-
-            <div id="pdf-generator" class="tab-content">
-                <div class="card">
-                    <h2>📄 Generate PDF Resume</h2>
-                    <p style="color: var(--text-secondary); margin-bottom: 24px;">Generate a downloadable PDF version of your resume in two styles.</p>
-                    
-                    <div style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-                        <!-- ATS-Friendly PDF -->
-                        <div style="background: var(--bg-secondary); border-radius: 12px; padding: 24px; border: 1px solid var(--glass-border);">
-                            <h3 style="font-size: 1.25rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 1.5rem;">📋</span> ATS-Friendly
-                            </h3>
-                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">
-                                Clean, simple format optimized for Applicant Tracking Systems. Black and white, standard fonts, no graphics.
-                            </p>
-                            <ul style="list-style: none; padding: 0; margin-bottom: 20px; font-size: 0.85rem; color: var(--text-muted);">
-                                <li style="padding: 4px 0;">✓ Machine-readable text</li>
-                                <li style="padding: 4px 0;">✓ Standard formatting</li>
-                                <li style="padding: 4px 0;">✓ Keyword optimized</li>
-                                <li style="padding: 4px 0;">✓ Single column layout</li>
-                            </ul>
-                            <button id="generateATSBtn" class="btn-secondary" style="width: 100%;">
-                                Generate ATS PDF
-                            </button>
-                        </div>
-
-                        <!-- Beautiful PDF -->
-                        <div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(59, 130, 246, 0.1)); border-radius: 12px; padding: 24px; border: 1px solid rgba(168, 85, 247, 0.3);">
-                            <h3 style="font-size: 1.25rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 1.5rem;">✨</span> Beautiful Design
-                            </h3>
-                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">
-                                Matches your website's liquid glass aesthetic. Perfect for direct submissions and portfolios.
-                            </p>
-                            <ul style="list-style: none; padding: 0; margin-bottom: 20px; font-size: 0.85rem; color: var(--text-muted);">
-                                <li style="padding: 4px 0;">✓ Liquid glass aesthetic</li>
-                                <li style="padding: 4px 0;">✓ Gradient accents</li>
-                                <li style="padding: 4px 0;">✓ Print-to-PDF ready</li>
-                                <li style="padding: 4px 0;">✓ Canva-quality design</li>
-                            </ul>
-                            <button id="generateBeautifulBtn" style="width: 100%; background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue)); border: none; padding: 12px 24px; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; transition: transform 0.2s;">
-                                Open Print Preview
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="pdfMessage" style="margin-top: 20px;"></div>
                 </div>
             </div>
 
@@ -452,7 +251,6 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -460,7 +258,6 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
         let resumeData = {
             theme: 'theme-glass', // Default theme
             flightData: null,
-            certifications: [],
             education: [],
             contact: {},
             about: '',
@@ -522,214 +319,37 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
                 if (response.ok) {
                     const data = await response.json();
                     
-                    // Load Education
-                    if (data.education && data.education.length > 0) {
-                        resumeData.education = data.education;
-                        renderEducationList();
+                    // Load Theme
+                    if (data.theme) {
+                        resumeData.theme = data.theme;
+                        const radio = document.querySelector(`input[name="theme"][value="${data.theme}"]`);
+                        if (radio) radio.checked = true;
                     } else {
-                        // Load default education if none exists
-                        resumeData.education = [
-                            {
-                                degree: 'B. Aviation Management',
-                                institution: 'Griffith University, Brisbane',
-                                year: '2022 – 2026'
-                            },
-                            {
-                                degree: 'ATPL (Frozen)',
-                                institution: 'AFT, Sunshine Coast',
-                                year: '2025 – 2026'
-                            },
-                            {
-                                degree: 'CPL',
-                                institution: 'Archerfield',
-                                year: '2022'
-                            }
-                        ];
-                        renderEducationList();
+                        // Default check
+                        document.querySelector('input[name="theme"][value="theme-glass"]').checked = true;
                     }
-                    
-                    // Load Certifications
-                    if (data.certifications && data.certifications.length > 0) {
-                        resumeData.certifications = data.certifications;
-                        renderCertificationsList();
-                    } else {
-                        // Load default certifications if none exist
-                        resumeData.certifications = [
-                            { displayName: 'CPL / ME-IR', fullName: 'Commercial Pilot License (CPL) & Multi-Engine Instrument Rating (ME-IR)' },
-                            { displayName: 'RU', fullName: 'Retractable Undercarriage (RU)' },
-                            { displayName: 'SF34', fullName: 'Type Rating: Saab 340 (SF34)' }
-                        ];
-                        renderCertificationsList();
-                    }
-                    
-                    // Load Contact
-                    if (data.contact && Object.keys(data.contact).length > 0) {
+
+                    if (data.education) { resumeData.education = data.education; renderEducationList(); }
+                    if (data.contact) {
                         resumeData.contact = data.contact;
                         document.getElementById('contactPhone').value = data.contact.phone || '';
                         document.getElementById('contactEmail').value = data.contact.email || '';
                         document.getElementById('contactLinkedIn').value = data.contact.linkedin || '';
-                    } else {
-                        // Load default contact if none exists and save to resumeData
-                        resumeData.contact = {
-                            phone: '0488 759 979',
-                            email: '[email protected]',
-                            linkedin: 'noah-mirosch'
-                        };
-                        document.getElementById('contactPhone').value = resumeData.contact.phone;
-                        document.getElementById('contactEmail').value = resumeData.contact.email;
-                        document.getElementById('contactLinkedIn').value = resumeData.contact.linkedin;
-                        console.log('Loaded default contact data into resumeData');
                     }
-                    
-                    // Load About
-                    if (data.about) {
-                        resumeData.about = data.about;
-                        document.getElementById('aboutText').value = data.about;
-                    } else {
-                        // Load default about if none exists
-                        resumeData.about = 'I am an Aviation professional with a strong background in both IFR flying and operations management. I have experience in flying large piston twins such as the Piper Chieftain and single engine turbine aircraft such as the Piper Meridian. I\'m also skilled in creating efficient business processes, leading teams, and managing aircraft operations. I\'m proficient in utilising technology for data analysis and process improvement. I am committed to maintaining high standards of safety and compliance in all aspects of aviation. Air safety starts on the ground.';
-                        document.getElementById('aboutText').value = resumeData.about;
-                    }
-                    
-                    // Load Experience
-                    if (data.experience && data.experience.length > 0) {
-                        resumeData.experience = data.experience;
-                        renderExperienceList();
-                    } else {
-                        // Load default experience if none exists
-                        resumeData.experience = [
-                            {
-                                title: 'Multi-Engine Line Pilot',
-                                company: 'FLY2HEALTH SYDNEY, BANKSTOWN',
-                                date: 'January 2025 – Current',
-                                responsibilities: [
-                                    'Operating a PA-31',
-                                    'Flying single pilot IFR',
-                                    'Operating to a wide number of airfields throughout NSW'
-                                ]
-                            },
-                            {
-                                title: 'Pilot / Python Development Manager',
-                                company: 'WESTAL WINDOWS, ORANGE',
-                                date: 'May 2023 – December 2024',
-                                responsibilities: [
-                                    'Operating a SR22 and PA46 privately from Orange airport to various ports throughout NSW, QLD and VIC',
-                                    'Creating business processes and teams of up to 10 people',
-                                    'Flying single pilot under the IFR',
-                                    'Managing aircraft airworthiness, maintenance and presentation',
-                                    'Managing passengers and freight',
-                                    'Leading and managing a team of Python developers',
-                                    'Project management, stakeholder engagement and staff training',
-                                    'High level technical Python skills'
-                                ]
-                            },
-                            {
-                                title: 'Operations Manager / Pilot',
-                                company: 'TEAM AVIATION, ARCHERFIELD',
-                                date: 'April 2022 – May 2023',
-                                responsibilities: [
-                                    'Operating the Cirrus SR22 and SR20 fleet for maintenance flights and positioning',
-                                    'Managing and leading small teams',
-                                    'AD-HOC 135 charter duties as required',
-                                    'Running day-to-day operations',
-                                    'Managing schedules and staff to optimise aircraft utilisation and reduce staff downtimes',
-                                    'Creating staff rosters compliant to CAO 48.1',
-                                    'Management of the office, hangar, staff and equipment',
-                                    'Project management including integration plans for C208B RPT and charter',
-                                    'Writing and document control of operations manuals and SOP manuals'
-                                ]
-                            }
-                        ];
-                        renderExperienceList();
-                    }
-                    
-                    console.log('Loaded existing data:', resumeData);
+                    if (data.about) { resumeData.about = data.about; document.getElementById('aboutText').value = data.about; }
+                    if (data.experience) { resumeData.experience = data.experience; renderExperienceList(); }
                 }
-            } catch (error) {
-                console.error('Error loading data:', error);
-                // Load defaults even if API fails
-                loadDefaultData();
+            } catch (error) { console.error('Error loading data:', error); }
+        }
+
+        // ===== THEME SAVING =====
+        document.getElementById('saveThemeBtn').addEventListener('click', () => {
+            const selected = document.querySelector('input[name="theme"]:checked');
+            if (selected) {
+                resumeData.theme = selected.value;
+                showMessage('themeMessage', 'Theme selection saved! Click "Publish" to apply changes live.', 'success');
             }
-        }
-        
-        function loadDefaultData() {
-            // Set all default data if API fails
-            resumeData.education = [
-                {
-                    degree: 'B. Aviation Management',
-                    institution: 'Griffith University, Brisbane',
-                    year: '2022 – 2026'
-                },
-                {
-                    degree: 'ATPL (Frozen)',
-                    institution: 'AFT, Sunshine Coast',
-                    year: '2025 – 2026'
-                },
-                {
-                    degree: 'CPL',
-                    institution: 'Archerfield',
-                    year: '2022'
-                }
-            ];
-            renderEducationList();
-            
-            resumeData.contact = {
-                phone: '0488 759 979',
-                email: '[email protected]',
-                linkedin: 'noah-mirosch'
-            };
-            document.getElementById('contactPhone').value = resumeData.contact.phone;
-            document.getElementById('contactEmail').value = resumeData.contact.email;
-            document.getElementById('contactLinkedIn').value = resumeData.contact.linkedin;
-            
-            resumeData.about = 'I am an Aviation professional with a strong background in both IFR flying and operations management. I have experience in flying large piston twins such as the Piper Chieftain and single engine turbine aircraft such as the Piper Meridian. I\'m also skilled in creating efficient business processes, leading teams, and managing aircraft operations. I\'m proficient in utilising technology for data analysis and process improvement. I am committed to maintaining high standards of safety and compliance in all aspects of aviation. Air safety starts on the ground.';
-            document.getElementById('aboutText').value = resumeData.about;
-            
-            resumeData.experience = [
-                {
-                    title: 'Multi-Engine Line Pilot',
-                    company: 'FLY2HEALTH SYDNEY, BANKSTOWN',
-                    date: 'January 2025 – Current',
-                    responsibilities: [
-                        'Operating a PA-31',
-                        'Flying single pilot IFR',
-                        'Operating to a wide number of airfields throughout NSW'
-                    ]
-                },
-                {
-                    title: 'Pilot / Python Development Manager',
-                    company: 'WESTAL WINDOWS, ORANGE',
-                    date: 'May 2023 – December 2024',
-                    responsibilities: [
-                        'Operating a SR22 and PA46 privately from Orange airport to various ports throughout NSW, QLD and VIC',
-                        'Creating business processes and teams of up to 10 people',
-                        'Flying single pilot under the IFR',
-                        'Managing aircraft airworthiness, maintenance and presentation',
-                        'Managing passengers and freight',
-                        'Leading and managing a team of Python developers',
-                        'Project management, stakeholder engagement and staff training',
-                        'High level technical Python skills'
-                    ]
-                },
-                {
-                    title: 'Operations Manager / Pilot',
-                    company: 'TEAM AVIATION, ARCHERFIELD',
-                    date: 'April 2022 – May 2023',
-                    responsibilities: [
-                        'Operating the Cirrus SR22 and SR20 fleet for maintenance flights and positioning',
-                        'Managing and leading small teams',
-                        'AD-HOC 135 charter duties as required',
-                        'Running day-to-day operations',
-                        'Managing schedules and staff to optimise aircraft utilisation and reduce staff downtimes',
-                        'Creating staff rosters compliant to CAO 48.1',
-                        'Management of the office, hangar, staff and equipment',
-                        'Project management including integration plans for C208B RPT and charter',
-                        'Writing and document control of operations manuals and SOP manuals'
-                    ]
-                }
-            ];
-            renderExperienceList();
-        }
+        });
 
         // ===== FLIGHT DATA =====
         let parsedFlightData = null;
@@ -818,146 +438,30 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
                 </div>`;
         }
 
-        // ===== CERTIFICATIONS =====
-        document.getElementById('addCertificationBtn').addEventListener('click', () => {
+        // ===== EDUCATION =====
+        document.getElementById('addEducationBtn').addEventListener('click', () => {
             currentEditIndex = -1;
-            document.getElementById('certDisplayName').value = '';
-            document.getElementById('certFullName').value = '';
-            document.getElementById('certificationForm').classList.remove('hidden');
-        });
-
-        document.getElementById('cancelCertificationBtn').addEventListener('click', () => {
-            document.getElementById('certificationForm').classList.add('hidden');
-        });
-
-        document.getElementById('saveCertificationBtn').addEventListener('click', () => {
-            const cert = {
-                displayName: document.getElementById('certDisplayName').value,
-                fullName: document.getElementById('certFullName').value
-            };
-
-            if (!cert.displayName || !cert.fullName) {
-                showMessage('certificationsMessage', 'Please fill all fields', 'error');
-                return;
-            }
-
-            if (currentEditIndex >= 0) {
-                resumeData.certifications[currentEditIndex] = cert;
-            } else {
-                resumeData.certifications.push(cert);
-            }
-
-            renderCertificationsList();
-            document.getElementById('certificationForm').classList.add('hidden');
-            showMessage('certificationsMessage', 'Certification saved! Click "Publish" to update resume.', 'success');
-        });
-
-        function renderCertificationsList() {
-            const list = document.getElementById('certificationsList');
-            
-            if (resumeData.certifications.length === 0) {
-                list.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 20px;">No certifications yet</p>';
-                return;
-            }
-
-            list.innerHTML = resumeData.certifications.map((cert, index) => `
-                <div class="list-item" draggable="true" data-index="${index}" data-list="certifications">
-                    <div class="drag-handle">
-                        <span></span><span></span><span></span>
-                        <span></span><span></span><span></span>
-                    </div>
-                    <div class="list-item-content">
-                        <div class="list-item-title">${cert.fullName}</div>
-                        <div class="list-item-meta">Badge: ${cert.displayName}</div>
-                    </div>
-                    <div class="list-item-actions">
-                        <button class="btn-small btn-secondary" onclick="editCertification(${index})">Edit</button>
-                        <button class="btn-small btn-danger" onclick="deleteCertification(${index})">Delete</button>
-                    </div>
-                </div>
-            `).join('');
-
-            attachDragEvents('certificationsList', 'certifications');
-        }
-
-        function editCertification(index) {
-            currentEditIndex = index;
-            const cert = resumeData.certifications[index];
-            document.getElementById('certDisplayName').value = cert.displayName;
-            document.getElementById('certFullName').value = cert.fullName;
-            document.getElementById('certificationForm').classList.remove('hidden');
-        }
-
-        function deleteCertification(index) {
-            if (confirm('Delete this certification?')) {
-                resumeData.certifications.splice(index, 1);
-                renderCertificationsList();
-                showMessage('certificationsMessage', 'Certification deleted! Click "Publish" to update resume.', 'success');
-            }
-        }
-
-        // ===== CERTIFICATIONS =====
-        document.getElementById('addCertificationBtn').addEventListener('click', () => {
-            currentEditIndex = -1;
-            document.getElementById('eduDegree').value = '';
-            document.getElementById('eduInstitution').value = '';
-            document.getElementById('eduYear').value = '';
+            document.getElementById('eduDegree').value = ''; document.getElementById('eduInstitution').value = ''; document.getElementById('eduYear').value = '';
             document.getElementById('educationForm').classList.remove('hidden');
         });
-
-        document.getElementById('cancelEducationBtn').addEventListener('click', () => {
-            document.getElementById('educationForm').classList.add('hidden');
-        });
-
+        document.getElementById('cancelEducationBtn').addEventListener('click', () => document.getElementById('educationForm').classList.add('hidden'));
         document.getElementById('saveEducationBtn').addEventListener('click', () => {
-            const edu = {
-                degree: document.getElementById('eduDegree').value,
-                institution: document.getElementById('eduInstitution').value,
-                year: document.getElementById('eduYear').value
-            };
-
-            if (!edu.degree || !edu.institution || !edu.year) {
-                showMessage('educationMessage', 'Please fill all fields', 'error');
-                return;
-            }
-
-            if (currentEditIndex >= 0) {
-                resumeData.education[currentEditIndex] = edu;
-            } else {
-                resumeData.education.push(edu);
-            }
-
+            const edu = { degree: document.getElementById('eduDegree').value, institution: document.getElementById('eduInstitution').value, year: document.getElementById('eduYear').value };
+            if (!edu.degree || !edu.institution || !edu.year) { showMessage('educationMessage', 'Please fill all fields', 'error'); return; }
+            if (currentEditIndex >= 0) { resumeData.education[currentEditIndex] = edu; } else { resumeData.education.push(edu); }
             renderEducationList();
             document.getElementById('educationForm').classList.add('hidden');
-            showMessage('educationMessage', 'Education saved! Click "Publish" to update resume.', 'success');
+            showMessage('educationMessage', 'Education saved!', 'success');
         });
 
         function renderEducationList() {
             const list = document.getElementById('educationList');
-            
-            if (resumeData.education.length === 0) {
-                list.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 20px;">No education entries yet</p>';
-                return;
-            }
-
+            if (resumeData.education.length === 0) { list.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 20px;">No education entries yet</p>'; return; }
             list.innerHTML = resumeData.education.map((edu, index) => `
-                <div class="list-item" draggable="true" data-index="${index}" data-list="education">
-                    <div class="drag-handle">
-                        <span></span><span></span><span></span>
-                        <span></span><span></span><span></span>
-                    </div>
-                    <div class="list-item-content">
-                        <div class="list-item-title">${edu.degree}</div>
-                        <div class="list-item-meta">${edu.institution} • ${edu.year}</div>
-                    </div>
-                    <div class="list-item-actions">
-                        <button class="btn-small btn-secondary" onclick="editEducation(${index})">Edit</button>
-                        <button class="btn-small btn-danger" onclick="deleteEducation(${index})">Delete</button>
-                    </div>
-                </div>
-            `).join('');
-
-            attachDragEvents('educationList', 'education');
+                <div class="list-item">
+                    <div class="list-item-content"><div class="list-item-title">${edu.degree}</div><div class="list-item-meta">${edu.institution} • ${edu.year}</div></div>
+                    <div class="list-item-actions"><button class="btn-small btn-secondary" onclick="editEducation(${index})">Edit</button><button class="btn-small btn-danger" onclick="deleteEducation(${index})">Delete</button></div>
+                </div>`).join('');
         }
         window.editEducation = function(index) {
             currentEditIndex = index;
@@ -997,23 +501,10 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
             const list = document.getElementById('experienceList');
             if (resumeData.experience.length === 0) { list.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 20px;">No experience entries yet</p>'; return; }
             list.innerHTML = resumeData.experience.map((exp, index) => `
-                <div class="list-item" draggable="true" data-index="${index}" data-list="experience">
-                    <div class="drag-handle">
-                        <span></span><span></span><span></span>
-                        <span></span><span></span><span></span>
-                    </div>
-                    <div class="list-item-content">
-                        <div class="list-item-title">${exp.title}</div>
-                        <div class="list-item-meta">${exp.company} • ${exp.date}</div>
-                    </div>
-                    <div class="list-item-actions">
-                        <button class="btn-small btn-secondary" onclick="editExperience(${index})">Edit</button>
-                        <button class="btn-small btn-danger" onclick="deleteExperience(${index})">Delete</button>
-                    </div>
-                </div>
-            `).join('');
-
-            attachDragEvents('experienceList', 'experience');
+                <div class="list-item">
+                    <div class="list-item-content"><div class="list-item-title">${exp.title}</div><div class="list-item-meta">${exp.company} • ${exp.date}</div></div>
+                    <div class="list-item-actions"><button class="btn-small btn-secondary" onclick="editExperience(${index})">Edit</button><button class="btn-small btn-danger" onclick="deleteExperience(${index})">Delete</button></div>
+                </div>`).join('');
         }
         window.editExperience = function(index) {
             currentEditIndex = index;
@@ -1021,138 +512,7 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
             document.getElementById('expTitle').value = exp.title; document.getElementById('expCompany').value = exp.company; document.getElementById('expDate').value = exp.date; document.getElementById('expResponsibilities').value = exp.responsibilities.join('\n');
             document.getElementById('experienceForm').classList.remove('hidden');
         }
-
-        function deleteExperience(index) {
-            if (confirm('Delete this experience entry?')) {
-                resumeData.experience.splice(index, 1);
-                renderExperienceList();
-                showMessage('experienceMessage', 'Experience deleted! Click "Publish" to update resume.', 'success');
-            }
-        }
-
-        // ===== DRAG AND DROP =====
-        function attachDragEvents(listId, dataKey) {
-            const items = document.querySelectorAll(`#${listId} .list-item`);
-
-            items.forEach(item => {
-                // Desktop drag
-                item.addEventListener('dragstart', (e) => {
-                    e.dataTransfer.effectAllowed = 'move';
-                    e.dataTransfer.setData('text/plain', item.dataset.index);
-                    item.classList.add('dragging');
-                });
-
-                item.addEventListener('dragend', () => {
-                    item.classList.remove('dragging');
-                    document.querySelectorAll(`#${listId} .list-item`).forEach(el => el.classList.remove('drag-over'));
-                });
-
-                item.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    e.dataTransfer.dropEffect = 'move';
-                    const dragging = document.querySelector(`#${listId} .dragging`);
-                    if (dragging && dragging !== item) {
-                        item.classList.add('drag-over');
-                    }
-                });
-
-                item.addEventListener('dragleave', () => {
-                    item.classList.remove('drag-over');
-                });
-
-                item.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    item.classList.remove('drag-over');
-                    const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
-                    const toIndex = parseInt(item.dataset.index);
-                    reorderItem(dataKey, fromIndex, toIndex);
-                });
-
-                // Touch drag (mobile)
-                const handle = item.querySelector('.drag-handle');
-                let touchStartY = 0;
-                let touchStartIndex = 0;
-                let cloneEl = null;
-
-                handle.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    touchStartY = e.touches[0].clientY;
-                    touchStartIndex = parseInt(item.dataset.index);
-                    item.classList.add('dragging');
-
-                    // Create a visual clone to follow the finger
-                    cloneEl = item.cloneNode(true);
-                    cloneEl.style.position = 'fixed';
-                    cloneEl.style.width = item.offsetWidth + 'px';
-                    cloneEl.style.left = item.getBoundingClientRect().left + 'px';
-                    cloneEl.style.top = item.getBoundingClientRect().top + 'px';
-                    cloneEl.style.zIndex = '9999';
-                    cloneEl.style.opacity = '0.85';
-                    cloneEl.style.boxShadow = '0 8px 30px rgba(168,85,247,0.4)';
-                    cloneEl.style.borderColor = 'rgba(168,85,247,0.6)';
-                    cloneEl.style.pointerEvents = 'none';
-                    cloneEl.style.transition = 'none';
-                    document.body.appendChild(cloneEl);
-                }, { passive: false });
-
-                handle.addEventListener('touchmove', (e) => {
-                    e.preventDefault();
-                    const touchY = e.touches[0].clientY;
-
-                    if (cloneEl) {
-                        cloneEl.style.top = (touchY - item.offsetHeight / 2) + 'px';
-                    }
-
-                    // Find which item we're hovering over
-                    const list = document.getElementById(listId);
-                    const allItems = [...list.querySelectorAll('.list-item:not(.dragging)')];
-                    allItems.forEach(el => el.classList.remove('drag-over'));
-
-                    const hovered = allItems.find(el => {
-                        const rect = el.getBoundingClientRect();
-                        return touchY > rect.top && touchY < rect.bottom;
-                    });
-
-                    if (hovered) {
-                        hovered.classList.add('drag-over');
-                    }
-                }, { passive: false });
-
-                handle.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    item.classList.remove('dragging');
-                    if (cloneEl) {
-                        cloneEl.remove();
-                        cloneEl = null;
-                    }
-
-                    const touchY = e.changedTouches[0].clientY;
-                    const list = document.getElementById(listId);
-                    const allItems = [...list.querySelectorAll('.list-item')];
-                    allItems.forEach(el => el.classList.remove('drag-over'));
-
-                    const hovered = allItems.find(el => {
-                        const rect = el.getBoundingClientRect();
-                        return touchY > rect.top && touchY < rect.bottom;
-                    });
-
-                    if (hovered) {
-                        const toIndex = parseInt(hovered.dataset.index);
-                        reorderItem(dataKey, touchStartIndex, toIndex);
-                    }
-                });
-            });
-        }
-
-        function reorderItem(dataKey, fromIndex, toIndex) {
-            if (fromIndex === toIndex) return;
-            const arr = resumeData[dataKey];
-            const moved = arr.splice(fromIndex, 1)[0];
-            arr.splice(toIndex, 0, moved);
-
-            if (dataKey === 'education') renderEducationList();
-            if (dataKey === 'experience') renderExperienceList();
-        }
+        window.deleteExperience = function(index) { if (confirm('Delete?')) { resumeData.experience.splice(index, 1); renderExperienceList(); } }
 
         // ===== PUBLISH ALL =====
         document.getElementById('publishBtn').addEventListener('click', async () => {
@@ -1161,45 +521,17 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
             const publishBtn = document.getElementById('publishBtn');
             publishBtn.disabled = true; publishBtn.textContent = 'Publishing...';
             try {
-                // If no new PDF was uploaded this session, fetch existing flight data from API
-                let flightFields = {};
-                if (resumeData.flightData) {
-                    // New PDF was parsed — use that
-                    flightFields = {
-                        totalTime: resumeData.flightData.totalTime.toFixed(1),
-                        pic: resumeData.flightData.pic.toFixed(1),
-                        turbine: resumeData.flightData.turbine.toFixed(1),
-                        night: resumeData.flightData.night.toFixed(1),
-                        multiEngine: resumeData.flightData.multiEngine.toFixed(1),
-                        ifr: resumeData.flightData.ifr.toFixed(1),
-                        multiPIC: resumeData.flightData.multiPIC.toFixed(1),
-                        aircraft: resumeData.flightData.aircraft.map(a => ({
-                            type: a.type,
-                            hours: a.hours.toFixed(1)
-                        }))
-                    };
-                } else {
-                    // No new PDF — pull existing flight data from API so we don't wipe it
-                    const existingRes = await fetch('https://password-nine-weld.vercel.app/api/resume-data');
-                    if (existingRes.ok) {
-                        const existing = await existingRes.json();
-                        flightFields = {
-                            totalTime: existing.totalTime || '0.0',
-                            pic: existing.pic || '0.0',
-                            turbine: existing.turbine || '0.0',
-                            night: existing.night || '0.0',
-                            multiEngine: existing.multiEngine || '0.0',
-                            ifr: existing.ifr || '0.0',
-                            multiPIC: existing.multiPIC || '0.0',
-                            aircraft: existing.aircraft || []
-                        };
-                    }
-                }
-
                 const dataToSave = {
-                    ...flightFields,
+                    theme: resumeData.theme, // Added theme to saved data
+                    totalTime: resumeData.flightData?.totalTime.toFixed(1) || '0.0',
+                    pic: resumeData.flightData?.pic.toFixed(1) || '0.0',
+                    turbine: resumeData.flightData?.turbine.toFixed(1) || '0.0',
+                    night: resumeData.flightData?.night.toFixed(1) || '0.0',
+                    multiEngine: resumeData.flightData?.multiEngine.toFixed(1) || '0.0',
+                    ifr: resumeData.flightData?.ifr.toFixed(1) || '0.0',
+                    multiPIC: resumeData.flightData?.multiPIC.toFixed(1) || '0.0',
+                    aircraft: resumeData.flightData?.aircraft.map(a => ({ type: a.type, hours: a.hours.toFixed(1) })) || [],
                     education: resumeData.education,
-                    certifications: resumeData.certifications,
                     contact: resumeData.contact,
                     about: resumeData.about,
                     experience: resumeData.experience,
@@ -1209,299 +541,10 @@ Operating to a wide number of airfields throughout NSW" rows="6"></textarea>
                     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password, data: dataToSave })
                 });
                 const result = await response.json();
-
-                if (result.success) {
-                    alert('✅ Resume published successfully! Your changes are now live.');
-                } else {
-                    alert('❌ Error publishing: ' + (result.error || 'Unknown error'));
-                }
-            } catch (error) {
-                alert('❌ Connection error: ' + error.message);
-            } finally {
-                publishBtn.disabled = false;
-                publishBtn.textContent = '🚀 Publish All Changes to Resume';
-            }
-        });
-
-        // ===== PDF GENERATION =====
-        const { jsPDF } = window.jspdf;
-
-        function showPDFMessage(message, type) {
-            const msgDiv = document.getElementById('pdfMessage');
-            msgDiv.className = `message ${type}`;
-            msgDiv.textContent = message;
-            msgDiv.style.display = 'block';
-            setTimeout(() => {
-                msgDiv.style.display = 'none';
-            }, 5000);
-        }
-
-        // Generate ATS-Friendly PDF
-        document.getElementById('generateATSBtn').addEventListener('click', async () => {
-            try {
-                const doc = new jsPDF();
-                let y = 20;
-                const leftMargin = 20;
-                const rightMargin = 190;
-                const pageWidth = 170;
-
-                // Header - Name
-                doc.setFontSize(22);
-                doc.setFont('helvetica', 'bold');
-                doc.text('NOAH MIROSCH', leftMargin, y);
-                y += 7;
-
-                doc.setFontSize(12);
-                doc.setFont('helvetica', 'normal');
-                doc.text('Commercial Pilot', leftMargin, y);
-                y += 5;
-
-                // Contact Info (compact, single line)
-                doc.setFontSize(9);
-                const contactLine = `${resumeData.contact.phone || ''} | ${resumeData.contact.email || ''} | linkedin.com/in/${resumeData.contact.linkedin || ''}`;
-                doc.text(contactLine, leftMargin, y);
-                y += 10;
-
-                // Line separator
-                doc.setLineWidth(0.5);
-                doc.line(leftMargin, y, rightMargin, y);
-                y += 8;
-
-                // FLIGHT TIME SUMMARY - Most critical section for pilots!
-                doc.setFontSize(12);
-                doc.setFont('helvetica', 'bold');
-                doc.text('FLIGHT TIME SUMMARY', leftMargin, y);
-                y += 7;
-
-                doc.setFontSize(10);
-                doc.setFont('helvetica', 'normal');
-
-                // Get flight data from API if available
-                let flightData = null;
-                try {
-                    const response = await fetch('https://password-nine-weld.vercel.app/api/resume-data');
-                    if (response.ok) {
-                        flightData = await response.json();
-                    }
-                } catch (error) {
-                    console.log('Could not fetch flight data');
-                }
-
-                if (flightData) {
-                    // Two-column layout for flight hours
-                    const col1X = leftMargin;
-                    const col2X = leftMargin + 85;
-                    
-                    doc.text(`Total Time: ${flightData.totalTime || '0.0'} hrs`, col1X, y);
-                    doc.text(`Pilot in Command: ${flightData.pic || '0.0'} hrs`, col2X, y);
-                    y += 5;
-                    
-                    doc.text(`Multi-Engine: ${flightData.multiEngine || '0.0'} hrs`, col1X, y);
-                    doc.text(`Multi-Engine PIC: ${flightData.multiPIC || '0.0'} hrs`, col2X, y);
-                    y += 5;
-                    
-                    doc.text(`Turbine: ${flightData.turbine || '0.0'} hrs`, col1X, y);
-                    doc.text(`Night: ${flightData.night || '0.0'} hrs`, col2X, y);
-                    y += 5;
-                    
-                    doc.text(`Instrument (Actual/Simulated): ${flightData.ifr || '0.0'} hrs`, col1X, y);
-                    y += 7;
-
-                    // Aircraft Experience
-                    if (flightData.aircraft && flightData.aircraft.length > 0) {
-                        doc.setFont('helvetica', 'bold');
-                        doc.text('Aircraft Experience:', leftMargin, y);
-                        y += 5;
-                        
-                        doc.setFont('helvetica', 'normal');
-                        // Only show top 10 aircraft
-                        const topAircraft = flightData.aircraft.slice(0, 10);
-                        const colWidth = pageWidth / 3;
-                        
-                        topAircraft.forEach((aircraft, index) => {
-                            const aircraftText = `${aircraft.type}: ${aircraft.hours} hrs`;
-                            const colIndex = index % 3;
-                            const xPos = col1X + (colIndex * colWidth);
-                            
-                            doc.text(aircraftText, xPos, y);
-                            
-                            if (index % 3 === 2) {
-                                y += 5;
-                            }
-                        });
-                        if (topAircraft.length % 3 !== 0) y += 5;
-                    }
-                }
-                y += 5;
-
-                // Line separator
-                doc.setLineWidth(0.5);
-                doc.line(leftMargin, y, rightMargin, y);
-                y += 8;
-
-                // Certifications & Ratings
-                doc.setFontSize(12);
-                doc.setFont('helvetica', 'bold');
-                doc.text('CERTIFICATIONS & RATINGS', leftMargin, y);
-                y += 7;
-
-                doc.setFontSize(10);
-                doc.setFont('helvetica', 'normal');
-                
-                // Use certifications from resumeData if available, otherwise use defaults
-                const certifications = resumeData.certifications && resumeData.certifications.length > 0 
-                    ? resumeData.certifications.map(c => c.fullName)
-                    : [
-                        'Commercial Pilot License (CPL)',
-                        'Multi-Engine Instrument Rating (ME-IR)',
-                        'Retractable Undercarriage (RU)',
-                        'Type Rating: Saab 340 (SF34)'
-                    ];
-                    
-                certifications.forEach(cert => {
-                    doc.text(`• ${cert}`, leftMargin, y);
-                    y += 5;
-                });
-                y += 10;
-
-                // Professional Summary
-                if (resumeData.about) {
-                    doc.setFontSize(12);
-                    doc.setFont('helvetica', 'bold');
-                    doc.text('PROFESSIONAL SUMMARY', leftMargin, y);
-                    y += 7;
-
-                    doc.setFontSize(10);
-                    doc.setFont('helvetica', 'normal');
-                    const aboutLines = doc.splitTextToSize(resumeData.about.replace(/<[^>]*>/g, ''), pageWidth);
-                    doc.text(aboutLines, leftMargin, y);
-                    y += (aboutLines.length * 5) + 10;
-                }
-
-                // Experience Section
-                if (resumeData.experience && resumeData.experience.length > 0) {
-                    if (y > 250) {
-                        doc.addPage();
-                        y = 20;
-                    }
-
-                    doc.setFontSize(12);
-                    doc.setFont('helvetica', 'bold');
-                    doc.text('PROFESSIONAL EXPERIENCE', leftMargin, y);
-                    y += 7;
-
-                    resumeData.experience.forEach((exp, index) => {
-                        if (y > 270) {
-                            doc.addPage();
-                            y = 20;
-                        }
-
-                        doc.setFontSize(11);
-                        doc.setFont('helvetica', 'bold');
-                        doc.text(exp.title, leftMargin, y);
-                        y += 5;
-
-                        doc.setFontSize(10);
-                        doc.setFont('helvetica', 'bold');
-                        doc.text(exp.company, leftMargin, y);
-                        
-                        // Right-align dates
-                        doc.setFont('helvetica', 'italic');
-                        doc.text(exp.date, rightMargin, y, { align: 'right' });
-                        y += 6;
-
-                        doc.setFont('helvetica', 'normal');
-                        exp.responsibilities.forEach(resp => {
-                            const lines = doc.splitTextToSize(`• ${resp}`, pageWidth - 5);
-                            doc.text(lines, leftMargin + 3, y);
-                            y += (lines.length * 5);
-                        });
-                        y += 5;
-                    });
-                }
-
-                // Education Section
-                if (resumeData.education && resumeData.education.length > 0) {
-                    if (y > 240) {
-                        doc.addPage();
-                        y = 20;
-                    }
-
-                    doc.setFontSize(12);
-                    doc.setFont('helvetica', 'bold');
-                    doc.text('EDUCATION & TRAINING', leftMargin, y);
-                    y += 7;
-
-                    resumeData.education.forEach(edu => {
-                        doc.setFontSize(11);
-                        doc.setFont('helvetica', 'bold');
-                        doc.text(edu.degree, leftMargin, y);
-                        y += 5;
-
-                        doc.setFontSize(10);
-                        doc.setFont('helvetica', 'normal');
-                        doc.text(edu.institution, leftMargin, y);
-                        
-                        doc.setFont('helvetica', 'italic');
-                        doc.text(edu.year, rightMargin, y, { align: 'right' });
-                        y += 7;
-                    });
-                }
-
-                // Save
-                doc.save('Noah_Mirosch_Pilot_Resume_ATS.pdf');
-                showPDFMessage('✅ ATS-friendly pilot resume generated successfully!', 'success');
-            } catch (error) {
-                console.error('PDF generation error:', error);
-                showPDFMessage('❌ Error generating PDF: ' + error.message, 'error');
-            }
-        });
-
-        // Generate Beautiful PDF - Opens print-friendly HTML page
-        document.getElementById('generateBeautifulBtn').addEventListener('click', async () => {
-            try {
-                // Get current resume data
-                let dataToPass = null;
-                
-                // Try to get the most current data (either from local state or API)
-                if (resumeData.contact && Object.keys(resumeData.contact).length > 0) {
-                    // We have local data, use it
-                    dataToPass = {
-                        contact: resumeData.contact,
-                        certifications: resumeData.certifications,
-                        education: resumeData.education,
-                        about: resumeData.about,
-                        experience: resumeData.experience
-                    };
-                    
-                    // Add flight data if available
-                    const response = await fetch('https://password-nine-weld.vercel.app/api/resume-data');
-                    if (response.ok) {
-                        const apiData = await response.json();
-                        dataToPass.totalTime = apiData.totalTime;
-                        dataToPass.pic = apiData.pic;
-                        dataToPass.multiEngine = apiData.multiEngine;
-                        dataToPass.multiPIC = apiData.multiPIC;
-                        dataToPass.turbine = apiData.turbine;
-                        dataToPass.night = apiData.night;
-                        dataToPass.ifr = apiData.ifr;
-                        dataToPass.aircraft = apiData.aircraft;
-                    }
-                }
-                
-                // Open the print-friendly resume page
-                // Pass data via URL parameter (URI-encoded JSON to support Unicode)
-                const encodedData = dataToPass ? encodeURIComponent(JSON.stringify(dataToPass)) : '';
-                const url = encodedData
-                    ? `resume-print.html?data=${encodedData}`
-                    : 'resume-print.html';
-                
-                window.open(url, '_blank');
-                showPDFMessage('✅ Print preview opened! Use Ctrl+P (or Cmd+P) to print to PDF.', 'success');
-            } catch (error) {
-                console.error('Error opening print preview:', error);
-                showPDFMessage('❌ Error opening print preview: ' + error.message, 'error');
-            }
+                if (result.success) { alert('✅ Resume published successfully! Your changes are now live.'); } 
+                else { alert('❌ Error publishing: ' + (result.error || 'Unknown error')); }
+            } catch (error) { alert('❌ Connection error: ' + error.message); } 
+            finally { publishBtn.disabled = false; publishBtn.textContent = '🚀 Publish All Changes to Resume'; }
         });
     </script>
 </body>
