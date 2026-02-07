@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        /* BASE THEME (Default Glass) */
         :root {
             --bg-primary: #0a0a0a;
             --bg-secondary: #141414;
@@ -22,18 +23,8 @@
             --accent-orange: #f97316;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            overflow-x: hidden;
-            width: 100%;
-            -webkit-text-size-adjust: 100%;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { overflow-x: hidden; width: 100%; -webkit-text-size-adjust: 100%; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
@@ -43,15 +34,9 @@
             position: relative;
             overflow-x: hidden;
             width: 100%;
-            max-width: 100vw;
         }
 
-        /* Prevent zoom on double-tap */
-        button, a, input, textarea, select {
-            touch-action: manipulation;
-        }
-
-        /* Animated gradient orbs background */
+        /* Default Background Animation */
         body::before {
             content: '';
             position: fixed;
@@ -68,130 +53,30 @@
             z-index: 0;
             will-change: transform;
         }
-
         @keyframes float {
             0%, 100% { transform: translate(0, 0) rotate(0deg); }
             33% { transform: translate(30px, -30px) rotate(120deg); }
             66% { transform: translate(-20px, 20px) rotate(240deg); }
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 64px 40px;
-            position: relative;
-            z-index: 1;
-            overflow: visible;
-            width: 100%;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 64px 40px; position: relative; z-index: 1; }
+        @media (max-width: 768px) { .container { padding: 40px 20px; } }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 40px 20px;
-            }
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 64px;
-            animation: fadeInDown 0.8s ease-out;
-            position: relative;
-            z-index: 1;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+        header { text-align: center; margin-bottom: 64px; animation: fadeInDown 0.8s ease-out; }
         h1 {
-            font-size: clamp(2.5rem, 7vw, 5rem);
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            margin-bottom: 16px;
-            animation: fadeInDown 0.8s ease-out 0.1s both;
-            background: linear-gradient(135deg, #a855f7, #3b82f6, #ec4899);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: fadeInDown 0.8s ease-out 0.1s both, gradientFlow 8s ease infinite;
+            font-size: clamp(2.5rem, 7vw, 5rem); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 16px;
+            background: linear-gradient(135deg, #a855f7, #3b82f6, #ec4899); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
         }
+        .subtitle { font-size: clamp(1.1rem, 2.5vw, 1.4rem); color: var(--text-secondary); margin-bottom: 12px; }
+        .credentials { font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; color: var(--text-muted); margin-top: 20px; }
+        .credentials span { display: inline-block; padding: 8px 16px; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; margin: 6px; backdrop-filter: blur(10px); }
 
-        @keyframes gradientFlow {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .subtitle {
-            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-            color: var(--text-secondary);
-            letter-spacing: 0.01em;
-            margin-bottom: 12px;
-            font-weight: 500;
-            animation: fadeInDown 0.8s ease-out 0.2s both;
-        }
-
-        .credentials {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            letter-spacing: 0.05em;
-            margin-top: 20px;
-            animation: fadeInDown 0.8s ease-out 0.3s both;
-        }
-
-        .credentials span {
-            display: inline-block;
-            padding: 8px 16px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            margin: 6px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .credentials span:hover {
-            background: rgba(168, 85, 247, 0.1);
-            border-color: rgba(168, 85, 247, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 28px;
-            margin-bottom: 56px;
-            position: relative;
-            z-index: 1;
-            overflow: visible;
-            width: 100%;
-        }
-
-        @media (max-width: 768px) {
-            .grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-        }
-
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; margin-bottom: 56px; }
         .card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 32px;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 32px;
+            backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             animation: fadeInUp 0.6s ease-out both;
             position: relative;
@@ -712,282 +597,46 @@
             background: white;
             border-radius: 1px;
         }
+        body.theme-paper::before { display: none; }
+        body.theme-paper .container { max-width: 800px; background: white; box-shadow: 0 0 50px rgba(0,0,0,0.05); min-height: 100vh; padding-top: 80px; }
+        body.theme-paper .grid { display: flex; flex-direction: column; gap: 40px; }
+        body.theme-paper .card { background: transparent; border: none; box-shadow: none; padding: 0; backdrop-filter: none; border-radius: 0; border-bottom: 2px solid var(--bg-secondary); padding-bottom: 40px; }
+        body.theme-paper h1 { color: #000; background: none; -webkit-text-fill-color: initial; font-size: 3.5rem; letter-spacing: -0.05em; }
+        body.theme-paper .stat { background: var(--bg-secondary); border: none; box-shadow: none; }
+        body.theme-paper .stat-value { background: none; -webkit-text-fill-color: initial; color: #000; }
+        body.theme-paper .experience-item { background: transparent; border: none; border-left: 2px solid #000; border-radius: 0; padding-left: 24px; box-shadow: none; }
+        body.theme-paper .experience-item::before { display: none; }
+        body.theme-paper .job-title { color: #000; background: none; -webkit-text-fill-color: initial; }
+        body.theme-paper .about-text { background: var(--bg-secondary); border: none; border-radius: 4px; }
 
-        .modal-close::before {
-            transform: rotate(45deg);
+        /* ================= THEME: COCKPIT HUD ================= */
+        body.theme-hud {
+            --bg-primary: #050f05;
+            --bg-secondary: #0a1a0a;
+            --glass-bg: rgba(0, 255, 65, 0.05);
+            --glass-border: #003300;
+            --text-primary: #00ff41;
+            --text-secondary: #00cc33;
+            --text-muted: #008822;
         }
-
-        .modal-close::after {
-            transform: rotate(-45deg);
+        body.theme-hud * { font-family: 'JetBrains Mono', monospace !important; text-transform: uppercase; }
+        body.theme-hud::before {
+            background: linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px; animation: none; width: 100%; height: 100%; top: 0; left: 0; z-index: -1;
         }
-
-        .modal-content {
-            margin: 80px auto 40px;
-            max-width: 500px;
-            width: 100%;
+        body.theme-hud::after {
+            content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 999; background-size: 100% 2px, 3px 100%; pointer-events: none;
         }
-
-        .modal-aircraft-tooltip {
-            background: linear-gradient(135deg, rgba(10, 10, 10, 0.98), rgba(20, 20, 20, 0.98));
-            border: 1px solid rgba(168, 85, 247, 0.4);
-            border-radius: 20px;
-            padding: 32px 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(168, 85, 247, 0.3);
-            backdrop-filter: blur(20px) saturate(180%);
-        }
-
-        /* Hide desktop tooltip on mobile */
-        @media (max-width: 768px) {
-            .aircraft-tooltip {
-                display: none !important;
-            }
-            
-            .aircraft-item {
-                cursor: pointer;
-                -webkit-tap-highlight-color: transparent;
-            }
-        }
-
-        /* Show regular tooltip on desktop */
-        @media (min-width: 769px) {
-            .aircraft-modal {
-                display: none !important;
-            }
-        }
-
-        .aircraft-type {
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 600;
-            color: var(--text-primary);
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .aircraft-hours {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .contact-grid {
-            display: grid;
-            gap: 12px;
-            margin-top: 15px;
-            margin-bottom: auto;
-            align-content: start;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 1;
-        }
-
-        .contact-item:hover {
-            background: rgba(236, 72, 153, 0.08);
-            border-color: rgba(236, 72, 153, 0.4);
-            transform: translateX(4px);
-        }
-
-        .contact-label {
-            font-weight: 500;
-            color: var(--text-muted);
-            min-width: 70px;
-            font-size: 0.875rem;
-        }
-
-        .contact-value {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.875rem;
-            transition: color 0.3s ease;
-        }
-
-        .contact-value:hover {
-            color: var(--text-primary);
-        }
-
-        .section {
-            margin-bottom: 56px;
-            animation: fadeInUp 0.6s ease-out both;
-            position: relative;
-            z-index: 1;
-        }
-
-        .about-text {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-left: 3px solid #a855f7;
-            padding: 32px;
-            border-radius: 16px;
-            font-size: 0.9375rem;
-            line-height: 1.8;
-            color: var(--text-secondary);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
-
-        .experience-item {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 24px;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Liquid glass shimmer on experience cards */
-        .experience-item::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent,
-                rgba(255, 255, 255, 0.03),
-                transparent
-            );
-            transform: rotate(45deg);
-            transition: all 0.8s ease;
-        }
-
-        .experience-item:hover::before {
-            left: 100%;
-        }
-
-        .experience-item:hover {
-            transform: translateY(-4px);
-            border-color: rgba(59, 130, 246, 0.4);
-            box-shadow: 
-                0 20px 60px rgba(59, 130, 246, 0.25),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-
-        .job-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, #a855f7, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-            letter-spacing: -0.02em;
-            position: relative;
-            z-index: 1;
-        }
-
-        .company {
-            font-weight: 500;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-            font-size: 0.9375rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .date {
-            font-size: 0.8125rem;
-            color: var(--text-muted);
-            letter-spacing: 0.05em;
-            margin-bottom: 18px;
-            text-transform: uppercase;
-            font-family: 'JetBrains Mono', monospace;
-            position: relative;
-            z-index: 1;
-        }
-
-        .experience-item ul {
-            list-style: none;
-            margin-top: 12px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .experience-item li {
-            padding-left: 24px;
-            margin-bottom: 10px;
-            position: relative;
-            color: var(--text-secondary);
-            font-size: 0.9375rem;
-            line-height: 1.6;
-        }
-
-        .experience-item li::before {
-            content: '→';
-            position: absolute;
-            left: 4px;
-            background: linear-gradient(135deg, #a855f7, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 600;
-        }
-
-        .data-note {
-            text-align: center;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 16px;
-            font-style: italic;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 32px 20px;
-            }
-
-            .flight-time-grid,
-            .aircraft-list {
-                grid-template-columns: 1fr;
-            }
-
-            .aircraft-list {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            h1 {
-                font-size: 2.25rem;
-            }
-
-            .subtitle {
-                font-size: 1rem;
-            }
-        }
-
-        /* Scroll animations */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .animate-on-scroll.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        body.theme-hud .card { border: 1px solid var(--text-primary); background: rgba(0, 20, 0, 0.8); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); border-radius: 4px; }
+        body.theme-hud .stat-value { background: none; -webkit-text-fill-color: initial; color: var(--text-primary); text-shadow: 0 0 10px rgba(0, 255, 65, 0.8); }
+        body.theme-hud h1 { background: none; -webkit-text-fill-color: initial; color: var(--text-primary); text-shadow: 0 0 10px var(--text-primary); }
+        body.theme-hud .aircraft-item.current-aircraft { animation: blink 2s infinite; border-color: var(--text-primary); background: var(--text-muted); color: black; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
     </style>
 </head>
-<body>
-    <div class="container">
+<body class="theme-glass"> <div class="container">
         <header>
             <h1>Noah Mirosch</h1>
             <div class="subtitle">Commercial Pilot</div>
@@ -1002,87 +651,29 @@
                 <div class="flight-time-grid">
                     <div class="stat stat-primary">
                         <div class="stat-label">Total Time</div>
-                        <div class="stat-value">1156.7</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-label">PIC</div>
-                        <div class="stat-value">856.1</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-label">Turbine</div>
-                        <div class="stat-value">49.3</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-label">Multi-Eng</div>
-                        <div class="stat-value">178.7</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-label">Night</div>
-                        <div class="stat-value">190.3</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-label">IFR</div>
                         <div class="stat-value">0.0</div>
                     </div>
-                    <div class="stat">
-                        <div class="stat-label">Multi PIC</div>
-                        <div class="stat-value">0.0</div>
-                    </div>
+                    <div class="stat"><div class="stat-label">PIC</div><div class="stat-value">0.0</div></div>
+                    <div class="stat"><div class="stat-label">Turbine</div><div class="stat-value">0.0</div></div>
+                    <div class="stat"><div class="stat-label">Multi-Eng</div><div class="stat-value">0.0</div></div>
+                    <div class="stat"><div class="stat-label">Night</div><div class="stat-value">0.0</div></div>
+                    <div class="stat"><div class="stat-label">IFR</div><div class="stat-value">0.0</div></div>
+                    <div class="stat"><div class="stat-label">Multi PIC</div><div class="stat-value">0.0</div></div>
                 </div>
-                <div class="data-note">Data correct as of 02/05/25</div>
+                <div class="data-note">Loading data...</div>
             </div>
 
             <div class="card aircraft-card">
                 <h2>Aircraft Experience</h2>
                 <div class="aircraft-list">
-                    <div class="aircraft-item">
-                        <span class="aircraft-type">SR22</span>
-                        <span class="aircraft-hours">622.9 hrs</span>
                     </div>
-                    <div class="aircraft-item">
-                        <span class="aircraft-type">C172</span>
-                        <span class="aircraft-hours">147.3 hrs</span>
-                    </div>
-                    <div class="aircraft-item">
-                        <span class="aircraft-type">PA31</span>
-                        <span class="aircraft-hours">125.4 hrs</span>
-                    </div>
-                    <div class="aircraft-item">
-                        <span class="aircraft-type">P46T</span>
-                        <span class="aircraft-hours">49.3 hrs</span>
-                    </div>
-                    <div class="aircraft-item">
-                        <span class="aircraft-type">C162</span>
-                        <span class="aircraft-hours">46.0 hrs</span>
-                    </div>
-                    <div class="aircraft-item">
-                        <span class="aircraft-type">SR20</span>
-                        <span class="aircraft-hours">35.5 hrs</span>
-                    </div>
-                    <div class="aircraft-item">
-                        <span class="aircraft-type">C72R</span>
-                        <span class="aircraft-hours">35.3 hrs</span>
-                    </div>
-                    <div class="aircraft-item">
-                        <span class="aircraft-type">BE58</span>
-                        <span class="aircraft-hours">28.7 hrs</span>
-                    </div>
-                    <div class="aircraft-item">
-                        <span class="aircraft-type">C182</span>
-                        <span class="aircraft-hours">25.5 hrs</span>
-                    </div>
-                </div>
-                <div class="data-note">Data correct as of 02/05/25</div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 28px;">
                 <div class="card">
                     <h2>Education</h2>
-                    <div id="educationContainer" style="display: flex; flex-direction: column; gap: 16px;">
-                        <!-- Education entries will be loaded dynamically -->
-                    </div>
+                    <div id="educationContainer"></div>
                 </div>
-
                 <div class="card">
                     <h2>Contact</h2>
                     <div class="contact-grid" id="contactGrid">
@@ -1092,11 +683,9 @@
             </div>
         </div>
 
-        <section class="section animate-on-scroll">
-            <h2 style="text-align: center; font-size: 1.75rem; margin-bottom: 32px; font-weight: 600; background: linear-gradient(135deg, #a855f7, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">About</h2>
-            <div class="about-text" id="aboutText">
-                <!-- About text will be loaded dynamically -->
-            </div>
+        <section class="section">
+            <h2 style="text-align: center;">About</h2>
+            <div class="about-text" id="aboutText"></div>
         </section>
 
         <section class="section animate-on-scroll">
@@ -1107,129 +696,67 @@
         </section>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // Load aircraft database
+    <script>
+        // --- 1. Load Aircraft DB ---
         let aircraftDatabase = {};
-        
         async function loadAircraftDatabase() {
             try {
                 const response = await fetch('aircraft-database.csv');
+                if(!response.ok) return;
                 const csvText = await response.text();
-                
-                // Parse CSV properly handling quoted fields with commas
                 const lines = csvText.trim().split('\n');
                 
-                // Parse a CSV line handling quoted fields
-                function parseCSVLine(line) {
-                    const result = [];
-                    let current = '';
-                    let inQuotes = false;
-                    
-                    for (let i = 0; i < line.length; i++) {
-                        const char = line[i];
-                        
-                        if (char === '"') {
-                            inQuotes = !inQuotes;
-                        } else if (char === ',' && !inQuotes) {
-                            result.push(current.trim());
-                            current = '';
-                        } else {
-                            current += char;
-                        }
+                // Simple CSV parser
+                const headers = lines[0].split(',').map(h => h.trim());
+                for(let i=1; i<lines.length; i++) {
+                    const row = lines[i];
+                    // Handle quoted strings slightly better
+                    const values = [];
+                    let inQuote = false; 
+                    let val = '';
+                    for(let char of row) {
+                        if(char === '"') { inQuote = !inQuote; }
+                        else if(char === ',' && !inQuote) { values.push(val.trim()); val = ''; }
+                        else { val += char; }
                     }
-                    result.push(current.trim());
-                    return result;
-                }
-                
-                const headers = parseCSVLine(lines[0]);
-                
-                for (let i = 1; i < lines.length; i++) {
-                    const values = parseCSVLine(lines[i]);
+                    values.push(val.trim());
+
                     const aircraft = {};
-                    
-                    headers.forEach((header, index) => {
-                        aircraft[header] = values[index];
-                    });
-                    
+                    headers.forEach((h, idx) => aircraft[h] = values[idx]);
                     aircraftDatabase[aircraft.type_code] = aircraft;
                 }
-                
-                console.log('Aircraft database loaded:', Object.keys(aircraftDatabase).length, 'aircraft');
-            } catch (error) {
-                console.error('Error loading aircraft database:', error);
-            }
+            } catch(e) { console.log('DB Load Error', e); }
         }
-        
-        function createAircraftTooltip(type, hours) {
-            const aircraft = aircraftDatabase[type];
-            
-            if (!aircraft) {
-                return ''; // No tooltip if aircraft not in database
-            }
-            
-            const badges = [];
-            if (aircraft.is_turbine === 'true') badges.push('<span class="tooltip-badge turbine">Turbine</span>');
-            if (aircraft.is_retract === 'true') badges.push('<span class="tooltip-badge">Retractable</span>');
-            if (aircraft.is_multi === 'true') badges.push('<span class="tooltip-badge multi">Multi-Engine</span>');
-            if (aircraft.is_multicrew === 'true') badges.push('<span class="tooltip-badge multicrew">Multi-Crew</span>');
+
+        function createTooltipHTML(type, hours) {
+            const ac = aircraftDatabase[type];
+            if(!ac) return '';
+            // Basic badges
+            let badges = '';
+            if(ac.is_turbine==='true') badges += '<span style="background:#3b82f633; color:#3b82f6; padding:2px 6px; border-radius:4px; font-size:0.7em; margin-right:4px;">Turbine</span>';
+            if(ac.is_multi==='true') badges += '<span style="background:#ec489933; color:#ec4899; padding:2px 6px; border-radius:4px; font-size:0.7em;">Multi</span>';
             
             return `
                 <div class="aircraft-tooltip">
-                    <div class="tooltip-header">${aircraft.name}</div>
-                    <div class="tooltip-subtitle">${type} • ${hours} hrs experience</div>
-                    <div class="tooltip-description">${aircraft.description}</div>
-                    <div class="tooltip-specs">
-                        <div class="tooltip-spec">
-                            <span class="tooltip-spec-label">MTOW</span>
-                            <span class="tooltip-spec-value">${aircraft.mtow_kg} kg</span>
-                        </div>
-                        <div class="tooltip-spec">
-                            <span class="tooltip-spec-label">Power</span>
-                            <span class="tooltip-spec-value">${aircraft.horsepower} HP</span>
-                        </div>
-                        <div class="tooltip-spec">
-                            <span class="tooltip-spec-label">Cruise Speed</span>
-                            <span class="tooltip-spec-value">${aircraft.cruise_speed_kt} kts</span>
-                        </div>
-                        <div class="tooltip-spec">
-                            <span class="tooltip-spec-label">Configuration</span>
-                            <span class="tooltip-spec-value">${aircraft.is_multi === 'true' ? 'Twin' : 'Single'}</span>
-                        </div>
-                    </div>
-                    ${badges.length > 0 ? `<div class="tooltip-badges">${badges.join('')}</div>` : ''}
-                </div>
-            `;
+                    <div style="font-weight:bold; color:white; margin-bottom:4px;">${ac.name}</div>
+                    <div style="font-size:0.8em; color:#888; margin-bottom:8px;">${type} • ${hours} hrs</div>
+                    <div style="font-size:0.8em; color:#aaa; line-height:1.4;">${ac.description}</div>
+                    <div style="margin-top:10px;">${badges}</div>
+                </div>`;
         }
 
-        // Load data from Vercel API (permanent storage)
+        // --- 2. Main Data Loader ---
         async function loadResumeData() {
-            console.log('Attempting to load resume data...');
-            
-            let data = null;
-            
-            // Try loading from Vercel API first (permanent storage)
             try {
-                console.log('Loading from Vercel API...');
+                // Fetch from API
                 const response = await fetch('https://password-nine-weld.vercel.app/api/resume-data');
-                console.log('API Response status:', response.status);
+                let data = null;
+                if(response.ok) data = await response.json();
                 
-                if (response.ok) {
-                    data = await response.json();
-                    console.log('Loaded data from Vercel API:', data);
-                } else {
-                    console.error('API returned error status:', response.status, response.statusText);
-                }
-            } catch (error) {
-                console.error('Could not load from Vercel API:', error);
-            }
-            
-            // Fallback to localStorage
-            if (!data) {
-                console.log('Trying localStorage...');
-                const savedData = localStorage.getItem('noahResumeData');
-                if (savedData) {
-                    data = JSON.parse(savedData);
-                    console.log('Loaded data from localStorage');
+                // Fallback to local
+                if(!data) {
+                    const local = localStorage.getItem('noahResumeData');
+                    if(local) data = JSON.parse(local);
                 }
             }
             
@@ -1383,153 +910,52 @@
                         `;
                         console.log('Updated contact info');
                     }
-                    
-                    // Update About section
-                    if (data.about) {
-                        document.getElementById('aboutText').innerHTML = data.about;
-                        console.log('Updated about section');
-                    }
-                    
-                    // Update Experience section
-                    if (data.experience && data.experience.length > 0) {
-                        const experienceContainer = document.getElementById('experienceContainer');
-                        experienceContainer.innerHTML = data.experience.map(exp => `
+
+                    // About
+                    if(data.about) document.getElementById('aboutText').innerHTML = data.about.replace(/\n/g, '<br>');
+
+                    // Experience
+                    if(data.experience) {
+                        document.getElementById('experienceContainer').innerHTML = data.experience.map(exp => `
                             <div class="experience-item">
                                 <div class="job-title">${exp.title}</div>
                                 <div class="company">${exp.company}</div>
                                 <div class="date">${exp.date}</div>
-                                <ul>
-                                    ${exp.responsibilities.map(r => `<li>${r}</li>`).join('')}
-                                </ul>
+                                <ul>${exp.responsibilities.map(r=>`<li>${r}</li>`).join('')}</ul>
                             </div>
                         `).join('');
-                        console.log('Updated experience with', data.experience.length, 'entries');
                     }
-                    
-                    console.log('✅ Resume data loaded and applied successfully!');
-                } catch (error) {
-                    console.error('Error applying data:', error);
+
+                    document.querySelectorAll('.data-note').forEach(el => el.textContent = `Data correct as of ${data.lastUpdated}`);
                 }
-            } else {
-                console.log('No data found from any source, using default values');
-            }
+            } catch(e) { console.error(e); }
         }
 
-        // Load aircraft database first, then resume data
-        loadAircraftDatabase().then(() => {
-            loadResumeData();
-        });
-
-        // Scroll animation observer
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+        // Mobile Modal Logic
+        window.openModal = function(type, hours) {
+            if(window.innerWidth > 768) return; // Desktop uses hover tooltip
+            const html = createTooltipHTML(type, hours);
+            const modal = document.getElementById('aircraftModal');
+            document.getElementById('modalContent').innerHTML = html.replace('aircraft-tooltip', 'modal-aircraft-tooltip'); // reuse styles roughly
+            // fix styles for modal context
+            const content = document.getElementById('modalContent').firstElementChild;
+            if(content) {
+                content.style.position = 'static';
+                content.style.opacity = '1';
+                content.style.visibility = 'visible';
+                content.style.transform = 'none';
+                content.style.width = '100%';
+            }
+            modal.classList.add('active');
         };
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.animate-on-scroll').forEach(el => {
-            observer.observe(el);
+        document.getElementById('modalClose').addEventListener('click', () => {
+            document.getElementById('aircraftModal').classList.remove('active');
         });
 
-        // Mobile modal for aircraft tooltips
-        function initMobileModal() {
-            // Only on mobile
-            if (window.innerWidth <= 768) {
-                // Create modal element
-                const modal = document.createElement('div');
-                modal.className = 'aircraft-modal';
-                modal.id = 'aircraftModal';
-                
-                modal.innerHTML = `
-                    <div class="modal-close" id="modalClose"></div>
-                    <div class="modal-content" id="modalContent"></div>
-                `;
-                
-                document.body.appendChild(modal);
-                
-                // Close button
-                document.getElementById('modalClose').addEventListener('click', () => {
-                    modal.classList.remove('active');
-                    // Unlock body scroll
-                    document.body.style.overflow = '';
-                    document.body.style.position = '';
-                    document.body.style.width = '';
-                });
-                
-                // Close on background click
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        modal.classList.remove('active');
-                        // Unlock body scroll
-                        document.body.style.overflow = '';
-                        document.body.style.position = '';
-                        document.body.style.width = '';
-                    }
-                });
-            }
-        }
-        
-        // Open modal when aircraft item is clicked on mobile
-        function openAircraftModal(type, hours) {
-            if (window.innerWidth <= 768) {
-                const modal = document.getElementById('aircraftModal');
-                const content = document.getElementById('modalContent');
-                
-                const aircraft = aircraftDatabase[type];
-                
-                if (!aircraft) return;
-                
-                const badges = [];
-                if (aircraft.is_turbine === 'true') badges.push('<span class="tooltip-badge turbine">Turbine</span>');
-                if (aircraft.is_retract === 'true') badges.push('<span class="tooltip-badge">Retractable</span>');
-                if (aircraft.is_multi === 'true') badges.push('<span class="tooltip-badge multi">Multi-Engine</span>');
-                if (aircraft.is_multicrew === 'true') badges.push('<span class="tooltip-badge multicrew">Multi-Crew</span>');
-                
-                content.innerHTML = `
-                    <div class="modal-aircraft-tooltip">
-                        <div class="tooltip-header">${aircraft.name}</div>
-                        <div class="tooltip-subtitle">${type} • ${hours} hrs experience</div>
-                        <div class="tooltip-description">${aircraft.description}</div>
-                        <div class="tooltip-specs">
-                            <div class="tooltip-spec">
-                                <span class="tooltip-spec-label">MTOW</span>
-                                <span class="tooltip-spec-value">${aircraft.mtow_kg} kg</span>
-                            </div>
-                            <div class="tooltip-spec">
-                                <span class="tooltip-spec-label">Power</span>
-                                <span class="tooltip-spec-value">${aircraft.horsepower} HP</span>
-                            </div>
-                            <div class="tooltip-spec">
-                                <span class="tooltip-spec-label">Cruise Speed</span>
-                                <span class="tooltip-spec-value">${aircraft.cruise_speed_kt} kts</span>
-                            </div>
-                            <div class="tooltip-spec">
-                                <span class="tooltip-spec-label">Configuration</span>
-                                <span class="tooltip-spec-value">${aircraft.is_multi === 'true' ? 'Twin' : 'Single'}</span>
-                            </div>
-                        </div>
-                        ${badges.length > 0 ? `<div class="tooltip-badges">${badges.join('')}</div>` : ''}
-                    </div>
-                `;
-                
-                modal.classList.add('active');
-                
-                // Lock body scroll on mobile
-                document.body.style.overflow = 'hidden';
-                document.body.style.position = 'fixed';
-                document.body.style.width = '100%';
-            }
-        }
-        
-        // Initialize modal on load
-        initMobileModal();
+        // Initialize
+        loadAircraftDatabase().then(loadResumeData);
+
     </script>
 </body>
 </html>
