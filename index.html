@@ -278,84 +278,86 @@
 
         // --- 2. Main Data Loader ---
         async function loadResumeData() {
-            try {
-                // Fetch from API
-                const response = await fetch('https://password-nine-weld.vercel.app/api/resume-data');
-                let data = null;
-                if(response.ok) data = await response.json();
-                
-                // Fallback to local
-                if(!data) {
-                    const local = localStorage.getItem('noahResumeData');
-                    if(local) data = JSON.parse(local);
-                }
+    const debugBox = document.createElement('div');
+    debugBox.style = "position:fixed;bottom:10px;left:10px;background:rgba(0,0,0,0.8);color:#0f0;padding:10px;font-size:10px;z-index:9999;border:1px solid #0f0;font-family:monospace;max-width:300px;";
+    debugBox.innerHTML = "Debug: Initializing...";
+    document.body.appendChild(debugBox);
 
-                if(data) {
-                    // *** APPLY THEME ***
-                    if(data.theme) document.body.className = data.theme;
-
-                    // Apply Stats
-                    const setStat = (idx, val) => {
-                        const els = document.querySelectorAll('.stat-value');
-                        if(els[idx]) els[idx].innerHTML = val.toString().split('').map(c=>`<span>${c}</span>`).join('');
-                    };
-                    setStat(0, data.totalTime); // Primary
-                    const smallStats = document.querySelectorAll('.stat:not(.stat-primary) .stat-value');
-                    const map = [data.pic, data.turbine, data.multiEngine, data.night, data.ifr||0, data.multiPIC||0];
-                    map.forEach((val, i) => {
-                         if(smallStats[i]) smallStats[i].innerHTML = val.toString().split('').map(c=>`<span>${c}</span>`).join('');
-                    });
-
-                    // Apply Aircraft
-                    const list = document.querySelector('.aircraft-list');
-                    if(list && data.aircraft) {
-                        list.innerHTML = data.aircraft.map(a => {
-                            const isCur = a.type === 'SF34';
-                            return `<div class="aircraft-item ${isCur?'current-aircraft':''}" onclick="openModal('${a.type}', '${a.hours}')">
-                                <span class="aircraft-type">${a.type}</span>
-                                <span class="aircraft-hours">${a.hours} hrs</span>
-                                ${createTooltipHTML(a.type, a.hours)}
-                            </div>`;
-                        }).join('');
-                    }
-
-                    // Education
-                    if(data.education) {
-                        document.getElementById('educationContainer').innerHTML = data.education.map(e => 
-                            `<div style="margin-bottom:16px;">
-                                <div style="font-weight:600; color:var(--text-primary);">${e.degree}</div>
-                                <div style="color:var(--accent-purple); font-size:0.9em;">${e.institution}</div>
-                                <div style="color:var(--text-muted); font-size:0.85em;">${e.year}</div>
-                            </div>`
-                        ).join('');
-                    }
-
-                    // Contact
-                    if(data.contact) {
-                        if(data.contact.phone) { document.getElementById('contactPhone').textContent = data.contact.phone; document.getElementById('contactPhone').href=`tel:${data.contact.phone}`; }
-                        if(data.contact.email) { document.getElementById('contactEmail').textContent = data.contact.email; document.getElementById('contactEmail').href=`mailto:${data.contact.email}`; }
-                        if(data.contact.linkedin) { document.getElementById('contactLinkedIn').textContent = data.contact.linkedin; document.getElementById('contactLinkedIn').href=`https://linkedin.com/in/${data.contact.linkedin}`; }
-                    }
-
-                    // About
-                    if(data.about) document.getElementById('aboutText').innerHTML = data.about.replace(/\n/g, '<br>');
-
-                    // Experience
-                    if(data.experience) {
-                        document.getElementById('experienceContainer').innerHTML = data.experience.map(exp => `
-                            <div class="experience-item">
-                                <div class="job-title">${exp.title}</div>
-                                <div class="company">${exp.company}</div>
-                                <div class="date">${exp.date}</div>
-                                <ul>${exp.responsibilities.map(r=>`<li>${r}</li>`).join('')}</ul>
-                            </div>
-                        `).join('');
-                    }
-
-                    document.querySelectorAll('.data-note').forEach(el => el.textContent = `Data correct as of ${data.lastUpdated}`);
-                }
-            } catch(e) { console.error(e); }
+    try {
+        debugBox.innerHTML += "<br>Status: Fetching from API...";
+        const response = await fetch('https://password-nine-weld.vercel.app/api/resume-data');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
         }
+
+        const data = await response.json();
+        debugBox.innerHTML += "<br>Status: JSON parsed.";
+
+        if (data) {
+            window.lastLoadedData = data;
+
+            // Log the theme for debugging
+            debugBox.innerHTML += `<br>Theme: ${data.theme || 'default'}`;
+            if (data.theme) document.body.className = data.theme;
+
+            // Check if flight data exists in the object
+            if (data.totalTime === undefined) {
+                debugBox.innerHTML += "<br><span style='color:red;'>Error: 'totalTime' missing in data!</span>";
+                console.error("The data object received does not contain flight hours:", data);
+            } else {
+                debugBox.innerHTML += `<br>Total Time Found: ${data.totalTime}`;
+            }
+
+            // Apply Stats
+            const setStat = (idx, val) => {
+                const els = document.querySelectorAll('.stat-value');
+                if (els[idx]) {
+                    const safeVal = (val === undefined || val === null) ? '0.0' : val;
+                    els[idx].innerHTML = safeVal.toString().split('').map(c => `<span>${c}</span>`).join('');
+                } else {
+                    debugBox.innerHTML += `<br>Warn: Element .stat-value[${idx}] not found`;
+                }
+            };
+
+            setStat(0, data.totalTime);
+            const smallStats = document.querySelectorAll('.stat:not(.stat-primary) .stat-value');
+            const statsMap = [data.pic, data.turbine, data.multiEngine, data.night, data.ifr || 0, data.multiPIC || 0];
+            
+            statsMap.forEach((val, i) => {
+                if (smallStats[i]) {
+                    const safeVal = (val === undefined || val === null) ? '0.0' : val;
+                    smallStats[i].innerHTML = safeVal.toString().split('').map(c => `<span>${c}</span>`).join('');
+                }
+            });
+
+            // Aircraft Experience
+            if (data.aircraft && data.aircraft.length > 0) {
+                debugBox.innerHTML += `<br>Aircraft Found: ${data.aircraft.length}`;
+                renderAircraftList(data);
+            } else {
+                debugBox.innerHTML += "<br>Warn: No aircraft list in data";
+            }
+
+            // Education & Experience (simplified render for debug)
+            if (data.education) document.getElementById('educationContainer').innerHTML = "Education items: " + data.education.length;
+            if (data.experience) document.getElementById('experienceContainer').innerHTML = "Experience items: " + data.experience.length;
+
+            document.querySelectorAll('.data-note').forEach(el => el.textContent = `Last update: ${data.lastUpdated || 'N/A'}`);
+            
+            // Hide debug box after 10 seconds if successful
+            setTimeout(() => debugBox.style.display = 'none', 10000);
+
+        } else {
+            debugBox.innerHTML += "<br>Error: Data object is empty";
+        }
+    } catch (e) {
+        debugBox.style.borderColor = "red";
+        debugBox.style.color = "red";
+        debugBox.innerHTML += `<br>FATAL ERROR: ${e.message}`;
+        console.error("Detailed Error:", e);
+    }
+}
 
         // Mobile Modal Logic
         window.openModal = function(type, hours) {
