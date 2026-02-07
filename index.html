@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Noah Mirosch – Commercial Pilot & Aviation Professional</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent-purple: #a855f7;
+            --accent-blue: #3b82f6;
+            --accent-pink: #ec4899;
+            --accent-orange: #f97316;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow-x: hidden;
+            width: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+        }
+
+        /* Prevent zoom on double-tap */
+        button, a, input, textarea, select {
+            touch-action: manipulation;
+        }
+
+        /* Animated gradient orbs background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(249, 115, 22, 0.1) 0%, transparent 60%);
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+            will-change: transform;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 64px 40px;
+            position: relative;
+            z-index: 1;
+            overflow: visible;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px;
+            }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 64px;
+            animation: fadeInDown 0.8s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+            animation: fadeInDown 0.8s ease-out 0.1s both;
+            background: linear-gradient(135deg, #a855f7, #3b82f6, #ec4899);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInDown 0.8s ease-out 0.1s both, gradientFlow 8s ease infinite;
+        }
+
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--text-secondary);
+            letter-spacing: 0.01em;
+            margin-bottom: 12px;
+            font-weight: 500;
+            animation: fadeInDown 0.8s ease-out 0.2s both;
+        }
+
+        .credentials {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            margin-top: 20px;
+            animation: fadeInDown 0.8s ease-out 0.3s both;
+        }
+
+        .credentials span {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            margin: 6px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .credentials span:hover {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: rgba(168, 85, 247, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+            margin-bottom: 56px;
+            position: relative;
+            z-index: 1;
+            overflow: visible;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 32px;
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 0.6s ease-out both;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Liquid glass shimmer effect */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 255, 255, 0.03),
+                transparent
+            );
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            pointer-events: none;
+            will-change: left;
+            z-index: -1;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        /* Allow tooltips to overflow aircraft card */
+        .card.aircraft-card {
+            overflow: visible;
+            z-index: 100;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(168, 85, 247, 0.3);
+            box-shadow: 
+                0 20px 60px rgba(168, 85, 247, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .flight-time-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: auto;
+            align-content: start;
+        }
+
+        .stat.stat-primary {
+            grid-column: span 2;
+            background: rgba(168, 85, 247, 0.1);
+            border: 2px solid rgba(168, 85, 247, 0.4);
+            padding: 24px 20px;
+        }
+
+        .stat.stat-primary:hover {
+            background: rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.6);
+        }
+
+        .stat {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat:hover {
+            background: rgba(168, 85, 247, 0.08);
+            border-color: rgba(168, 85, 247, 0.3);
+            transform: scale(1.02);
+        }
+
+        .stat-primary .stat-label {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media (max-width: 768px) {
+            .stat-label {
+                font-size: 0.65rem;
+                letter-spacing: 0.05em;
+            }
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.75rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            user-select: text;
+            -webkit-user-select: text;
+        }
+
+        .stat-primary .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Airport flip board animation for numbers */
+        @keyframes flipIn {
+            0% {
+                transform: rotateX(90deg);
+                opacity: 0;
+            }
+            50% {
+                transform: rotateX(-10deg);
+            }
+            100% {
+                transform: rotateX(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* Wrap each digit/character in a span for individual animation */
+        .stat-value span {
+            display: inline-block;
+            transform-origin: 50% 0%;
+            pointer-events: none;
+        }
+
+        .stat-value span.flip {
+            animation: flipIn 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) both;
+        }
+
+        .stat-value span.flip:nth-child(1) { animation-delay: 0.1s; }
+        .stat-value span.flip:nth-child(2) { animation-delay: 0.2s; }
+        .stat-value span.flip:nth-child(3) { animation-delay: 0.3s; }
+        .stat-value span.flip:nth-child(4) { animation-delay: 0.4s; }
+        .stat-value span.flip:nth-child(5) { animation-delay: 0.5s; }
+        .stat-value span.flip:nth-child(6) { animation-delay: 0.6s; }
+        .stat-value span.flip:nth-child(7) { animation-delay: 0.7s; }
+        .stat-value span.flip:nth-child(8) { animation-delay: 0.8s; }
+
+        /* Also animate aircraft hours */
+        .aircraft-hours span {
+            display: inline-block;
+            transform-origin: 50% 0%;
+            pointer-events: none;
+        }
+
+        .aircraft-hours span.flip {
+            animation: flipIn 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) both;
+        }
+
+        .aircraft-hours span.flip:nth-child(1) { animation-delay: 0.1s; }
+        .aircraft-hours span.flip:nth-child(2) { animation-delay: 0.2s; }
+        .aircraft-hours span.flip:nth-child(3) { animation-delay: 0.3s; }
+        .aircraft-hours span.flip:nth-child(4) { animation-delay: 0.4s; }
+        .aircraft-hours span.flip:nth-child(5) { animation-delay: 0.5s; }
+        .aircraft-hours span.flip:nth-child(6) { animation-delay: 0.6s; }
+        .aircraft-hours span.flip:nth-child(7) { animation-delay: 0.7s; }
+        .aircraft-hours span.flip:nth-child(8) { animation-delay: 0.8s; }
+
+        .aircraft-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+            margin-bottom: auto;
+            align-content: start;
+            overflow: visible;
+            position: relative;
+            z-index: 1;
+        }
+
+        .aircraft-item {
+            text-align: center;
+            padding: 14px 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            font-size: 0.875rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        /* Desktop: add top space for consistent height */
+        @media (min-width: 769px) {
+            .aircraft-item {
+                padding-top: 28px;
+            }
+        }
+
+        .aircraft-item:hover {
+            background: rgba(59, 130, 246, 0.08);
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+            z-index: 99999;
+        }
+
+        /* SF34 Special Highlight - Current Aircraft */
+        .aircraft-item.current-aircraft {
+            background: rgba(168, 85, 247, 0.1);
+            border: 2px solid rgba(168, 85, 247, 0.4);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+            animation: pulse-glow 3s ease-in-out infinite;
+            position: relative;
+        }
+
+        .aircraft-item.current-aircraft:hover {
+            background: rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.6);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+            z-index: 99999;
+        }
+
+        .aircraft-item.current-aircraft .aircraft-type {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        /* Type Rated banner for SF34 */
+        .aircraft-item.current-aircraft::before {
+            content: 'TYPE RATED';
+            position: absolute;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            color: white;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+            z-index: 10;
+            animation: badgePulse 3s ease-in-out infinite;
+        }
+
+        /* Mobile: top-right badge */
+        @media (max-width: 768px) {
+            .aircraft-item.current-aircraft::before {
+                top: -8px;
+                right: -8px;
+                font-size: 0.6rem;
+                padding: 4px 10px;
+                border-radius: 8px;
+            }
+        }
+
+        /* Desktop: elegant top banner */
+        @media (min-width: 769px) {
+            .aircraft-item.current-aircraft::before {
+                top: 0;
+                left: 0;
+                right: 0;
+                font-size: 0.5rem;
+                padding: 3px 0;
+                border-radius: 10px 10px 0 0;
+                text-align: center;
+            }
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { 
+                box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+            }
+            50% { 
+                box-shadow: 0 4px 20px rgba(168, 85, 247, 0.6);
+            }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(168, 85, 247, 0.5); }
+        }
+
+        /* Aircraft Info Tooltip */
+        .aircraft-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.98), rgba(20, 20, 20, 0.98));
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 16px;
+            padding: 20px;
+            width: 340px;
+            max-width: 90vw;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(168, 85, 247, 0.2);
+            backdrop-filter: blur(20px) saturate(180%);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            z-index: 999999;
+        }
+
+        .aircraft-item:hover .aircraft-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        .aircraft-tooltip::before {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid rgba(168, 85, 247, 0.4);
+        }
+
+        .tooltip-header {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tooltip-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tooltip-description {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        .tooltip-specs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .tooltip-spec {
+            font-size: 0.75rem;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .tooltip-spec-label {
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .tooltip-spec-value {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .tooltip-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tooltip-badge {
+            padding: 4px 10px;
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            font-size: 0.7rem;
+            color: var(--accent-purple);
+            font-weight: 500;
+        }
+
+        .tooltip-badge.turbine {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: var(--accent-blue);
+        }
+
+        .tooltip-badge.multi {
+            background: rgba(236, 72, 153, 0.15);
+            border-color: rgba(236, 72, 153, 0.3);
+            color: var(--accent-pink);
+        }
+
+        .tooltip-badge.multicrew {
+            background: rgba(249, 115, 22, 0.15);
+            border-color: rgba(249, 115, 22, 0.3);
+            color: var(--accent-orange);
+        }
+
+        /* Mobile fullscreen modal for aircraft tooltips */
+        .aircraft-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.4);
+            backdrop-filter: blur(60px) saturate(150%);
+            -webkit-backdrop-filter: blur(60px) saturate(150%);
+            z-index: 999999;
+            overflow-y: auto;
+            padding: 20px;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        .aircraft-modal.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: rotate(90deg);
+        }
+
+        .modal-close::before,
+        .modal-close::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 2px;
+            background: white;
+            border-radius: 1px;
+        }
+
+        .modal-close::before {
+            transform: rotate(45deg);
+        }
+
+        .modal-close::after {
+            transform: rotate(-45deg);
+        }
+
+        .modal-content {
+            margin: 80px auto 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .modal-aircraft-tooltip {
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.98), rgba(20, 20, 20, 0.98));
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 20px;
+            padding: 32px 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(168, 85, 247, 0.3);
+            backdrop-filter: blur(20px) saturate(180%);
+        }
+
+        /* Hide desktop tooltip on mobile */
+        @media (max-width: 768px) {
+            .aircraft-tooltip {
+                display: none !important;
+            }
+            
+            .aircraft-item {
+                cursor: pointer;
+                -webkit-tap-highlight-color: transparent;
+            }
+        }
+
+        /* Show regular tooltip on desktop */
+        @media (min-width: 769px) {
+            .aircraft-modal {
+                display: none !important;
+            }
+        }
+
+        .aircraft-type {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .aircraft-hours {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .contact-grid {
+            display: grid;
+            gap: 12px;
+            margin-top: 15px;
+            margin-bottom: auto;
+            align-content: start;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-item:hover {
+            background: rgba(236, 72, 153, 0.08);
+            border-color: rgba(236, 72, 153, 0.4);
+            transform: translateX(4px);
+        }
+
+        .contact-label {
+            font-weight: 500;
+            color: var(--text-muted);
+            min-width: 70px;
+            font-size: 0.875rem;
+        }
+
+        .contact-value {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s ease;
+        }
+
+        .contact-value:hover {
+            color: var(--text-primary);
+        }
+
+        .section {
+            margin-bottom: 56px;
+            animation: fadeInUp 0.6s ease-out both;
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-text {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-left: 3px solid #a855f7;
+            padding: 32px;
+            border-radius: 16px;
+            font-size: 0.9375rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .experience-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Liquid glass shimmer on experience cards */
+        .experience-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 255, 255, 0.03),
+                transparent
+            );
+            transform: rotate(45deg);
+            transition: all 0.8s ease;
+        }
+
+        .experience-item:hover::before {
+            left: 100%;
+        }
+
+        .experience-item:hover {
+            transform: translateY(-4px);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 
+                0 20px 60px rgba(59, 130, 246, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .job-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .company {
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-size: 0.9375rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .date {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+            position: relative;
+            z-index: 1;
+        }
+
+        .experience-item ul {
+            list-style: none;
+            margin-top: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .experience-item li {
+            padding-left: 24px;
+            margin-bottom: 10px;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+
+        .experience-item li::before {
+            content: '→';
+            position: absolute;
+            left: 4px;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        .data-note {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 16px;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 32px 20px;
+            }
+
+            .flight-time-grid,
+            .aircraft-list {
+                grid-template-columns: 1fr;
+            }
+
+            .aircraft-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            h1 {
+                font-size: 2.25rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+
+        /* Scroll animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    
+
+        /* ================= THEME: SWISS MINIMAL (Paper) ================= */
+        body.theme-paper {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f4f4f5;
+            --glass-bg: #ffffff;
+            --glass-border: #e4e4e7;
+            --text-primary: #18181b;
+            --text-secondary: #52525b;
+            --text-muted: #a1a1aa;
+        }
+        body.theme-paper::before { display: none; }
+        body.theme-paper .container { max-width: 800px; background: white; box-shadow: 0 0 50px rgba(0,0,0,0.05); min-height: 100vh; padding-top: 80px; }
+        body.theme-paper .grid { display: flex; flex-direction: column; gap: 40px; }
+        body.theme-paper .card { background: transparent; border: none; box-shadow: none; padding: 0; backdrop-filter: none; border-radius: 0; border-bottom: 2px solid var(--bg-secondary); padding-bottom: 40px; }
+        body.theme-paper h1 { color: #000; background: none; -webkit-text-fill-color: initial; font-size: 3.5rem; letter-spacing: -0.05em; }
+        body.theme-paper .stat { background: var(--bg-secondary); border: none; box-shadow: none; }
+        body.theme-paper .stat-value { background: none; -webkit-text-fill-color: initial; color: #000; }
+        body.theme-paper .experience-item { background: transparent; border: none; border-left: 2px solid #000; border-radius: 0; padding-left: 24px; box-shadow: none; }
+        body.theme-paper .experience-item::before { display: none; }
+        body.theme-paper .job-title { color: #000; background: none; -webkit-text-fill-color: initial; }
+        body.theme-paper .about-text { background: var(--bg-secondary); border: none; border-radius: 4px; }
+
+        /* ================= THEME: COCKPIT HUD ================= */
+        body.theme-hud {
+            --bg-primary: #050f05;
+            --bg-secondary: #0a1a0a;
+            --glass-bg: rgba(0, 255, 65, 0.05);
+            --glass-border: #003300;
+            --text-primary: #00ff41;
+            --text-secondary: #00cc33;
+            --text-muted: #008822;
+        }
+        body.theme-hud * { font-family: 'JetBrains Mono', monospace !important; text-transform: uppercase; }
+        body.theme-hud::before {
+            background: linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px; animation: none; width: 100%; height: 100%; top: 0; left: 0; z-index: -1;
+        }
+        body.theme-hud::after {
+            content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 999; background-size: 100% 2px, 3px 100%; pointer-events: none;
+        }
+        body.theme-hud .card { border: 1px solid var(--text-primary); background: rgba(0, 20, 0, 0.8); box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); border-radius: 4px; }
+        body.theme-hud .stat-value { background: none; -webkit-text-fill-color: initial; color: var(--text-primary); text-shadow: 0 0 10px rgba(0, 255, 65, 0.8); }
+        body.theme-hud h1 { background: none; -webkit-text-fill-color: initial; color: var(--text-primary); text-shadow: 0 0 10px var(--text-primary); }
+        body.theme-hud .aircraft-item.current-aircraft { animation: blink 2s infinite; border-color: var(--text-primary); background: var(--text-muted); color: black; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+    </style>
+</head>
+<body class="theme-glass">
+    <div class="container">
+        <header>
+            <h1>Noah Mirosch</h1>
+            <div class="subtitle">Commercial Pilot</div>
+            <div class="credentials" id="certificationBadges">
+                <!-- Certification badges will be loaded dynamically -->
+            </div>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <h2>Flight Time</h2>
+                <div class="flight-time-grid">
+                    <div class="stat stat-primary">
+                        <div class="stat-label">Total Time</div>
+                        <div class="stat-value">1156.7</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">PIC</div>
+                        <div class="stat-value">856.1</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Turbine</div>
+                        <div class="stat-value">49.3</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Multi-Eng</div>
+                        <div class="stat-value">178.7</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Night</div>
+                        <div class="stat-value">190.3</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">IFR</div>
+                        <div class="stat-value">0.0</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Multi PIC</div>
+                        <div class="stat-value">0.0</div>
+                    </div>
+                </div>
+                <div class="data-note">Data correct as of 02/05/25</div>
+            </div>
+
+            <div class="card aircraft-card">
+                <h2>Aircraft Experience</h2>
+                <div class="aircraft-list">
+                    <div class="aircraft-item">
+                        <span class="aircraft-type">SR22</span>
+                        <span class="aircraft-hours">622.9 hrs</span>
+                    </div>
+                    <div class="aircraft-item">
+                        <span class="aircraft-type">C172</span>
+                        <span class="aircraft-hours">147.3 hrs</span>
+                    </div>
+                    <div class="aircraft-item">
+                        <span class="aircraft-type">PA31</span>
+                        <span class="aircraft-hours">125.4 hrs</span>
+                    </div>
+                    <div class="aircraft-item">
+                        <span class="aircraft-type">P46T</span>
+                        <span class="aircraft-hours">49.3 hrs</span>
+                    </div>
+                    <div class="aircraft-item">
+                        <span class="aircraft-type">C162</span>
+                        <span class="aircraft-hours">46.0 hrs</span>
+                    </div>
+                    <div class="aircraft-item">
+                        <span class="aircraft-type">SR20</span>
+                        <span class="aircraft-hours">35.5 hrs</span>
+                    </div>
+                    <div class="aircraft-item">
+                        <span class="aircraft-type">C72R</span>
+                        <span class="aircraft-hours">35.3 hrs</span>
+                    </div>
+                    <div class="aircraft-item">
+                        <span class="aircraft-type">BE58</span>
+                        <span class="aircraft-hours">28.7 hrs</span>
+                    </div>
+                    <div class="aircraft-item">
+                        <span class="aircraft-type">C182</span>
+                        <span class="aircraft-hours">25.5 hrs</span>
+                    </div>
+                </div>
+                <div class="data-note">Data correct as of 02/05/25</div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 28px;">
+                <div class="card">
+                    <h2>Education</h2>
+                    <div id="educationContainer" style="display: flex; flex-direction: column; gap: 16px;">
+                        <!-- Education entries will be loaded dynamically -->
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Contact</h2>
+                    <div class="contact-grid" id="contactGrid">
+                        <!-- Contact info loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="section animate-on-scroll">
+            <h2 style="text-align: center; font-size: 1.75rem; margin-bottom: 32px; font-weight: 600; background: linear-gradient(135deg, #a855f7, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">About</h2>
+            <div class="about-text" id="aboutText">
+                <!-- About text will be loaded dynamically -->
+            </div>
+        </section>
+
+        <section class="section animate-on-scroll">
+            <h2 style="text-align: center; font-size: 1.75rem; margin-bottom: 36px; font-weight: 600; background: linear-gradient(135deg, #ec4899, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Experience</h2>
+            <div id="experienceContainer">
+                <!-- Experience items will be loaded dynamically -->
+            </div>
+        </section>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Load aircraft database
+        let aircraftDatabase = {};
+        
+        async function loadAircraftDatabase() {
+            try {
+                const response = await fetch('aircraft-database.csv');
+                const csvText = await response.text();
+                
+                // Parse CSV properly handling quoted fields with commas
+                const lines = csvText.trim().split('\n');
+                
+                // Parse a CSV line handling quoted fields
+                function parseCSVLine(line) {
+                    const result = [];
+                    let current = '';
+                    let inQuotes = false;
+                    
+                    for (let i = 0; i < line.length; i++) {
+                        const char = line[i];
+                        
+                        if (char === '"') {
+                            inQuotes = !inQuotes;
+                        } else if (char === ',' && !inQuotes) {
+                            result.push(current.trim());
+                            current = '';
+                        } else {
+                            current += char;
+                        }
+                    }
+                    result.push(current.trim());
+                    return result;
+                }
+                
+                const headers = parseCSVLine(lines[0]);
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const values = parseCSVLine(lines[i]);
+                    const aircraft = {};
+                    
+                    headers.forEach((header, index) => {
+                        aircraft[header] = values[index];
+                    });
+                    
+                    aircraftDatabase[aircraft.type_code] = aircraft;
+                }
+                
+                console.log('Aircraft database loaded:', Object.keys(aircraftDatabase).length, 'aircraft');
+            } catch (error) {
+                console.error('Error loading aircraft database:', error);
+            }
+        }
+        
+        function createAircraftTooltip(type, hours) {
+            const aircraft = aircraftDatabase[type];
+            
+            if (!aircraft) {
+                return ''; // No tooltip if aircraft not in database
+            }
+            
+            const badges = [];
+            if (aircraft.is_turbine === 'true') badges.push('<span class="tooltip-badge turbine">Turbine</span>');
+            if (aircraft.is_retract === 'true') badges.push('<span class="tooltip-badge">Retractable</span>');
+            if (aircraft.is_multi === 'true') badges.push('<span class="tooltip-badge multi">Multi-Engine</span>');
+            if (aircraft.is_multicrew === 'true') badges.push('<span class="tooltip-badge multicrew">Multi-Crew</span>');
+            
+            return `
+                <div class="aircraft-tooltip">
+                    <div class="tooltip-header">${aircraft.name}</div>
+                    <div class="tooltip-subtitle">${type} • ${hours} hrs experience</div>
+                    <div class="tooltip-description">${aircraft.description}</div>
+                    <div class="tooltip-specs">
+                        <div class="tooltip-spec">
+                            <span class="tooltip-spec-label">MTOW</span>
+                            <span class="tooltip-spec-value">${aircraft.mtow_kg} kg</span>
+                        </div>
+                        <div class="tooltip-spec">
+                            <span class="tooltip-spec-label">Power</span>
+                            <span class="tooltip-spec-value">${aircraft.horsepower} HP</span>
+                        </div>
+                        <div class="tooltip-spec">
+                            <span class="tooltip-spec-label">Cruise Speed</span>
+                            <span class="tooltip-spec-value">${aircraft.cruise_speed_kt} kts</span>
+                        </div>
+                        <div class="tooltip-spec">
+                            <span class="tooltip-spec-label">Configuration</span>
+                            <span class="tooltip-spec-value">${aircraft.is_multi === 'true' ? 'Twin' : 'Single'}</span>
+                        </div>
+                    </div>
+                    ${badges.length > 0 ? `<div class="tooltip-badges">${badges.join('')}</div>` : ''}
+                </div>
+            `;
+        }
+
+        // Load data from Vercel API (permanent storage)
+        async function loadResumeData() {
+            console.log('Attempting to load resume data...');
+            
+            let data = null;
+            
+            // Try loading from Vercel API first (permanent storage)
+            try {
+                console.log('Loading from Vercel API...');
+                const response = await fetch('https://password-nine-weld.vercel.app/api/resume-data');
+                console.log('API Response status:', response.status);
+                
+                if (response.ok) {
+                    data = await response.json();
+                    console.log('Loaded data from Vercel API:', data);
+                } else {
+                    console.error('API returned error status:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Could not load from Vercel API:', error);
+            }
+            
+            // Fallback to localStorage
+            if (!data) {
+                console.log('Trying localStorage...');
+                const savedData = localStorage.getItem('noahResumeData');
+                if (savedData) {
+                    data = JSON.parse(savedData);
+                    console.log('Loaded data from localStorage');
+                }
+            }
+            
+            // Fallback to local JSON file
+            if (!data) {
+                console.log('Trying resume-data.json file...');
+                try {
+                    const response = await fetch('resume-data.json');
+                    if (response.ok) {
+                        data = await response.json();
+                        console.log('Loaded data from resume-data.json');
+                    }
+                } catch (error) {
+                    console.log('No resume-data.json file found');
+                }
+            }
+            
+            if (data) {
+                try {
+                    console.log('Applying data to resume...');
+                    console.log('Data to apply:', data);
+                    
+                    // Helper function to wrap each character in a span for flip animation (airport board style)
+                    function animateNumber(element, value) {
+                        const text = value.toString();
+                        element.innerHTML = text.split('').map(char => `<span class="flip">${char}</span>`).join('');
+                        element.querySelectorAll('span').forEach(span => {
+                            span.addEventListener('animationend', () => {
+                                span.classList.remove('flip');
+                                // Force final state so parent hover transforms don't trigger re-evaluation
+                                span.style.transform = 'rotateX(0deg)';
+                                span.style.opacity = '1';
+                            }, { once: true });
+                        });
+                    }
+                    
+                    // Update flight time stats with flip animation
+                    const primaryStat = document.querySelector('.stat-primary .stat-value');
+                    console.log('Primary stat element:', primaryStat);
+                    if (primaryStat) {
+                        animateNumber(primaryStat, data.totalTime);
+                        console.log('Set total time to:', data.totalTime);
+                    }
+                    
+                    const stats = document.querySelectorAll('.stat:not(.stat-primary) .stat-value');
+                    console.log('Found stat elements:', stats.length);
+                    
+                    if (stats.length >= 6) {
+                        animateNumber(stats[0], data.pic);                    // Row 1 Left - PIC
+                        animateNumber(stats[1], data.turbine);                // Row 1 Right - Turbine
+                        animateNumber(stats[2], data.multiEngine);            // Row 2 Left - Multi Engine
+                        animateNumber(stats[3], data.night);                  // Row 2 Right - Night
+                        animateNumber(stats[4], data.ifr || '0.0');           // Row 3 Left - IFR
+                        animateNumber(stats[5], data.multiPIC || '0.0');      // Row 3 Right - Multi PIC
+                        console.log('Updated all stats with flip animation');
+                    }
+                    
+                    // Update aircraft list
+                    const aircraftList = document.querySelector('.aircraft-list');
+                    console.log('Aircraft list element:', aircraftList);
+                    
+                    if (aircraftList && data.aircraft && data.aircraft.length > 0) {
+                        aircraftList.innerHTML = data.aircraft.map(a => {
+                            const isCurrent = a.type === 'SF34';
+                            const tooltip = createAircraftTooltip(a.type, a.hours);
+                            
+                            // Animate the hours value
+                            const hoursText = a.hours.toString();
+                            const hoursSpans = hoursText.split('').map(char => `<span class="flip">${char}</span>`).join('');
+                            
+                            return `
+                                <div class="aircraft-item ${isCurrent ? 'current-aircraft' : ''}" 
+                                     data-aircraft-type="${a.type}" 
+                                     data-aircraft-hours="${a.hours}"
+                                     onclick="openAircraftModal('${a.type}', '${a.hours}')">
+                                    <span class="aircraft-type">${a.type}</span>
+                                    <span class="aircraft-hours">${hoursSpans} hrs</span>
+                                    ${tooltip}
+                                </div>
+                            `;
+                        }).join('');
+                        // Strip .flip class off aircraft hour spans once they finish
+                        aircraftList.querySelectorAll('.aircraft-hours span').forEach(span => {
+                            span.addEventListener('animationend', () => {
+                                span.classList.remove('flip');
+                                // Force final state so hover transforms don't trigger re-evaluation
+                                span.style.transform = 'rotateX(0deg)';
+                                span.style.opacity = '1';
+                            }, { once: true });
+                        });
+                        console.log('Updated aircraft list with', data.aircraft.length, 'aircraft');
+                    }
+                    
+                    // Update data notes
+                    const dateNotes = document.querySelectorAll('.data-note');
+                    console.log('Found date note elements:', dateNotes.length);
+                    
+                    dateNotes.forEach((note, index) => {
+                        note.textContent = `Data correct as of ${data.lastUpdated}`;
+                        console.log(`Updated date note ${index}`);
+                    });
+                    
+                    // Update Certification Badges
+                    if (data.certifications && data.certifications.length > 0) {
+                        const badgesContainer = document.getElementById('certificationBadges');
+                        badgesContainer.innerHTML = data.certifications
+                            .map(cert => `<span>${cert.displayName}</span>`)
+                            .join('');
+                        console.log('Updated certification badges with', data.certifications.length, 'certifications');
+                    } else {
+                        // Default badges if none exist
+                        document.getElementById('certificationBadges').innerHTML = `
+                            <span>CPL / ME-IR</span>
+                            <span>MPPC</span>
+                            <span>RU</span>
+                        `;
+                    }
+                    
+                    // Update Education section
+                    if (data.education && data.education.length > 0) {
+                        const educationContainer = document.getElementById('educationContainer');
+                        const colors = ['var(--accent-purple)', 'var(--accent-blue)', 'var(--accent-pink)'];
+                        educationContainer.innerHTML = data.education.map((edu, index) => `
+                            <div class="education-item">
+                                <div style="font-weight: 600; color: var(--text-primary); font-size: 1.05rem;">${edu.degree}</div>
+                                <div style="color: ${colors[index % colors.length]}; font-size: 0.95rem; margin-top: 4px;">${edu.institution}</div>
+                                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">${edu.year}</div>
+                            </div>
+                        `).join('');
+                        console.log('Updated education with', data.education.length, 'entries');
+                    }
+                    
+                    // Update Contact section
+                    
+                // Apply theme from data
+                if (data.theme) {
+                    document.body.className = data.theme;
+                }
+
+                if (data.contact) {
+                        const phone = data.contact.phone || '';
+                        const email = data.contact.email || '';
+                        const linkedin = data.contact.linkedin || '';
+                        document.getElementById('contactGrid').innerHTML = `
+                            <div class="contact-item">
+                                <span class="contact-label">Phone:</span>
+                                <a href="tel:${phone.replace(/\s/g, '')}" class="contact-value">${phone}</a>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-label">Email:</span>
+                                <a href="mailto:${email}" class="contact-value">${email}</a>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-label">LinkedIn:</span>
+                                <a href="https://linkedin.com/in/${linkedin}" target="_blank" class="contact-value">${linkedin}</a>
+                            </div>
+                        `;
+                        console.log('Updated contact info');
+                    }
+                    
+                    // Update About section
+                    if (data.about) {
+                        document.getElementById('aboutText').innerHTML = data.about;
+                        console.log('Updated about section');
+                    }
+                    
+                    // Update Experience section
+                    if (data.experience && data.experience.length > 0) {
+                        const experienceContainer = document.getElementById('experienceContainer');
+                        experienceContainer.innerHTML = data.experience.map(exp => `
+                            <div class="experience-item">
+                                <div class="job-title">${exp.title}</div>
+                                <div class="company">${exp.company}</div>
+                                <div class="date">${exp.date}</div>
+                                <ul>
+                                    ${exp.responsibilities.map(r => `<li>${r}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `).join('');
+                        console.log('Updated experience with', data.experience.length, 'entries');
+                    }
+                    
+                    console.log('✅ Resume data loaded and applied successfully!');
+                } catch (error) {
+                    console.error('Error applying data:', error);
+                }
+            } else {
+                console.log('No data found from any source, using default values');
+            }
+        }
+
+        // Load aircraft database first, then resume data
+        loadAircraftDatabase().then(() => {
+            loadResumeData();
+        });
+
+        // Scroll animation observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Mobile modal for aircraft tooltips
+        function initMobileModal() {
+            // Only on mobile
+            if (window.innerWidth <= 768) {
+                // Create modal element
+                const modal = document.createElement('div');
+                modal.className = 'aircraft-modal';
+                modal.id = 'aircraftModal';
+                
+                modal.innerHTML = `
+                    <div class="modal-close" id="modalClose"></div>
+                    <div class="modal-content" id="modalContent"></div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                // Close button
+                document.getElementById('modalClose').addEventListener('click', () => {
+                    modal.classList.remove('active');
+                    // Unlock body scroll
+                    document.body.style.overflow = '';
+                    document.body.style.position = '';
+                    document.body.style.width = '';
+                });
+                
+                // Close on background click
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('active');
+                        // Unlock body scroll
+                        document.body.style.overflow = '';
+                        document.body.style.position = '';
+                        document.body.style.width = '';
+                    }
+                });
+            }
+        }
+        
+        // Open modal when aircraft item is clicked on mobile
+        function openAircraftModal(type, hours) {
+            if (window.innerWidth <= 768) {
+                const modal = document.getElementById('aircraftModal');
+                const content = document.getElementById('modalContent');
+                
+                const aircraft = aircraftDatabase[type];
+                
+                if (!aircraft) return;
+                
+                const badges = [];
+                if (aircraft.is_turbine === 'true') badges.push('<span class="tooltip-badge turbine">Turbine</span>');
+                if (aircraft.is_retract === 'true') badges.push('<span class="tooltip-badge">Retractable</span>');
+                if (aircraft.is_multi === 'true') badges.push('<span class="tooltip-badge multi">Multi-Engine</span>');
+                if (aircraft.is_multicrew === 'true') badges.push('<span class="tooltip-badge multicrew">Multi-Crew</span>');
+                
+                content.innerHTML = `
+                    <div class="modal-aircraft-tooltip">
+                        <div class="tooltip-header">${aircraft.name}</div>
+                        <div class="tooltip-subtitle">${type} • ${hours} hrs experience</div>
+                        <div class="tooltip-description">${aircraft.description}</div>
+                        <div class="tooltip-specs">
+                            <div class="tooltip-spec">
+                                <span class="tooltip-spec-label">MTOW</span>
+                                <span class="tooltip-spec-value">${aircraft.mtow_kg} kg</span>
+                            </div>
+                            <div class="tooltip-spec">
+                                <span class="tooltip-spec-label">Power</span>
+                                <span class="tooltip-spec-value">${aircraft.horsepower} HP</span>
+                            </div>
+                            <div class="tooltip-spec">
+                                <span class="tooltip-spec-label">Cruise Speed</span>
+                                <span class="tooltip-spec-value">${aircraft.cruise_speed_kt} kts</span>
+                            </div>
+                            <div class="tooltip-spec">
+                                <span class="tooltip-spec-label">Configuration</span>
+                                <span class="tooltip-spec-value">${aircraft.is_multi === 'true' ? 'Twin' : 'Single'}</span>
+                            </div>
+                        </div>
+                        ${badges.length > 0 ? `<div class="tooltip-badges">${badges.join('')}</div>` : ''}
+                    </div>
+                `;
+                
+                modal.classList.add('active');
+                
+                // Lock body scroll on mobile
+                document.body.style.overflow = 'hidden';
+                document.body.style.position = 'fixed';
+                document.body.style.width = '100%';
+            }
+        }
+        
+        // Initialize modal on load
+        initMobileModal();
+    </script>
+</body>
+</html>
