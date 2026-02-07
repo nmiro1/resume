@@ -227,21 +227,22 @@
         <div class="modal-content" id="modalContent"></div>
     </div>
 
-    <script>
-        // --- 1. Load Aircraft DB ---
+<script>
+        // --- 1. Configuration & Global State ---
         let aircraftDatabase = {};
+        let lastLoadedData = null;
+
+        // --- 2. Aircraft Database Loader ---
         async function loadAircraftDatabase() {
             try {
                 const response = await fetch('aircraft-database.csv');
                 if(!response.ok) return;
                 const csvText = await response.text();
                 const lines = csvText.trim().split('\n');
-                
-                // Simple CSV parser
                 const headers = lines[0].split(',').map(h => h.trim());
+                
                 for(let i=1; i<lines.length; i++) {
                     const row = lines[i];
-                    // Handle quoted strings slightly better
                     const values = [];
                     let inQuote = false; 
                     let val = '';
@@ -251,158 +252,130 @@
                         else { val += char; }
                     }
                     values.push(val.trim());
-
                     const aircraft = {};
                     headers.forEach((h, idx) => aircraft[h] = values[idx]);
                     aircraftDatabase[aircraft.type_code] = aircraft;
                 }
-            } catch(e) { console.log('DB Load Error', e); }
+                // If resume data loaded first, refresh the list to add tooltips
+                if(lastLoadedData) renderAircraftList(lastLoadedData);
+            } catch(e) { console.warn('Aircraft DB Load Silently Failed', e); }
         }
 
+        // --- 3. UI Renderers ---
         function createTooltipHTML(type, hours) {
             const ac = aircraftDatabase[type];
             if(!ac) return '';
-            // Basic badges
             let badges = '';
-            if(ac.is_turbine==='true') badges += '<span style="background:#3b82f633; color:#3b82f6; padding:2px 6px; border-radius:4px; font-size:0.7em; margin-right:4px;">Turbine</span>';
-            if(ac.is_multi==='true') badges += '<span style="background:#ec489933; color:#ec4899; padding:2px 6px; border-radius:4px; font-size:0.7em;">Multi</span>';
+            if(ac.is_turbine==='true') badges += '<span style="background:rgba(59, 130, 246, 0.2); color:#3b82f6; padding:2px 6px; border-radius:4px; font-size:10px; margin-right:4px;">Turbine</span>';
+            if(ac.is_multi==='true') badges += '<span style="background:rgba(236, 72, 153, 0.2); color:#ec4899; padding:2px 6px; border-radius:4px; font-size:10px;">Multi</span>';
             
             return `
                 <div class="aircraft-tooltip">
                     <div style="font-weight:bold; color:white; margin-bottom:4px;">${ac.name}</div>
-                    <div style="font-size:0.8em; color:#888; margin-bottom:8px;">${type} • ${hours} hrs</div>
-                    <div style="font-size:0.8em; color:#aaa; line-height:1.4;">${ac.description}</div>
+                    <div style="font-size:11px; color:#888; margin-bottom:8px;">${type} • ${hours} hrs</div>
+                    <div style="font-size:11px; color:#aaa; line-height:1.4;">${ac.description}</div>
                     <div style="margin-top:10px;">${badges}</div>
                 </div>`;
         }
-        // --- Helper to Render Aircraft ---
+
         function renderAircraftList(data) {
             const list = document.querySelector('.aircraft-list');
-            if(list && data.aircraft) {
-                list.innerHTML = data.aircraft.map(a => {
-                    // Check if this is your current/active aircraft to highlight it
-                    const isCur = a.type === 'SF34' || a.type === 'PA31'; 
-                    
-                    return `
-                        <div class="aircraft-item ${isCur ? 'current-aircraft' : ''}" onclick="openModal('${a.type}', '${a.hours}')">
-                            <span class="aircraft-type">${a.type}</span>
-                            <span class="aircraft-hours">${a.hours} hrs</span>
-                            ${typeof createTooltipHTML === 'function' ? createTooltipHTML(a.type, a.hours) : ''}
-                        </div>`;
-                }).join('');
-                console.log("Aircraft list rendered successfully.");
-            } else {
-                console.error("Could not find .aircraft-list element or aircraft data is missing.");
-            }
+            if(!list || !data.aircraft) return;
+
+            list.innerHTML = data.aircraft.map(a => {
+                const isCur = a.type === 'SF34' || a.type === 'PA31';
+                return `
+                    <div class="aircraft-item ${isCur?'current-aircraft':''}" onclick="openModal('${a.type}', '${a.hours}')">
+                        <span class="aircraft-type">${a.type}</span>
+                        <span class="aircraft-hours">${a.hours} hrs</span>
+                        ${createTooltipHTML(a.type, a.hours)}
+                    </div>`;
+            }).join('');
         }
-        // --- 2. Main Data Loader ---
+
+        // --- 4. Main Data Loader ---
         async function loadResumeData() {
-    const debugBox = document.createElement('div');
-    debugBox.style = "position:fixed;bottom:10px;left:10px;background:rgba(0,0,0,0.8);color:#0f0;padding:10px;font-size:10px;z-index:9999;border:1px solid #0f0;font-family:monospace;max-width:300px;";
-    debugBox.innerHTML = "Debug: Initializing...";
-    document.body.appendChild(debugBox);
+            try {
+                const response = await fetch('https://password-nine-weld.vercel.app/api/resume-data');
+                const data = response.ok ? await response.json() : JSON.parse(localStorage.getItem('noahResumeData'));
+                
+                if(!data) return;
+                lastLoadedData = data;
 
-    try {
-        debugBox.innerHTML += "<br>Status: Fetching from API...";
-        const response = await fetch('https://password-nine-weld.vercel.app/api/resume-data');
-        
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-        }
+                // Set Theme
+                document.body.className = data.theme || 'theme-glass';
 
-        const data = await response.json();
-        debugBox.innerHTML += "<br>Status: JSON parsed.";
+                // Render Primary Totals
+                const setStat = (idx, val) => {
+                    const els = document.querySelectorAll('.stat-value');
+                    const displayVal = (val || '0.0').toString();
+                    if(els[idx]) els[idx].innerHTML = displayVal.split('').map(c=>`<span>${c}</span>`).join('');
+                };
 
-        if (data) {
-            window.lastLoadedData = data;
+                setStat(0, data.totalTime);
+                const smallStats = document.querySelectorAll('.stat:not(.stat-primary) .stat-value');
+                const statsMap = [data.pic, data.turbine, data.multiEngine, data.night, data.ifr||0, data.multiPIC||0];
+                statsMap.forEach((val, i) => {
+                     if(smallStats[i]) {
+                         const displayVal = (val || '0.0').toString();
+                         smallStats[i].innerHTML = displayVal.split('').map(c=>`<span>${c}</span>`).join('');
+                     }
+                });
 
-            // Log the theme for debugging
-            debugBox.innerHTML += `<br>Theme: ${data.theme || 'default'}`;
-            if (data.theme) document.body.className = data.theme;
-
-            // Check if flight data exists in the object
-            if (data.totalTime === undefined) {
-                debugBox.innerHTML += "<br><span style='color:red;'>Error: 'totalTime' missing in data!</span>";
-                console.error("The data object received does not contain flight hours:", data);
-            } else {
-                debugBox.innerHTML += `<br>Total Time Found: ${data.totalTime}`;
-            }
-
-            // Apply Stats
-            const setStat = (idx, val) => {
-                const els = document.querySelectorAll('.stat-value');
-                if (els[idx]) {
-                    const safeVal = (val === undefined || val === null) ? '0.0' : val;
-                    els[idx].innerHTML = safeVal.toString().split('').map(c => `<span>${c}</span>`).join('');
-                } else {
-                    debugBox.innerHTML += `<br>Warn: Element .stat-value[${idx}] not found`;
-                }
-            };
-
-            setStat(0, data.totalTime);
-            const smallStats = document.querySelectorAll('.stat:not(.stat-primary) .stat-value');
-            const statsMap = [data.pic, data.turbine, data.multiEngine, data.night, data.ifr || 0, data.multiPIC || 0];
-            
-            statsMap.forEach((val, i) => {
-                if (smallStats[i]) {
-                    const safeVal = (val === undefined || val === null) ? '0.0' : val;
-                    smallStats[i].innerHTML = safeVal.toString().split('').map(c => `<span>${c}</span>`).join('');
-                }
-            });
-
-            // Aircraft Experience
-            if (data.aircraft && data.aircraft.length > 0) {
-                debugBox.innerHTML += `<br>Aircraft Found: ${data.aircraft.length}`;
+                // Render Sections
                 renderAircraftList(data);
-            } else {
-                debugBox.innerHTML += "<br>Warn: No aircraft list in data";
+
+                if(data.education) {
+                    document.getElementById('educationContainer').innerHTML = data.education.map(e => 
+                        `<div style="margin-bottom:16px;">
+                            <div style="font-weight:600; color:var(--text-primary);">${e.degree}</div>
+                            <div style="color:var(--accent-purple); font-size:0.9em;">${e.institution}</div>
+                            <div style="color:var(--text-muted); font-size:0.85em;">${e.year}</div>
+                        </div>`
+                    ).join('');
+                }
+
+                if(data.contact) {
+                    const { phone, email, linkedin } = data.contact;
+                    if(phone) { document.getElementById('contactPhone').textContent = phone; document.getElementById('contactPhone').href=`tel:${phone}`; }
+                    if(email) { document.getElementById('contactEmail').textContent = email; document.getElementById('contactEmail').href=`mailto:${email}`; }
+                    if(linkedin) { document.getElementById('contactLinkedIn').textContent = linkedin; document.getElementById('contactLinkedIn').href=`https://linkedin.com/in/${linkedin}`; }
+                }
+
+                if(data.about) document.getElementById('aboutText').innerHTML = data.about.replace(/\n/g, '<br>');
+
+                if(data.experience) {
+                    document.getElementById('experienceContainer').innerHTML = data.experience.map(exp => `
+                        <div class="experience-item">
+                            <div class="job-title">${exp.title}</div>
+                            <div class="company">${exp.company}</div>
+                            <div class="date">${exp.date}</div>
+                            <ul>${exp.responsibilities.map(r=>`<li>${r}</li>`).join('')}</ul>
+                        </div>
+                    `).join('');
+                }
+
+                document.querySelectorAll('.data-note').forEach(el => el.textContent = `Data current as of ${data.lastUpdated || 'today'}`);
+            } catch(e) {
+                console.error("Load Error:", e);
             }
-
-            // Education & Experience (simplified render for debug)
-            if (data.education) document.getElementById('educationContainer').innerHTML = "Education items: " + data.education.length;
-            if (data.experience) document.getElementById('experienceContainer').innerHTML = "Experience items: " + data.experience.length;
-
-            document.querySelectorAll('.data-note').forEach(el => el.textContent = `Last update: ${data.lastUpdated || 'N/A'}`);
-            
-            // Hide debug box after 10 seconds if successful
-            setTimeout(() => debugBox.style.display = 'none', 10000);
-
-        } else {
-            debugBox.innerHTML += "<br>Error: Data object is empty";
         }
-    } catch (e) {
-        debugBox.style.borderColor = "red";
-        debugBox.style.color = "red";
-        debugBox.innerHTML += `<br>FATAL ERROR: ${e.message}`;
-        console.error("Detailed Error:", e);
-    }
-}
 
-        // Mobile Modal Logic
+        // --- 5. Global Helpers & Init ---
         window.openModal = function(type, hours) {
-            if(window.innerWidth > 768) return; // Desktop uses hover tooltip
+            if(window.innerWidth > 768) return; 
             const html = createTooltipHTML(type, hours);
+            if(!html) return;
             const modal = document.getElementById('aircraftModal');
-            document.getElementById('modalContent').innerHTML = html.replace('aircraft-tooltip', 'modal-aircraft-tooltip'); // reuse styles roughly
-            // fix styles for modal context
-            const content = document.getElementById('modalContent').firstElementChild;
-            if(content) {
-                content.style.position = 'static';
-                content.style.opacity = '1';
-                content.style.visibility = 'visible';
-                content.style.transform = 'none';
-                content.style.width = '100%';
-            }
+            document.getElementById('modalContent').innerHTML = html.replace('aircraft-tooltip', 'modal-aircraft-tooltip');
             modal.classList.add('active');
         };
 
-        document.getElementById('modalClose').addEventListener('click', () => {
-            document.getElementById('aircraftModal').classList.remove('active');
-        });
+        document.getElementById('modalClose').onclick = () => document.getElementById('aircraftModal').classList.remove('active');
 
-        // Initialize
-        loadAircraftDatabase().then(loadResumeData);
-
+        // Ship it!
+        loadAircraftDatabase();
+        loadResumeData();
     </script>
 </body>
 </html>
