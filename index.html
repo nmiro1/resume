@@ -275,7 +275,26 @@
                     <div style="margin-top:10px;">${badges}</div>
                 </div>`;
         }
-
+        // --- Helper to Render Aircraft ---
+        function renderAircraftList(data) {
+            const list = document.querySelector('.aircraft-list');
+            if(list && data.aircraft) {
+                list.innerHTML = data.aircraft.map(a => {
+                    // Check if this is your current/active aircraft to highlight it
+                    const isCur = a.type === 'SF34' || a.type === 'PA31'; 
+                    
+                    return `
+                        <div class="aircraft-item ${isCur ? 'current-aircraft' : ''}" onclick="openModal('${a.type}', '${a.hours}')">
+                            <span class="aircraft-type">${a.type}</span>
+                            <span class="aircraft-hours">${a.hours} hrs</span>
+                            ${typeof createTooltipHTML === 'function' ? createTooltipHTML(a.type, a.hours) : ''}
+                        </div>`;
+                }).join('');
+                console.log("Aircraft list rendered successfully.");
+            } else {
+                console.error("Could not find .aircraft-list element or aircraft data is missing.");
+            }
+        }
         // --- 2. Main Data Loader ---
         async function loadResumeData() {
     const debugBox = document.createElement('div');
